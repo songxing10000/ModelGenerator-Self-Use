@@ -1,3 +1,9 @@
+![](api.gif)
+
+![](sosoapi to pro.gif)
+
+![](sosoapi to postman.gif)
+
 ## Such data returned by the server
 
 Field  | Type | Description |
@@ -61,7 +67,5 @@ user |
 @property (nonatomic) NSArray   *user;
 ```
 
-
-![](ModelGeneratorForAPI.gif)
 
 ### But this particular array type, there may be a bunch of dictionary or dictionaries, unlike JSON array data as to know there are specific types, so for this array have to be processed manually
