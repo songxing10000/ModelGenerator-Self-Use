@@ -30,7 +30,7 @@
     [super viewDidLoad];
     self.preferredContentSize = CGSizeMake(700, 400);
     
-    languageArray = @[@"Objective-C",@"Swift",@"Java", @"Api to OC property", @"Sosoapi to OC property", @"Sosoapi to postman bulk edit"];
+    languageArray = @[@"Objective-C",@"Swift",@"Java", @"Api to OC property", @"Sosoapi to OC property", @"Sosoapi to OC dict", @"Sosoapi to postman bulk edit"];
     generater = [ModelGenerator sharedGenerator];
     
     [_jsonTextView becomeFirstResponder];
@@ -84,15 +84,18 @@
     } else if ([currentLanguage isEqualToString:@"Swift"]) {
         [self jsonToOCProperty];
 
-    } if ([currentLanguage isEqualToString:@"Java-C"]) {
+    } else if ([currentLanguage isEqualToString:@"Java-C"]) {
         [self jsonToOCProperty];
 
-    } if ([currentLanguage isEqualToString:@"Api to OC property"]) {
+    } else if ([currentLanguage isEqualToString:@"Api to OC property"]) {
         [self apiToOCProperty];
-    } if ([currentLanguage isEqualToString:@"Sosoapi to OC property"]) {
-        [self sosoapiToOCProperty:YES];
-    }  if ([currentLanguage isEqualToString:@"Sosoapi to postman bulk edit"]) {
-        [self  sosoapiToOCProperty:NO];
+    } else if ([currentLanguage isEqualToString:@"Sosoapi to OC property"]) {
+        [self sosoapiToOCProperty:YES needOCDict:NO];
+    } else if ([currentLanguage isEqualToString:@"Sosoapi to OC dict"])  {
+        [self sosoapiToOCProperty:YES needOCDict:YES];
+    }
+    else if ([currentLanguage isEqualToString:@"Sosoapi to postman bulk edit"]) {
+        [self sosoapiToOCProperty:NO  needOCDict:NO];
     }
     
 }
@@ -233,7 +236,7 @@
     }];
 }
 /// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
-- (void)sosoapiToOCProperty:(BOOL)isOCProperty {
+- (void)sosoapiToOCProperty:(BOOL)isOCProperty needOCDict:(BOOL)isNeedDict{
     
     
             
@@ -328,10 +331,38 @@
             NSString *codeString = @"??";
             if (!isOCProperty) {
                 
-                codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
-            } else  {
+                    
+                    codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
                 
-                codeString = [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
+
+                
+            } else  {
+                if (isNeedDict) {
+                    
+                    /*
+                     @{
+                     @"":@"",
+                     @"":@"",
+                     @"":@"",
+                     
+                     @"":@""}
+                     
+                     */
+                    if (idx == 0) {
+                        codeString = [NSString stringWithFormat:@"@{\n@\"%@\": @1,\n", propertyName];
+
+                    } else if (idx == outPutArray.count) {
+                        codeString = [NSString stringWithFormat:@"@\"%@\": @1\n}", propertyName];
+
+                    } else {
+                        
+                        codeString = [NSString stringWithFormat:@"@\"%@\": @1,\n", propertyName];
+                    }
+                    
+                } else {
+                    
+                    codeString = [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
+                }
             }
             [outPutArray addObject:codeString];
         }
