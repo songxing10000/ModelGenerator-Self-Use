@@ -25,7 +25,7 @@
     NSString *result;
     NSArray *languageArray;
 }
-
+#pragma mark - view life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.preferredContentSize = CGSizeMake(700, 400);
@@ -47,25 +47,17 @@
     [self makeRound:_startBtn];
     [self makeRound:self.emptyBtn];
 }
-- (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title  {
-    return [[NSAttributedString alloc]initWithString:title attributes:@{NSFontAttributeName: [NSFont fontWithName:@"Times New Roman" size:16],NSForegroundColorAttributeName:[NSColor whiteColor]}];
-}
-- (void)makeRound:(NSView*)view{
-    view.layer.masksToBounds = YES;
-    view.layer.cornerRadius = 10;
-    view.layer.borderWidth = 5;
-    view.layer.borderColor = [NSColor whiteColor].CGColor;
-}
+
 #pragma mark - action
+#pragma mark empty btn
 - (IBAction)clickemptyBtn:(NSButton *)sender {
     self.jsonTextView.string = @"";
 
 }
-
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
 }
-
+#pragma mark start btn
 - (IBAction)generate:(id)sender {
 
     if (self.comboBox.indexOfSelectedItem >= languageArray.count) {
@@ -99,6 +91,7 @@
     }
     
 }
+#pragma mark jsonToOCProperty
 - (void)jsonToOCProperty {
     if (self.jsonTextView.textStorage.string.length == 0) {
         NSAlert *alert = [[NSAlert alloc]init];
@@ -162,6 +155,7 @@
     });
 
 }
+#pragma mark apiToOCProperty
 - (void)apiToOCProperty {
     
     if (self.jsonTextView.textStorage.string.length == 0) {
@@ -223,23 +217,8 @@
     });
 
 }
-- (void)dealWithArray:(NSMutableArray *)arr {
-    [arr enumerateObjectsUsingBlock:^(NSString  *_Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([str isEqualToString:@" "] || [str isEqualToString:@"formData"]) {
-            [arr removeObject:str];
-        }
-        BOOL hasValue = str && str.length;
-        if (!hasValue) {
-            [arr removeObject:str];
-        }
-        
-    }];
-}
 /// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
 - (void)sosoapiToOCProperty:(BOOL)isOCProperty needOCDict:(BOOL)isNeedDict{
-    
-    
-            
     
     
     if (self.jsonTextView.textStorage.string.length == 0) {
@@ -276,31 +255,6 @@
         
         i --;
     }
-    /*
-     
-     (
-     (
-     "category_id",
-     "合作雪球分类id",
-     integer
-     ),
-     (
-     "demand_name",
-     "需求名称",
-     string
-     ),
-     (
-     "demand_describe",
-     "需求描述",
-     string
-     )
-     )
-     
-     
-     */
-    NSLog(@"%@",arrs);
-    
-    
     
     NSMutableArray *outPutArray = @[].mutableCopy;
     [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -384,6 +338,7 @@
     });
 
 }
+#pragma mark - selected a language
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
     if (sender.indexOfSelectedItem < languageArray.count) {
         generater.language = sender.indexOfSelectedItem;
@@ -433,6 +388,29 @@
 - (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index
 {
     return languageArray[index];
+}
+#pragma mark - private 
+- (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title  {
+    return [[NSAttributedString alloc]initWithString:title attributes:@{NSFontAttributeName: [NSFont fontWithName:@"Times New Roman" size:16],NSForegroundColorAttributeName:[NSColor whiteColor]}];
+}
+- (void)makeRound:(NSView*)view{
+    view.layer.masksToBounds = YES;
+    view.layer.cornerRadius = 10;
+    view.layer.borderWidth = 5;
+    view.layer.borderColor = [NSColor whiteColor].CGColor;
+}
+
+- (void)dealWithArray:(NSMutableArray *)arr {
+    [arr enumerateObjectsUsingBlock:^(NSString  *_Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([str isEqualToString:@" "] || [str isEqualToString:@"formData"]) {
+            [arr removeObject:str];
+        }
+        BOOL hasValue = str && str.length;
+        if (!hasValue) {
+            [arr removeObject:str];
+        }
+        
+    }];
 }
 
 @end
