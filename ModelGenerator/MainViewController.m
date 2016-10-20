@@ -349,15 +349,18 @@
                      
                      */
                     if (idx == 0) {
-                        codeString = [NSString stringWithFormat:@"@{\n@\"%@\": @1,\n", propertyName];
+                        
+                        codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
 
-                    } else if (idx == outPutArray.count) {
-                        codeString = [NSString stringWithFormat:@"@\"%@\": @1\n}", propertyName];
+                    } else if (idx == arrs.count -1) {
+                        
+                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
 
                     } else {
                         
-                        codeString = [NSString stringWithFormat:@"@\"%@\": @1,\n", propertyName];
+                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
                     }
+                    
                     
                 } else {
                     
@@ -369,7 +372,7 @@
         
         
     }];
-    
+
     self.rightCodeString = [outPutArray componentsJoinedByString:@""];
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
