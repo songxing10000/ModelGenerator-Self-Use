@@ -182,11 +182,11 @@
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VBm-Dc-THG">
                                 <rect key="frame" x="0.0" y="0.0" width="300" height="257"/>
                                 <clipView key="contentView" id="xKZ-Nn-SIU">
-                                    <rect key="frame" x="1" y="1" width="283" height="255"/>
+                                    <rect key="frame" x="1" y="1" width="298" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="p7Q-IO-h2F">
-                                            <rect key="frame" x="0.0" y="0.0" width="283" height="255"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="298" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <size key="minSize" width="283" height="255"/>
@@ -266,11 +266,11 @@
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPe-l8-THT">
                                 <rect key="frame" x="300" y="0.0" width="300" height="257"/>
                                 <clipView key="contentView" id="nDZ-iH-vQp">
-                                    <rect key="frame" x="1" y="1" width="283" height="255"/>
+                                    <rect key="frame" x="1" y="1" width="298" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" importsGraphics="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="Ysi-iN-v9F">
-                                            <rect key="frame" x="0.0" y="0.0" width="283" height="255"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="298" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <size key="minSize" width="283" height="255"/>
