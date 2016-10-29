@@ -97,31 +97,32 @@
     }];
     self.outArr = outArr;
     NSArray <NSString *>*codes = [code componentsSeparatedByString:@"\n\n"];
-    NSMutableArray <NSMutableString *>*codesMu = @[].mutableCopy;
-    [codes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [codesMu addObject:obj.mutableCopy];
-    }];
+    NSMutableArray <NSString *>*temArr   = @[].mutableCopy;
     
-    [codesMu enumerateObjectsUsingBlock:^( NSMutableString * _Nonnull codeLine, NSUInteger idx, BOOL * _Nonnull stop) {
+    [codes enumerateObjectsUsingBlock:^( NSString * _Nonnull codeLine, NSUInteger idx, BOOL * _Nonnull stop) {
     
             if ([codeLine hasPrefix:@"@property"]) {
                 /*
                  @property (nonatomic,assign) NSInteger is_receive_much,
 
                  */
-                __block NSString *codeLineB = codeLine;
-                [self.outArr enumerateObjectsUsingBlock:^(NSDictionary<NSString *,NSString *> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    if ([obj.allKeys.firstObject isEqualToString:@""]) {
+                
+                NSString *pro = [[codeLine componentsSeparatedByString:@" "].lastObject stringByReplacingOccurrencesOfString:@";" withString:@""];
+                for (NSDictionary *dict in self.outArr) {
+                    if ([dict.allKeys.firstObject isEqualToString: pro]) {
                         
-                        codeLineB = [NSString stringWithFormat:@"///  %@/n%@", obj.allValues.firstObject, codeLine];
+                       NSString *c = [NSString stringWithFormat:@"///  %@\n%@", dict.allValues.firstObject, codeLine].mutableCopy;
+                        [temArr addObject:c];
                     }
-                }];
+                }
                 
             }
         
     }];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
+        [temArr insertObject:codes.firstObject atIndex:0];
+        [temArr insertObject:codes.lastObject atIndex:temArr.count];
+        [self.codeTextView insertText:[temArr componentsJoinedByString:@"\n\n"]  replacementRange:NSMakeRange(0, 1)];
         self.codeTextView.editable = NO;
     });
 } failure:^(NSString * _Nullable errorString) {
