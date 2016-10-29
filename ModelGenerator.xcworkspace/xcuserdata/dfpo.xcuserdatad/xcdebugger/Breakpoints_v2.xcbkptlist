@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModelGenerator/MainViewController.m"
-            timestampString = "499406500.68785"
+            timestampString = "499411062.284509"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "-jsonToOCProperty"
             landmarkType = "7">
             <Locations>
@@ -26,29 +26,45 @@
                   moduleName = "ModelGenerator"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/dfpo/Downloads/ModelGenerator-master/ModelGenerator/MainViewController.m"
-                  timestampString = "499405864.585379"
+                  timestampString = "499410425.253105"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "226"
-                  endingLineNumber = "226"
+                  startingLineNumber = "231"
+                  endingLineNumber = "231"
                   offsetFromSymbolStart = "324">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "__38-[MainViewController jsonToOCProperty]_block_invoke.245"
+                  symbolName = "__38-[MainViewController jsonToOCProperty]_block_invoke.253"
                   moduleName = "ModelGenerator"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/dfpo/Downloads/ModelGenerator-master/ModelGenerator/MainViewController.m"
-                  timestampString = "499405864.588368"
+                  timestampString = "499410425.261835"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "227"
-                  endingLineNumber = "227"
+                  startingLineNumber = "232"
+                  endingLineNumber = "232"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ModelGenerator/MainViewController.m"
+            timestampString = "499411062.284509"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "-loadDataFromServerDealWithCode:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -57,19 +57,23 @@
     [self makeRound:self.emptyBtn];
 }
 - (void)dfds {
+    
     self.HUD = [[MBProgressHUD alloc] initWithWindow:self.view.window];
-    [self.view addSubview:self.HUD];
+    
+    [self.codeTextView addSubview:self.HUD];
     
     self.HUD.delegate = self;
     self.HUD.labelText = @"Loading";
+    self.HUD.detailsLabelText = @"updating data";
+    self.HUD.square = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.HUD show:YES];
+    });
     
-    [self.HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
 }
-- (void)myTask {
-    // Do something usefull in here instead of sleeping ...
-    sleep(3);
-}
+
 - (void)loadDataFromServerDealWithCode:(NSString *)code {
+    [self dfds];
 [[SXNetManager manager] getWithAPI:@"dbdoc.php" params:NULL HUDString:@"加载中..." success:^(NSString  *_Nullable string) {
     NSArray <NSString *>*arr1 = [string componentsSeparatedByString:@"\n"];
     NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr = @[].mutableCopy;
@@ -120,6 +124,8 @@
         
     }];
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.HUD hide:YES];
+
         [temArr insertObject:codes.firstObject atIndex:0];
         [temArr insertObject:codes.lastObject atIndex:temArr.count];
         [self.codeTextView insertText:[temArr componentsJoinedByString:@"\n\n"]  replacementRange:NSMakeRange(0, 1)];
