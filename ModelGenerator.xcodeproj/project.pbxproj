@@ -17,9 +17,14 @@
 		07A304391B79B1ED00B0CA47 /* ModelGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A304381B79B1ED00B0CA47 /* ModelGenerator.m */; };
 		07CE48BE1C5A04CD00DC2AFD /* ColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE48BB1C5A04CD00DC2AFD /* ColorView.m */; };
 		07CE48BF1C5A04CD00DC2AFD /* Window.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE48BD1C5A04CD00DC2AFD /* Window.m */; };
+		60BC6F470E8C1CCCE39F567F /* libPods-ModelGenerator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D601320D0FAF187E1A83B4 /* libPods-ModelGenerator.a */; };
+		98A8CBB41DC435F10067822A /* SXNetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A8CBB31DC435F10067822A /* SXNetManager.m */; };
+		98A8CBB71DC4367B0067822A /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A8CBB61DC4367B0067822A /* MBProgressHUD.m */; };
+		98A8CBBA1DC43C550067822A /* MainViewController+Show.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A8CBB91DC43C550067822A /* MainViewController+Show.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		07298A6195D771439BD22088 /* Pods-ModelGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelGenerator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ModelGenerator/Pods-ModelGenerator.debug.xcconfig"; sourceTree = "<group>"; };
 		075150C51B7B14BE0078138B /* ClassViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassViewController.h; sourceTree = "<group>"; };
 		075150C61B7B14BE0078138B /* ClassViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassViewController.m; sourceTree = "<group>"; };
 		075150ED1B7C94070078138B /* Template.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Template.h; sourceTree = "<group>"; };
@@ -41,6 +46,14 @@
 		07CE48BB1C5A04CD00DC2AFD /* ColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorView.m; sourceTree = "<group>"; };
 		07CE48BC1C5A04CD00DC2AFD /* Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Window.h; sourceTree = "<group>"; };
 		07CE48BD1C5A04CD00DC2AFD /* Window.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Window.m; sourceTree = "<group>"; };
+		69D601320D0FAF187E1A83B4 /* libPods-ModelGenerator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelGenerator.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		98A8CBB21DC435F10067822A /* SXNetManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SXNetManager.h; sourceTree = "<group>"; };
+		98A8CBB31DC435F10067822A /* SXNetManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SXNetManager.m; sourceTree = "<group>"; };
+		98A8CBB51DC4367B0067822A /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		98A8CBB61DC4367B0067822A /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		98A8CBB81DC43C550067822A /* MainViewController+Show.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MainViewController+Show.h"; sourceTree = "<group>"; };
+		98A8CBB91DC43C550067822A /* MainViewController+Show.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MainViewController+Show.m"; sourceTree = "<group>"; };
+		F0497B18906CFDA666C4C0DA /* Pods-ModelGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelGenerator.release.xcconfig"; path = "Pods/Target Support Files/Pods-ModelGenerator/Pods-ModelGenerator.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60BC6F470E8C1CCCE39F567F /* libPods-ModelGenerator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +73,8 @@
 			children = (
 				07A304131B79B1DC00B0CA47 /* ModelGenerator */,
 				07A304121B79B1DC00B0CA47 /* Products */,
+				6E439A3CEF55857D73D0BC6E /* Pods */,
+				43A96C7D94594DA8EE6AC72E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,6 +89,7 @@
 		07A304131B79B1DC00B0CA47 /* ModelGenerator */ = {
 			isa = PBXGroup;
 			children = (
+				98A8CBB11DC435F10067822A /* SXNetManager */,
 				07853DC71CDC6CDD007A5F3A /* ModelGenerator.entitlements */,
 				07A304161B79B1DC00B0CA47 /* AppDelegate.h */,
 				07A304171B79B1DC00B0CA47 /* AppDelegate.m */,
@@ -82,6 +99,8 @@
 				07853E231CE31D67007A5F3A /* MainWindowController.m */,
 				07A3041B1B79B1DC00B0CA47 /* MainViewController.h */,
 				07A3041C1B79B1DC00B0CA47 /* MainViewController.m */,
+				98A8CBB81DC43C550067822A /* MainViewController+Show.h */,
+				98A8CBB91DC43C550067822A /* MainViewController+Show.m */,
 				075150C51B7B14BE0078138B /* ClassViewController.h */,
 				075150C61B7B14BE0078138B /* ClassViewController.m */,
 				07CE48BA1C5A04CD00DC2AFD /* ColorView.h */,
@@ -105,6 +124,34 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		43A96C7D94594DA8EE6AC72E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				69D601320D0FAF187E1A83B4 /* libPods-ModelGenerator.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6E439A3CEF55857D73D0BC6E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				07298A6195D771439BD22088 /* Pods-ModelGenerator.debug.xcconfig */,
+				F0497B18906CFDA666C4C0DA /* Pods-ModelGenerator.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		98A8CBB11DC435F10067822A /* SXNetManager */ = {
+			isa = PBXGroup;
+			children = (
+				98A8CBB21DC435F10067822A /* SXNetManager.h */,
+				98A8CBB31DC435F10067822A /* SXNetManager.m */,
+				98A8CBB51DC4367B0067822A /* MBProgressHUD.h */,
+				98A8CBB61DC4367B0067822A /* MBProgressHUD.m */,
+			);
+			path = SXNetManager;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,9 +159,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 07A304311B79B1DC00B0CA47 /* Build configuration list for PBXNativeTarget "ModelGenerator" */;
 			buildPhases = (
+				D261CDD61F67D9E86406F53D /* [CP] Check Pods Manifest.lock */,
 				07A3040D1B79B1DC00B0CA47 /* Sources */,
 				07A3040E1B79B1DC00B0CA47 /* Frameworks */,
 				07A3040F1B79B1DC00B0CA47 /* Resources */,
+				64C2695E694EB33F3E31D099 /* [CP] Embed Pods Frameworks */,
+				6ABA4A1BA0EE9B407391DC12 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -174,6 +224,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		64C2695E694EB33F3E31D099 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ModelGenerator/Pods-ModelGenerator-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6ABA4A1BA0EE9B407391DC12 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ModelGenerator/Pods-ModelGenerator-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D261CDD61F67D9E86406F53D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		07A3040D1B79B1DC00B0CA47 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -182,9 +280,12 @@
 				07A3041D1B79B1DC00B0CA47 /* MainViewController.m in Sources */,
 				07A3041A1B79B1DC00B0CA47 /* main.m in Sources */,
 				07853E241CE31D67007A5F3A /* MainWindowController.m in Sources */,
+				98A8CBB41DC435F10067822A /* SXNetManager.m in Sources */,
 				07A304181B79B1DC00B0CA47 /* AppDelegate.m in Sources */,
+				98A8CBBA1DC43C550067822A /* MainViewController+Show.m in Sources */,
 				07CE48BF1C5A04CD00DC2AFD /* Window.m in Sources */,
 				07A304391B79B1ED00B0CA47 /* ModelGenerator.m in Sources */,
+				98A8CBB71DC4367B0067822A /* MBProgressHUD.m in Sources */,
 				07CE48BE1C5A04CD00DC2AFD /* ColorView.m in Sources */,
 				075150C71B7B14BE0078138B /* ClassViewController.m in Sources */,
 			);
@@ -286,6 +387,7 @@
 		};
 		07A304321B79B1DC00B0CA47 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 07298A6195D771439BD22088 /* Pods-ModelGenerator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ModelGenerator/ModelGenerator.entitlements;
@@ -299,6 +401,7 @@
 		};
 		07A304331B79B1DC00B0CA47 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F0497B18906CFDA666C4C0DA /* Pods-ModelGenerator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ModelGenerator/ModelGenerator.entitlements;

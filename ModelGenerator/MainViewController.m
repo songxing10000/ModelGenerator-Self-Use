@@ -9,13 +9,20 @@
 #import "MainViewController.h"
 #import "ModelGenerator.h"
 #import "ClassViewController.h"
+#import "MBProgressHUD.h"
+#import "SXNetManager.h"
+#import "MainViewController+Show.h"
 
-@interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate>
+@interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate,MBProgressHUDDelegate>
 
 /// api to oc property use
 @property (nonatomic) NSString *rightCodeString;
 
 @property (weak) IBOutlet NSButton *emptyBtn;
+@property (nonatomic)     MBProgressHUD *HUD;
+@property (nonatomic)     NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr;
+
+@property (weak) IBOutlet NSButton *needNetControl;
 @end
 
 @implementation MainViewController
@@ -29,7 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.preferredContentSize = CGSizeMake(700, 400);
-    
+    _outArr = @[].mutableCopy;
     languageArray = @[@"Objective-C",@"Swift",@"Java", @"Api to OC property", @"Sosoapi to OC property", @"Sosoapi to OC dict", @"Sosoapi to postman bulk edit"];
     generater = [ModelGenerator sharedGenerator];
     
@@ -40,15 +47,95 @@
     _classNameField.placeholderAttributedString = [self btnAttributedStringWithtitle:@"ClassName"];
     _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"Start"];
     self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"empty"];
+    self.needNetControl.attributedTitle = [self btnAttributedStringWithtitle:@"net"];
     _comboBox.stringValue = @"Objective-C";
     generater.language = ObjectiveC;
+    [self makeRound:self.needNetControl];
     [self makeRound:_comboBox];
     [self makeRound:_classNameField];
     [self makeRound:_startBtn];
     [self makeRound:self.emptyBtn];
 }
+- (void)dfds {
+    self.HUD = [[MBProgressHUD alloc] initWithWindow:self.view.window];
+    [self.view addSubview:self.HUD];
+    
+    self.HUD.delegate = self;
+    self.HUD.labelText = @"Loading";
+    
+    [self.HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
+}
+- (void)myTask {
+    // Do something usefull in here instead of sleeping ...
+    sleep(3);
+}
+- (void)loadDataFromServerDealWithCode:(NSString *)code {
+[[SXNetManager manager] getWithAPI:@"dbdoc.php" params:NULL HUDString:@"加载中..." success:^(NSString  *_Nullable string) {
+    NSArray <NSString *>*arr1 = [string componentsSeparatedByString:@"\n"];
+    NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr = @[].mutableCopy;
+    
+    [arr1 enumerateObjectsUsingBlock:^(NSString * _Nonnull linStr, NSUInteger idx, BOOL * _Nonnull stop) {
+        linStr = [linStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        if ([linStr isEqualToString:@"<tr class=\"odd\">"] ||
+            [linStr isEqualToString:@"<tr class=\"even\">"]) {
+            
+            NSString *propertyName = arr1[idx + 1];
+            propertyName = [propertyName stringByReplacingOccurrencesOfString:@"<td>" withString:@""];
+            propertyName = [propertyName stringByReplacingOccurrencesOfString:@"</td>" withString:@""];
+            propertyName = [propertyName stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            NSString *desStr = arr1[idx + 7];
+            desStr = [desStr stringByReplacingOccurrencesOfString:@"<td>" withString:@""];
+            desStr = [desStr stringByReplacingOccurrencesOfString:@"</td>" withString:@""];
+            desStr = [desStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+            
+            [outArr addObject:@{propertyName: desStr}];
+        } else {
+            
+        }
+    }];
+    self.outArr = outArr;
+    NSArray <NSString *>*codes = [code componentsSeparatedByString:@"\n\n"];
+    NSMutableArray <NSMutableString *>*codesMu = @[].mutableCopy;
+    [codes enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [codesMu addObject:obj.mutableCopy];
+    }];
+    
+    [codesMu enumerateObjectsUsingBlock:^( NSMutableString * _Nonnull codeLine, NSUInteger idx, BOOL * _Nonnull stop) {
+    
+            if ([codeLine hasPrefix:@"@property"]) {
+                /*
+                 @property (nonatomic,assign) NSInteger is_receive_much,
 
+                 */
+                __block NSString *codeLineB = codeLine;
+                [self.outArr enumerateObjectsUsingBlock:^(NSDictionary<NSString *,NSString *> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([obj.allKeys.firstObject isEqualToString:@""]) {
+                        
+                        codeLineB = [NSString stringWithFormat:@"///  %@/n%@", obj.allValues.firstObject, codeLine];
+                    }
+                }];
+                
+            }
+        
+    }];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
+        self.codeTextView.editable = NO;
+    });
+} failure:^(NSString * _Nullable errorString) {
+    
+    [self showAlertWithString:errorString];
+}];
+}
 #pragma mark - action
+
+- (IBAction)checkChangeFromBtn:(NSButton *)sender {
+    NSLog(@"----%tu---", sender.state);
+}
+
+
 #pragma mark empty btn
 - (IBAction)clickemptyBtn:(NSButton *)sender {
     self.jsonTextView.string = @"";
@@ -61,12 +148,7 @@
 - (IBAction)generate:(id)sender {
 
     if (self.comboBox.indexOfSelectedItem >= languageArray.count) {
-        NSAlert *alert = [[NSAlert alloc]init];
-        alert.messageText = @"请先选择一个转换格式";
-        [alert addButtonWithTitle:@"好的"];
-        alert.alertStyle = NSWarningAlertStyle;
-        [alert runModal];
-        return;
+        [self showAlertWithString:@"请先选择一个转换格式"];
         return;
     }
     
@@ -94,38 +176,25 @@
 #pragma mark jsonToOCProperty
 - (void)jsonToOCProperty {
     if (self.jsonTextView.textStorage.string.length == 0) {
-        NSAlert *alert = [[NSAlert alloc]init];
-        alert.messageText = @"请先输入要转换的Json文本";
-        [alert addButtonWithTitle:@"好的"];
-        alert.alertStyle = NSWarningAlertStyle;
-        [alert runModal];
+        [self showAlertWithString:@"请先输入要转换的Json文本"];
         return;
     }
     if (_classNameField.stringValue.length == 0) {
-        NSAlert *alert = [[NSAlert alloc]init];
-        alert.messageText = @"请输入要生成的类名";
-        [alert addButtonWithTitle:@"好的"];
-        alert.alertStyle = NSWarningAlertStyle;
-        [alert runModal];
+        [self showAlertWithString:@"请输入要生成的类名"];
         return;
     }
     if (generater.language == Unknow) {
-        NSAlert *alert = [[NSAlert alloc]init];
-        alert.messageText = @"请选择语言";
-        [alert addButtonWithTitle:@"好的"];
-        alert.alertStyle = NSWarningAlertStyle;
-        [alert runModal];
+        
+        [self showAlertWithString:@"请选择语言"];
+
         return;
     }
     generater.className = _classNameField.stringValue;
     NSError *error = nil;
     NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[_jsonTextView.textStorage.string dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
     if (error) {
-        NSAlert *alert = [[NSAlert alloc]init];
-        alert.messageText = @"无效的Json数据";
-        [alert addButtonWithTitle:@"好的"];
-        alert.alertStyle = NSWarningAlertStyle;
-        [alert runModal];
+        
+        [self showAlertWithString:@"无效的Json数据"];
         return;
     }
     self.codeTextView.editable = YES;
@@ -146,11 +215,18 @@
             }
             return result;
         }];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        if (self.needNetControl.state == 1) {
+            // 需要加入网络来的注释
+            [self loadDataFromServerDealWithCode:code];
+            
+            
+        } else {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
+                self.codeTextView.editable = NO;
+            });
+        }
         
     });
 
@@ -340,12 +416,17 @@
 }
 #pragma mark - selected a language
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
-    if (sender.indexOfSelectedItem < languageArray.count) {
-        generater.language = sender.indexOfSelectedItem;
+    NSInteger idx = sender.indexOfSelectedItem;
+    if (idx < languageArray.count) {
+        generater.language = idx;
         
-        BOOL showJsonPlaceHoler = sender.indexOfSelectedItem <= 2;
+        BOOL showJsonPlaceHoler = idx <= 2;
         self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
         self.classNameField.hidden = !showJsonPlaceHoler;
+        
+        
+        self.needNetControl.hidden = !(idx == 0 || idx == 4);
+        
     }
 }
 
@@ -389,7 +470,17 @@
 {
     return languageArray[index];
 }
-#pragma mark - private 
+
+#pragma mark -
+#pragma mark MBProgressHUDDelegate methods
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+
+    [self.HUD removeFromSuperview];
+    self.HUD = nil;
+}
+
+#pragma mark - private
 - (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title  {
     return [[NSAttributedString alloc]initWithString:title attributes:@{NSFontAttributeName: [NSFont fontWithName:@"Times New Roman" size:16],NSForegroundColorAttributeName:[NSColor whiteColor]}];
 }
