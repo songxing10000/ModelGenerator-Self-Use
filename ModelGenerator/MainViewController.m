@@ -82,7 +82,8 @@
         linStr = [linStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
         if ([linStr isEqualToString:@"<tr class=\"odd\">"] ||
-            [linStr isEqualToString:@"<tr class=\"even\">"]) {
+            [linStr isEqualToString:@"<tr class=\"even\">"] ||
+            [linStr isEqualToString:@"<th>备注</th></tr>        <tr class=\"odd\">"]) {
             
             NSString *propertyName = arr1[idx + 1];
             propertyName = [propertyName stringByReplacingOccurrencesOfString:@"<td>" withString:@""];
@@ -322,28 +323,49 @@
     
     
     NSMutableArray *arrs = @[].mutableCopy;
-    for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
-        
-        NSMutableArray *arr1 = [NSMutableArray array];
-        NSInteger counts = 0;
-        
-        while (counts != 3 && i < [lineCodeStrings count]  ) {
-            counts++;
-            [arr1 addObject:lineCodeStrings[i]];
-            i ++;
+    if (lineCodeStrings.count % 3 == 0) {
+        // 有注释
+            for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
+                
+                NSMutableArray *arr1 = [NSMutableArray array];
+                NSInteger counts = 0;
+                
+                while (counts != 3 && i < [lineCodeStrings count]  ) {
+                    counts++;
+                    [arr1 addObject:lineCodeStrings[i]];
+                    i ++;
+                    
+                    
+                }
+                [arrs addObject:arr1];
+                
+                i --;
+            }
+    } else if (lineCodeStrings.count % 2 == 0) {
+        // 没有注释
+        for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
             
+            NSMutableArray *arr1 = [NSMutableArray array];
+            NSInteger counts = 0;
             
+            while (counts != 2 && i < [lineCodeStrings count]  ) {
+                counts++;
+                [arr1 addObject:lineCodeStrings[i]];
+                i ++;
+                
+                
+            }
+            [arrs addObject:arr1];
+            
+            i --;
         }
-        [arrs addObject:arr1];
-        
-        i --;
     }
     
     NSMutableArray *outPutArray = @[].mutableCopy;
     [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
         
         if (lineArray.count == 3) {
-            
+            // 有注释
             
             NSString *propertyName = lineArray.firstObject;
             NSString *descString = [lineArray[1].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
@@ -405,7 +427,70 @@
                 }
             }
             [outPutArray addObject:codeString];
+        } else  if (lineArray.count == 2) {
+            // 没有注释
+            
+            NSString *propertyName = lineArray.firstObject;
+            NSString *className = lineArray[1];
+            NSString *objectStr = @"*";
+            
+            if ([className isEqualToString:@"string"]) {
+                className = @"NSString";
+            } else if ([className isEqualToString:@"integer"]) {
+                className = @"NSInteger";
+            } else if ([className isEqualToString:@"array"]) {
+                className = @"NSArray";
+            }
+            if ([className isEqualToString:@"NSInteger"]) {
+                objectStr = @" ";
+            } else if ([className isEqualToString:@"NSString"]) {
+                objectStr = @"  *";
+            } else if ([className isEqualToString:@"NSArray"]) {
+                objectStr = @"   *";
+            }
+            
+            NSString *codeString = @"??";
+            if (!isOCProperty) {
+                
+                
+                codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
+                
+                
+                
+            } else  {
+                if (isNeedDict) {
+                    
+                    /*
+                     @{
+                     @"":@"",
+                     @"":@"",
+                     @"":@"",
+                     
+                     @"":@""}
+                     
+                     */
+                    if (idx == 0) {
+                        
+                        codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
+                        
+                    } else if (idx == arrs.count -1) {
+                        
+                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
+                        
+                    } else {
+                        
+                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
+                    }
+                    
+                    
+                } else {
+                    
+                    codeString = [NSString stringWithFormat:@"\n@property (nonatomic) %@%@%@;\n\n",  className, objectStr, propertyName];
+                }
+            }
+            [outPutArray addObject:codeString];
         }
+
         
         
     }];
@@ -414,11 +499,15 @@
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
+//    if (self.needNetControl.state == 1) {
+//        [self loadDataFromServerDealWithCode:self.rightCodeString];
+//    } else {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
-        self.codeTextView.editable = NO;
-    });
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
+            self.codeTextView.editable = NO;
+        });
+//    }
 
 }
 #pragma mark - selected a language
