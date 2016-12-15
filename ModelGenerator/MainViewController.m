@@ -48,7 +48,8 @@
     _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"Start"];
     self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"empty"];
     self.needNetControl.attributedTitle = [self btnAttributedStringWithtitle:@"net"];
-    _comboBox.stringValue = @"Objective-C";
+    
+    
     generater.language = ObjectiveC;
     [self makeRound:self.needNetControl];
     [self makeRound:_comboBox];
@@ -318,178 +319,120 @@
     NSMutableArray <NSString *>*lineCodeStrings =
     [inputString componentsSeparatedByString:@"\n"].mutableCopy;
     
-    
+    // 12=4*3
     [self dealWithArray:lineCodeStrings];
-    
+    NSInteger lieNum = 3;
+    if ([lineCodeStrings[2] isEqualToString:@"是"] ||
+        [lineCodeStrings[2] isEqualToString:@"否"] ||
+        [lineCodeStrings[2] isEqualToString:@"非"] ||
+        [lineCodeStrings[2] isEqualToString:@"不是"]) {
+        // 四列
+        lieNum = 4;
+
+    } else {
+        // 三行
+        lieNum = 3;
+    }
     
     NSMutableArray *arrs = @[].mutableCopy;
-    if (lineCodeStrings.count % 3 == 0) {
-        // 有注释
-            for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
-                
-                NSMutableArray *arr1 = [NSMutableArray array];
-                NSInteger counts = 0;
-                
-                while (counts != 3 && i < [lineCodeStrings count]  ) {
-                    counts++;
-                    [arr1 addObject:lineCodeStrings[i]];
-                    i ++;
-                    
-                    
-                }
-                [arrs addObject:arr1];
-                
-                i --;
-            }
-    } else if (lineCodeStrings.count % 2 == 0) {
-        // 没有注释
-        for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
+    
+    
+    for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
+        
+        NSMutableArray *arr1 = [NSMutableArray array];
+        NSInteger counts = 0;
+        
+        while (counts != lieNum && i < [lineCodeStrings count]  ) {
+            counts++;
+            [arr1 addObject:lineCodeStrings[i]];
+            i ++;
             
-            NSMutableArray *arr1 = [NSMutableArray array];
-            NSInteger counts = 0;
             
-            while (counts != 2 && i < [lineCodeStrings count]  ) {
-                counts++;
-                [arr1 addObject:lineCodeStrings[i]];
-                i ++;
-                
-                
-            }
-            [arrs addObject:arr1];
-            
-            i --;
         }
+        [arrs addObject:arr1];
+        
+        i --;
     }
+    
     
     NSMutableArray *outPutArray = @[].mutableCopy;
     [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        if (lineArray.count == 3) {
+        
             // 有注释
             
-            NSString *propertyName = lineArray.firstObject;
-            NSString *descString = [lineArray[1].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
-            NSString *className = lineArray[2];
-            NSString *objectStr = @"*";
-            
-            if ([className isEqualToString:@"string"]) {
-                className = @"NSString";
-            } else if ([className isEqualToString:@"integer"]) {
-                className = @"NSInteger";
-            } else if ([className isEqualToString:@"array"]) {
-                className = @"NSArray";
-            }
-            if ([className isEqualToString:@"NSInteger"]) {
-                objectStr = @" ";
-            } else if ([className isEqualToString:@"NSString"]) {
-                objectStr = @"  *";
-            } else if ([className isEqualToString:@"NSArray"]) {
-                objectStr = @"   *";
-            }            
-            
-            NSString *codeString = @"??";
-            if (!isOCProperty) {
-                
-                    
-                    codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
-                
+        NSString *propertyName = lineArray.firstObject;
+        NSString *className = lineArray[1];
+        NSString *descString = @"未处理";
 
-                
-            } else  {
-                if (isNeedDict) {
-                    
-                    /*
-                     @{
-                     @"":@"",
-                     @"":@"",
-                     @"":@"",
-                     
-                     @"":@""}
-                     
-                     */
-                    if (idx == 0) {
-                        
-                        codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
+        if (lieNum == 3) {
+            descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
 
-                    } else if (idx == arrs.count -1) {
-                        
-                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
+        } else if (lieNum == 4) {
+            descString =
+            [NSString stringWithFormat:@"%@，是否必填->%@",
+            [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
+             lineArray[2]];
 
-                    } else {
-                        
-                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
-                    }
-                    
-                    
-                } else {
-                    
-                    codeString = [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
-                }
-            }
-            [outPutArray addObject:codeString];
-        } else  if (lineArray.count == 2) {
-            // 没有注释
+        }
+        NSString *objectStr = @"*";
+        
+        if ([className isEqualToString:@"string"]) {
+            className = @"NSString";
+        } else if ([className isEqualToString:@"int"]) {
+            className = @"NSInteger";
+        } else if ([className isEqualToString:@"array"]) {
+            className = @"NSArray";
+        }
+        if ([className isEqualToString:@"NSInteger"]) {
+            objectStr = @" ";
+        } else if ([className isEqualToString:@"NSString"]) {
+            objectStr = @"  *";
+        } else if ([className isEqualToString:@"NSArray"]) {
+            objectStr = @"   *";
+        }            
+        
+        NSString *codeString = @"??";
+        if (!isOCProperty) {
             
-            NSString *propertyName = lineArray.firstObject;
-            NSString *className = lineArray[1];
-            NSString *objectStr = @"*";
-            
-            if ([className isEqualToString:@"string"]) {
-                className = @"NSString";
-            } else if ([className isEqualToString:@"integer"]) {
-                className = @"NSInteger";
-            } else if ([className isEqualToString:@"array"]) {
-                className = @"NSArray";
-            }
-            if ([className isEqualToString:@"NSInteger"]) {
-                objectStr = @" ";
-            } else if ([className isEqualToString:@"NSString"]) {
-                objectStr = @"  *";
-            } else if ([className isEqualToString:@"NSArray"]) {
-                objectStr = @"   *";
-            }
-            
-            NSString *codeString = @"??";
-            if (!isOCProperty) {
-                
                 
                 codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
+            
+
+            
+        } else  {
+            if (isNeedDict) {
                 
-                
-                
-            } else  {
-                if (isNeedDict) {
+                /*
+                 @{
+                 @"":@"",
+                 @"":@"",
+                 @"":@"",
+                 
+                 @"":@""}
+                 
+                 */
+                if (idx == 0) {
                     
-                    /*
-                     @{
-                     @"":@"",
-                     @"":@"",
-                     @"":@"",
-                     
-                     @"":@""}
-                     
-                     */
-                    if (idx == 0) {
-                        
-                        codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
-                        
-                    } else if (idx == arrs.count -1) {
-                        
-                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
-                        
-                    } else {
-                        
-                        codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
-                    }
+                    codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
+
+                } else if (idx == arrs.count -1) {
                     
-                    
+                    codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
+
                 } else {
                     
-                    codeString = [NSString stringWithFormat:@"\n@property (nonatomic) %@%@%@;\n\n",  className, objectStr, propertyName];
+                    codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
                 }
+                
+                
+            } else {
+                
+                codeString = [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
             }
-            [outPutArray addObject:codeString];
         }
+        [outPutArray addObject:codeString];
+        
 
         
         
@@ -521,7 +464,7 @@
         self.classNameField.hidden = !showJsonPlaceHoler;
         
         
-        self.needNetControl.hidden = !(idx == 0 || idx == 4);
+        self.needNetControl.hidden = !(idx == 1 || idx == 4);
         
     }
 }
