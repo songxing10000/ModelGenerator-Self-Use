@@ -5,6 +5,4 @@ inhibit_all_warnings!
 
 target 'ModelGenerator' do
 
-pod "AFNetworking"
-
 end

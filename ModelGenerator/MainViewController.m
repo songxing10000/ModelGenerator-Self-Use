@@ -9,20 +9,16 @@
 #import "MainViewController.h"
 #import "ModelGenerator.h"
 #import "ClassViewController.h"
-#import "MBProgressHUD.h"
-#import "SXNetManager.h"
 #import "MainViewController+Show.h"
 
-@interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate,MBProgressHUDDelegate>
+@interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate>
 
 /// api to oc property use
 @property (nonatomic) NSString *rightCodeString;
 
 @property (weak) IBOutlet NSButton *emptyBtn;
-@property (nonatomic)     MBProgressHUD *HUD;
 @property (nonatomic)     NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr;
 
-@property (weak) IBOutlet NSButton *needNetControl;
 @end
 
 @implementation MainViewController
@@ -47,96 +43,14 @@
     _classNameField.placeholderAttributedString = [self btnAttributedStringWithtitle:@"ClassName"];
     _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"Start"];
     self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"empty"];
-    self.needNetControl.attributedTitle = [self btnAttributedStringWithtitle:@"net"];
     
     
     generater.language = ObjectiveC;
-    [self makeRound:self.needNetControl];
+    
     [self makeRound:_comboBox];
     [self makeRound:_classNameField];
     [self makeRound:_startBtn];
     [self makeRound:self.emptyBtn];
-}
-- (void)dfds {
-    
-    self.HUD = [[MBProgressHUD alloc] initWithWindow:self.view.window];
-    
-    [self.codeTextView addSubview:self.HUD];
-    
-    self.HUD.delegate = self;
-    self.HUD.labelText = @"Loading";
-    self.HUD.detailsLabelText = @"updating data";
-    self.HUD.square = YES;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.HUD show:YES];
-    });
-    
-}
-
-- (void)loadDataFromServerDealWithCode:(NSString *)code {
-    [self dfds];
-[[SXNetManager manager] getWithAPI:@"dbdoc.php" params:NULL HUDString:@"加载中..." success:^(NSString  *_Nullable string) {
-    NSArray <NSString *>*arr1 = [string componentsSeparatedByString:@"\n"];
-    NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr = @[].mutableCopy;
-    
-    [arr1 enumerateObjectsUsingBlock:^(NSString * _Nonnull linStr, NSUInteger idx, BOOL * _Nonnull stop) {
-        linStr = [linStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        if ([linStr isEqualToString:@"<tr class=\"odd\">"] ||
-            [linStr isEqualToString:@"<tr class=\"even\">"] ||
-            [linStr isEqualToString:@"<th>备注</th></tr>        <tr class=\"odd\">"]) {
-            
-            NSString *propertyName = arr1[idx + 1];
-            propertyName = [propertyName stringByReplacingOccurrencesOfString:@"<td>" withString:@""];
-            propertyName = [propertyName stringByReplacingOccurrencesOfString:@"</td>" withString:@""];
-            propertyName = [propertyName stringByReplacingOccurrencesOfString:@" " withString:@""];
-            
-            NSString *desStr = arr1[idx + 7];
-            desStr = [desStr stringByReplacingOccurrencesOfString:@"<td>" withString:@""];
-            desStr = [desStr stringByReplacingOccurrencesOfString:@"</td>" withString:@""];
-            desStr = [desStr stringByReplacingOccurrencesOfString:@" " withString:@""];
-            
-            [outArr addObject:@{propertyName: desStr}];
-        } else {
-            
-        }
-    }];
-    self.outArr = outArr;
-    NSArray <NSString *>*codes = [code componentsSeparatedByString:@"\n\n"];
-    NSMutableArray <NSString *>*temArr   = @[].mutableCopy;
-    
-    [codes enumerateObjectsUsingBlock:^( NSString * _Nonnull codeLine, NSUInteger idx, BOOL * _Nonnull stop) {
-    
-            if ([codeLine hasPrefix:@"@property"]) {
-                /*
-                 @property (nonatomic,assign) NSInteger is_receive_much,
-
-                 */
-                
-                NSString *pro = [[codeLine componentsSeparatedByString:@" "].lastObject stringByReplacingOccurrencesOfString:@";" withString:@""];
-                for (NSDictionary *dict in self.outArr) {
-                    if ([dict.allKeys.firstObject isEqualToString: pro]) {
-                        
-                       NSString *c = [NSString stringWithFormat:@"///  %@\n%@", dict.allValues.firstObject, codeLine].mutableCopy;
-                        [temArr addObject:c];
-                    }
-                }
-                
-            }
-        
-    }];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.HUD hide:YES];
-
-        [temArr insertObject:codes.firstObject atIndex:0];
-        [temArr insertObject:codes.lastObject atIndex:temArr.count];
-        [self.codeTextView insertText:[temArr componentsJoinedByString:@"\n\n"]  replacementRange:NSMakeRange(0, 1)];
-        self.codeTextView.editable = NO;
-    });
-} failure:^(NSString * _Nullable errorString) {
-    
-    [self showAlertWithString:errorString];
-}];
 }
 #pragma mark - action
 
@@ -224,18 +138,13 @@
             }
             return result;
         }];
-        if (self.needNetControl.state == 1) {
-            // 需要加入网络来的注释
-            [self loadDataFromServerDealWithCode:code];
-            
-            
-        } else {
-            
+        
+        
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
                 self.codeTextView.editable = NO;
             });
-        }
+        
         
     });
 
@@ -464,7 +373,6 @@
         self.classNameField.hidden = !showJsonPlaceHoler;
         
         
-        self.needNetControl.hidden = !(idx == 1 || idx == 4);
         
     }
 }
@@ -510,14 +418,6 @@
     return languageArray[index];
 }
 
-#pragma mark -
-#pragma mark MBProgressHUDDelegate methods
-
-- (void)hudWasHidden:(MBProgressHUD *)hud {
-
-    [self.HUD removeFromSuperview];
-    self.HUD = nil;
-}
 
 #pragma mark - private
 - (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title  {
