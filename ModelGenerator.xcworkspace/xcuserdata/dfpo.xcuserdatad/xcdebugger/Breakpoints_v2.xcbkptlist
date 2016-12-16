@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModelGenerator/MainViewController.m"
-            timestampString = "499596262.930585"
+            timestampString = "503591330.224613"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
             landmarkName = "-jsonToOCProperty"
             landmarkType = "7">
             <Locations>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModelGenerator/MainViewController.m"
-            timestampString = "499596262.930585"
+            timestampString = "503591330.224613"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "328"
-            endingLineNumber = "328"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
             landmarkName = "-sosoapiToOCProperty:needOCDict:"
             landmarkType = "7">
          </BreakpointContent>

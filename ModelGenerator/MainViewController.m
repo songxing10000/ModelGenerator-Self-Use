@@ -33,7 +33,7 @@
     [super viewDidLoad];
     self.preferredContentSize = CGSizeMake(700, 400);
     _outArr = @[].mutableCopy;
-    languageArray = @[@"Objective-C",@"Swift",@"Java", @"Api to OC property", @"Sosoapi to OC property", @"Sosoapi to OC dict", @"Sosoapi to postman bulk edit"];
+    languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC dict", @"doc to postman bulk edit"];
     generater = [ModelGenerator sharedGenerator];
     
     [_jsonTextView becomeFirstResponder];
@@ -76,22 +76,14 @@
     }
     
     NSString *currentLanguage = languageArray[self.comboBox.indexOfSelectedItem];
-    if ([currentLanguage isEqualToString:@"Objective-C"]) {
+    if ([currentLanguage isEqualToString:@"JSON to OC property"]) {
         [self jsonToOCProperty];
-    } else if ([currentLanguage isEqualToString:@"Swift"]) {
-        [self jsonToOCProperty];
-
-    } else if ([currentLanguage isEqualToString:@"Java-C"]) {
-        [self jsonToOCProperty];
-
-    } else if ([currentLanguage isEqualToString:@"Api to OC property"]) {
-        [self apiToOCProperty];
-    } else if ([currentLanguage isEqualToString:@"Sosoapi to OC property"]) {
+    } else if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
-    } else if ([currentLanguage isEqualToString:@"Sosoapi to OC dict"])  {
+    } else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
         [self sosoapiToOCProperty:YES needOCDict:YES];
     }
-    else if ([currentLanguage isEqualToString:@"Sosoapi to postman bulk edit"]) {
+    else if ([currentLanguage isEqualToString:@"doc to postman bulk edit"]) {
         [self sosoapiToOCProperty:NO  needOCDict:NO];
     }
     
@@ -149,68 +141,7 @@
     });
 
 }
-#pragma mark apiToOCProperty
-- (void)apiToOCProperty {
-    
-    if (self.jsonTextView.textStorage.string.length == 0) {
-        NSAlert *alert = [[NSAlert alloc]init];
-        alert.messageText = @"无码不欢";
-        [alert addButtonWithTitle:@"好的"];
-        alert.alertStyle = NSWarningAlertStyle;
-        [alert runModal];
-        return;
-    }
-    
-    NSString *inputString = _jsonTextView.textStorage.string;
-    NSArray *lineCodeStrings =
-    [inputString componentsSeparatedByString:@"\n"];
-    
-    NSMutableArray <NSString *> *temArr = @[].mutableCopy;
-    
-    [lineCodeStrings enumerateObjectsUsingBlock:^(NSString  *_Nonnull lineCodeString, NSUInteger idx, BOOL * _Nonnull stop) {
-        // lineCodeString ->  title           string      标题,
-        NSMutableArray <NSString *>*arr = [lineCodeString.mutableCopy componentsSeparatedByString:@" "].mutableCopy;
-        [self dealWithArray:arr];
-        if (arr.count == 3) {
-            NSString *propertyName = arr.firstObject;
-            NSString *className = arr[1];
-            NSString *descString = arr[2];
-            NSString *objectStr = @"*";
-            
-            if ([className isEqualToString:@"string"]) {
-                className = @"NSString";
-            } else if ([className isEqualToString:@"int"]) {
-                className = @"NSInteger";
-            } else if ([className isEqualToString:@"array"]) {
-                className = @"NSArray";
-            }
-            if ([className isEqualToString:@"NSInteger"]) {
-                objectStr = @" ";
-            } else if ([className isEqualToString:@"NSString"]) {
-                objectStr = @"  *";
-            } else if ([className isEqualToString:@"NSArray"]) {
-                objectStr = @"   *";
-            }
-            NSString *codeString = [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
-            [temArr addObject:codeString];
-            
-            NSLog(@"----%@---", codeString);
-        }
-        
-        
-    }];
-    
-    self.rightCodeString = [temArr componentsJoinedByString:@""];
-    self.codeTextView.editable = YES;
-    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-    
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
-        self.codeTextView.editable = NO;
-    });
 
-}
 /// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
 - (void)sosoapiToOCProperty:(BOOL)isOCProperty needOCDict:(BOOL)isNeedDict{
     
@@ -235,12 +166,13 @@
         [lineCodeStrings[2] isEqualToString:@"否"] ||
         [lineCodeStrings[2] isEqualToString:@"非"] ||
         [lineCodeStrings[2] isEqualToString:@"不是"]) {
-        // 四列
-        lieNum = 4;
+        
+        
+        lieNum = 4;///< 四列、含有 参数为必填与非必填
 
     } else {
         // 三行
-        lieNum = 3;
+        lieNum = 3;///< 三列、不包含 参数为必填与非必填
     }
     
     NSMutableArray *arrs = @[].mutableCopy;
@@ -351,15 +283,12 @@
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
-//    if (self.needNetControl.state == 1) {
-//        [self loadDataFromServerDealWithCode:self.rightCodeString];
-//    } else {
-    
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
-//    }
+
+// 操作完毕，写入textview
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
+        self.codeTextView.editable = NO;
+    });
 
 }
 #pragma mark - selected a language
