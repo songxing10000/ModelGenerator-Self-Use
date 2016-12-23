@@ -33,7 +33,7 @@
     [super viewDidLoad];
     self.preferredContentSize = CGSizeMake(700, 400);
     _outArr = @[].mutableCopy;
-    languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC dict", @"doc to postman bulk edit"];
+    languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
     generater = [ModelGenerator sharedGenerator];
     
     [_jsonTextView becomeFirstResponder];
@@ -85,6 +85,9 @@
     }
     else if ([currentLanguage isEqualToString:@"doc to postman bulk edit"]) {
         [self sosoapiToOCProperty:NO  needOCDict:NO];
+    } else if ([currentLanguage isEqualToString:@"doc to OC IB property"]) {
+        // 生成IB连线
+        [self sosoapiToOCIBProperty];
     }
     
 }
@@ -143,6 +146,114 @@
 }
 
 /// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
+- (void)sosoapiToOCIBProperty{
+    
+    
+    if (self.jsonTextView.textStorage.string.length == 0) {
+        NSAlert *alert = [[NSAlert alloc]init];
+        alert.messageText = @"无码不欢";
+        [alert addButtonWithTitle:@"好的"];
+        alert.alertStyle = NSWarningAlertStyle;
+        [alert runModal];
+        return;
+    }
+    
+    NSString *inputString = _jsonTextView.textStorage.string;
+    NSMutableArray <NSString *>*lineCodeStrings =
+    [inputString componentsSeparatedByString:@"\n"].mutableCopy;
+    
+    // 12=4*3
+    [self dealWithArray:lineCodeStrings];
+    
+    NSMutableArray *arrs = @[].mutableCopy;
+    
+    
+    for (NSInteger i = 0; i < [lineCodeStrings count] ; i ++) {
+        
+        NSMutableArray *arr1 = [NSMutableArray array];
+        NSInteger counts = 0;
+        
+        while (counts != 3 && i < [lineCodeStrings count]  ) {
+            counts++;
+            [arr1 addObject:lineCodeStrings[i]];
+            i ++;
+            
+            
+        }
+        [arrs addObject:arr1];
+        
+        i --;
+    }
+    
+    
+    NSMutableArray *outPutArray = @[].mutableCopy;
+    [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        
+            // 有注释
+            
+        NSString *propertyName = lineArray.firstObject;
+        NSString *className = lineArray[1];
+        NSString *descString = @"未处理";
+
+        
+        
+        descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
+
+       
+        NSString *objectStr = @"*";
+        
+        if ([className isEqualToString:@"string"]) {
+            className = @"NSString";
+        } else if ([className isEqualToString:@"int"]) {
+            className = @"NSInteger";
+        } else if ([className isEqualToString:@"array"]) {
+            className = @"NSArray";
+        }
+        if ([className isEqualToString:@"NSInteger"]) {
+            objectStr = @" ";
+        } else if ([className isEqualToString:@"NSString"]) {
+            objectStr = @"  *";
+        } else if ([className isEqualToString:@"NSArray"]) {
+            objectStr = @"   *";
+        }            
+        
+        NSString *codeString = @"??";
+        
+        if (![className isEqualToString:@"NSArray"]) {
+            // NSArray 不需要生成IB
+        
+        /*
+         /** 企业简称 */
+         // @property (weak, nonatomic) IBOutlet UILabel *storeShortNameLabel;
+         
+         */
+        
+            codeString =
+            [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
+            
+        
+            [outPutArray addObject:codeString];
+        }
+        
+
+        
+        
+    }];
+
+    self.rightCodeString = [outPutArray componentsJoinedByString:@""];
+    self.codeTextView.editable = YES;
+    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+    
+
+// 操作完毕，写入textview
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
+        self.codeTextView.editable = NO;
+    });
+
+}
+/// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
 - (void)sosoapiToOCProperty:(BOOL)isOCProperty needOCDict:(BOOL)isNeedDict{
     
     
@@ -169,7 +280,7 @@
         
         
         lieNum = 4;///< 四列、含有 参数为必填与非必填
-
+        
     } else {
         // 三行
         lieNum = 3;///< 三列、不包含 参数为必填与非必填
@@ -200,21 +311,21 @@
     [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
         
         
-            // 有注释
-            
+        // 有注释
+        
         NSString *propertyName = lineArray.firstObject;
         NSString *className = lineArray[1];
         NSString *descString = @"未处理";
-
+        
         if (lieNum == 3) {
             descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
-
+            
         } else if (lieNum == 4) {
             descString =
             [NSString stringWithFormat:@"%@，是否必填->%@",
-            [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
+             [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
              lineArray[2]];
-
+            
         }
         NSString *objectStr = @"*";
         
@@ -231,15 +342,15 @@
             objectStr = @"  *";
         } else if ([className isEqualToString:@"NSArray"]) {
             objectStr = @"   *";
-        }            
+        }
         
         NSString *codeString = @"??";
         if (!isOCProperty) {
             
-                
-                codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
             
-
+            codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
+            
+            
             
         } else  {
             if (isNeedDict) {
@@ -256,11 +367,11 @@
                 if (idx == 0) {
                     
                     codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
-
+                    
                 } else if (idx == arrs.count -1) {
                     
                     codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
-
+                    
                 } else {
                     
                     codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
@@ -274,22 +385,22 @@
         }
         [outPutArray addObject:codeString];
         
-
+        
         
         
     }];
-
+    
     self.rightCodeString = [outPutArray componentsJoinedByString:@""];
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
-
-// 操作完毕，写入textview
+    
+    // 操作完毕，写入textview
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
         self.codeTextView.editable = NO;
     });
-
+    
 }
 #pragma mark - selected a language
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
