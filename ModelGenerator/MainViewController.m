@@ -223,14 +223,14 @@
         if (![className isEqualToString:@"NSArray"]) {
             // NSArray 不需要生成IB
         
-        /*
+        
          /** 企业简称 */
          // @property (weak, nonatomic) IBOutlet UILabel *storeShortNameLabel;
          
-         */
+        
         
             codeString =
-            [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
+            [NSString stringWithFormat:@"///  %@\n@property (weak, nonatomic) IBOutlet UILabel *%@Label;\n\n", descString, propertyName];
             
         
             [outPutArray addObject:codeString];
