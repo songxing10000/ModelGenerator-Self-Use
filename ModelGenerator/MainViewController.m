@@ -13,10 +13,9 @@
 
 @interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate>
 
+@property (weak) IBOutlet NSButton *emptyBtn;
 /// api to oc property use
 @property (nonatomic) NSString *rightCodeString;
-
-@property (weak) IBOutlet NSButton *emptyBtn;
 @property (nonatomic)     NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr;
 
 @end
@@ -31,6 +30,7 @@
 #pragma mark - view life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.preferredContentSize = CGSizeMake(700, 400);
     _outArr = @[].mutableCopy;
     languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
@@ -119,6 +119,7 @@
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
     dispatch_async(dispatch_queue_create("generate", DISPATCH_QUEUE_CONCURRENT), ^{
+        // 异步耗时操作
         NSString *code = [generater generateModelFromDictionary:dic withBlock:^NSString *(id unresolvedObject) {
             
             objectToResolve = unresolvedObject;
@@ -135,10 +136,12 @@
         }];
         
         
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
-                self.codeTextView.editable = NO;
-            });
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // 主线程写入UI
+            [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
+            self.codeTextView.editable = NO;
+        });
         
         
     });
@@ -189,15 +192,11 @@
     NSMutableArray *outPutArray = @[].mutableCopy;
     [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        
             // 有注释
             
         NSString *propertyName = lineArray.firstObject;
         NSString *className = lineArray[1];
         NSString *descString = @"未处理";
-
-        
-        
         descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
 
        
@@ -222,22 +221,13 @@
         
         if (![className isEqualToString:@"NSArray"]) {
             // NSArray 不需要生成IB
-        
-        
-         /** 企业简称 */
-         // @property (weak, nonatomic) IBOutlet UILabel *storeShortNameLabel;
-         
-        
-        
+            
             codeString =
-            [NSString stringWithFormat:@"///  %@\n@property (weak, nonatomic) IBOutlet UILabel *%@Label;\n\n", descString, propertyName];
+            [NSString stringWithFormat:@"///  %@\n__weak IBOutlet UILabel *%@Label;\n\n", descString, propertyName];
             
         
             [outPutArray addObject:codeString];
         }
-        
-
-        
         
     }];
 
@@ -278,9 +268,7 @@
         [lineCodeStrings[2] isEqualToString:@"非"] ||
         [lineCodeStrings[2] isEqualToString:@"不是"]) {
         
-        
         lieNum = 4;///< 四列、含有 参数为必填与非必填
-        
     } else {
         // 三行
         lieNum = 3;///< 三列、不包含 参数为必填与非必填
@@ -309,8 +297,6 @@
     
     NSMutableArray *outPutArray = @[].mutableCopy;
     [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        
         // 有注释
         
         NSString *propertyName = lineArray.firstObject;
@@ -318,43 +304,52 @@
         NSString *descString = @"未处理";
         
         if (lieNum == 3) {
-            descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
             
+            descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
         } else if (lieNum == 4) {
+            
             descString =
             [NSString stringWithFormat:@"%@，是否必填->%@",
              [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
              lineArray[2]];
-            
         }
         NSString *objectStr = @"*";
         
         if ([className isEqualToString:@"string"]) {
+            
             className = @"NSString";
         } else if ([className isEqualToString:@"int"]) {
+            
             className = @"NSInteger";
         } else if ([className isEqualToString:@"array"]) {
+            
             className = @"NSArray";
-        }
-        if ([className isEqualToString:@"NSInteger"]) {
+        } else if ([className isEqualToString:@"NSInteger"]) {
+            
             objectStr = @" ";
         } else if ([className isEqualToString:@"NSString"]) {
+            
             objectStr = @"  *";
         } else if ([className isEqualToString:@"NSArray"]) {
+            
             objectStr = @"   *";
+        } else {
+            
+            NSLog(@"----%@---", @"特别情况出现");
         }
         
         NSString *codeString = @"??";
         if (!isOCProperty) {
             
-            
             codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
-            
-            
-            
         } else  {
-            if (isNeedDict) {
+            if (!isNeedDict) {
                 
+                codeString =
+                [NSString stringWithFormat:
+                 @"///  %@\n@property (nonatomic) %@%@%@;\n\n",
+                 descString, className, objectStr, propertyName];
+            } else {
                 /*
                  @{
                  @"":@"",
@@ -377,17 +372,14 @@
                     codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
                 }
                 
-                
-            } else {
-                
-                codeString = [NSString stringWithFormat:@"///  %@\n@property (nonatomic) %@%@%@;\n\n", descString, className, objectStr, propertyName];
             }
         }
+        
+        
+        
+        
+        
         [outPutArray addObject:codeString];
-        
-        
-        
-        
     }];
     
     self.rightCodeString = [outPutArray componentsJoinedByString:@""];
@@ -472,7 +464,7 @@
 
 - (void)dealWithArray:(NSMutableArray *)arr {
     [arr enumerateObjectsUsingBlock:^(NSString  *_Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([str isEqualToString:@" "] || [str isEqualToString:@"formData"]) {
+        if ([str isEqualToString:@" "]) {
             [arr removeObject:str];
         }
         BOOL hasValue = str && str.length;
