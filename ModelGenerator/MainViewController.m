@@ -321,6 +321,7 @@
         } else if ([className isEqualToString:@"int"]) {
             
             className = @"NSInteger";
+            objectStr = @" ";
         } else if ([className isEqualToString:@"array"]) {
             
             className = @"NSArray";
@@ -347,7 +348,7 @@
                 
                 codeString =
                 [NSString stringWithFormat:
-                 @"///  %@\n@property (nonatomic) %@%@%@;\n\n",
+                 @"///  %@\n@property (nonatomic) %@ %@ %@;\n\n",
                  descString, className, objectStr, propertyName];
             } else {
                 /*
