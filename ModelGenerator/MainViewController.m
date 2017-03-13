@@ -351,34 +351,19 @@
                  @"///  %@\n@property (nonatomic) %@ %@ %@;\n\n",
                  descString, className, objectStr, propertyName];
             } else {
-                /*
-                 @{
-                 @"":@"",
-                 @"":@"",
-                 @"":@"",
-                 
-                 @"":@""}
-                 
-                 */
+                
                 if (idx == 0) {
                     
                     codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
-                    
                 } else if (idx == arrs.count -1) {
                     
                     codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
-                    
                 } else {
                     
                     codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
                 }
-                
             }
         }
-        
-        
-        
-        
         
         [outPutArray addObject:codeString];
     }];
@@ -397,26 +382,29 @@
 }
 #pragma mark - selected a language
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
+    
     NSInteger idx = sender.indexOfSelectedItem;
     if (idx < languageArray.count) {
-        generater.language = idx;
-        
-        BOOL showJsonPlaceHoler = idx <= 2;
-        self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
-        self.classNameField.hidden = !showJsonPlaceHoler;
-        
-        
-        
+    
+        return;
     }
+    
+    generater.language = idx;
+    BOOL showJsonPlaceHoler = idx <= 2;
+    self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
+    self.classNameField.hidden = !showJsonPlaceHoler;
 }
 
-- (void)prepareForSegue:(NSStoryboardSegue *)segue sender:(id)sender
-{
-    if ([segue.identifier isEqualToString:@"showModal"]) {
-        ClassViewController *vc = segue.destinationController;
-        vc.objectToResolve = objectToResolve;
-        vc.delegate = self;
+- (void)prepareForSegue:(NSStoryboardSegue *)segue sender:(id)sender {
+    
+    if (![segue.identifier isEqualToString:@"showModal"]) {
+    
+        return;
     }
+    
+    ClassViewController *vc = segue.destinationController;
+    vc.objectToResolve = objectToResolve;
+    vc.delegate = self;
 }
 
 #pragma mark NSTextViewDelegate
@@ -436,25 +424,28 @@
         name = [name stringByAppendingString:@"*"];
     }
     result = name;
-//    NSLog(@"%@",result);
 }
 
 #pragma mark NSComboBoxDelegate & NSComboBoxDataSource
 
-- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox
-{
+- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox {
+    
     return languageArray.count;
 }
 
-- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index
-{
+- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index {
+    
     return languageArray[index];
 }
 
 
 #pragma mark - private
 - (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title  {
-    return [[NSAttributedString alloc]initWithString:title attributes:@{NSFontAttributeName: [NSFont fontWithName:@"Times New Roman" size:16],NSForegroundColorAttributeName:[NSColor whiteColor]}];
+    
+    NSDictionary *dict = @{NSForegroundColorAttributeName:[NSColor whiteColor],
+                           NSFontAttributeName: [NSFont fontWithName:@"Times New Roman" size:16]};
+    return [[NSAttributedString alloc] initWithString:title
+                                           attributes:dict];
 }
 - (void)makeRound:(NSView*)view{
     view.layer.masksToBounds = YES;
