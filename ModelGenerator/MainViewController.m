@@ -196,7 +196,7 @@
             
         NSString *propertyName = lineArray.firstObject;
         NSString *className = lineArray[1];
-        NSString *descString = @"未处理";
+        NSString *descString = @"未找到该字段的注释";
         descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
 
        
@@ -300,12 +300,17 @@
         // 有注释
         
         NSString *propertyName = lineArray.firstObject;
-        NSString *className = lineArray[1];
-        NSString *descString = @"未处理";
+        NSString *className = @"NSObject";
+        if ([lineArray count] >= 3) {
+            className = lineArray[1];
+        }
+        NSString *descString = @"未找到该字段的注释";
         
         if (lieNum == 3) {
-            
-            descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
+            if ([lineArray count] >= 3) {
+                
+                descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
+            }
         } else if (lieNum == 4) {
             
             descString =
@@ -334,6 +339,10 @@
         } else if ([className isEqualToString:@"NSArray"]) {
             
             objectStr = @"   *";
+        } else if ([className isEqualToString:@"boolean"]) {
+            className = @"BOOL";
+            objectStr = @"   ";
+
         } else {
             
             NSLog(@"----%@---", @"特别情况出现");

@@ -17,38 +17,6 @@
             endingLineNumber = "133"
             landmarkName = "-jsonToOCProperty"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__38-[MainViewController jsonToOCProperty]_block_invoke"
-                  moduleName = "ModelGenerator"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dfpo/Downloads/ModelGenerator-master/ModelGenerator/MainViewController.m"
-                  timestampString = "499596263.240075"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "233"
-                  endingLineNumber = "233"
-                  offsetFromSymbolStart = "324">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__38-[MainViewController jsonToOCProperty]_block_invoke.255"
-                  moduleName = "ModelGenerator"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/dfpo/Downloads/ModelGenerator-master/ModelGenerator/MainViewController.m"
-                  timestampString = "499596263.241948"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "234"
-                  endingLineNumber = "234"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -63,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "168"
             endingLineNumber = "168"
-            landmarkName = "-sosoapiToOCProperty:needOCDict:"
+            landmarkName = "-sosoapiToOCIBProperty"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
