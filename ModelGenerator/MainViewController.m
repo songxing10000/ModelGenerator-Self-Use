@@ -266,7 +266,9 @@
     if ([lineCodeStrings[2] isEqualToString:@"是"] ||
         [lineCodeStrings[2] isEqualToString:@"否"] ||
         [lineCodeStrings[2] isEqualToString:@"非"] ||
-        [lineCodeStrings[2] isEqualToString:@"不是"]) {
+        [lineCodeStrings[2] isEqualToString:@"不是"] ||
+        [lineCodeStrings[1] isEqualToString:@"false"] ||
+        [lineCodeStrings[1] isEqualToString:@"true"]) {
         
         lieNum = 4;///< 四列、含有 参数为必填与非必填
     } else {
@@ -303,6 +305,10 @@
         NSString *className = @"NSObject";
         if ([lineArray count] >= 3) {
             className = lineArray[1];
+            if ([lineArray[1] isEqualToString:@"false"] ||
+                [lineArray[1] isEqualToString:@"true"]) {
+                className = lineArray[2];
+            }
         }
         NSString *descString = @"未找到该字段的注释";
         
@@ -312,11 +318,21 @@
                 descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
             }
         } else if (lieNum == 4) {
+            if ([lineArray[1] isEqualToString:@"false"] ||
+                [lineArray[1] isEqualToString:@"true"]) {
             
-            descString =
-            [NSString stringWithFormat:@"%@，是否必填->%@",
-             [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
-             lineArray[2]];
+                descString =
+                [NSString stringWithFormat:@"%@，是否必填->%@",
+                 [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
+                 lineArray[1]];
+            } else {
+                
+                descString =
+                [NSString stringWithFormat:@"%@，是否必填->%@",
+                 [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
+                 lineArray[2]];
+            }
+            
         }
         NSString *objectStr = @"*";
         
@@ -346,6 +362,10 @@
         } else {
             
             NSLog(@"----%@---", @"特别情况出现");
+            if ([className isEqualToString:@"true"] ||
+                [className isEqualToString:@"false"]) {
+                // count	false	int	单页返回的记录条数，默认为20。
+            }
         }
         
         NSString *codeString = @"??";
