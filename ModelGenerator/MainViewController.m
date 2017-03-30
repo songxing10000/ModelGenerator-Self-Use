@@ -14,9 +14,6 @@
 @interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate>
 
 @property (weak) IBOutlet NSButton *emptyBtn;
-/// api to oc property use
-@property (nonatomic) NSString *rightCodeString;
-@property (nonatomic)     NSMutableArray <NSDictionary<NSString*,NSString*>*>*outArr;
 
 @end
 
@@ -32,7 +29,6 @@
     [super viewDidLoad];
     
     self.preferredContentSize = CGSizeMake(700, 400);
-    _outArr = @[].mutableCopy;
     languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
     generater = [ModelGenerator sharedGenerator];
     
@@ -109,12 +105,18 @@
     }
     generater.className = _classNameField.stringValue;
     NSError *error = nil;
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:[_jsonTextView.textStorage.string dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
+    NSData *JSONData = [_jsonTextView.textStorage.string dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:JSONData
+                                                        options:0
+                                                          error:&error];
     if (error) {
         
         [self showAlertWithString:@"无效的Json数据"];
         return;
     }
+    
+    
+    
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
@@ -231,14 +233,14 @@
         
     }];
 
-    self.rightCodeString = [outPutArray componentsJoinedByString:@""];
+    NSString *rightCodeString = [outPutArray componentsJoinedByString:@""];
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
 
 // 操作完毕，写入textview
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
+        [self.codeTextView insertText:rightCodeString replacementRange:NSMakeRange(0, 1)];
         self.codeTextView.editable = NO;
     });
 
@@ -395,14 +397,14 @@
         }
     }];
     
-    self.rightCodeString = [outPutArray componentsJoinedByString:@""];
+    NSString *rightCodeString = [outPutArray componentsJoinedByString:@""];
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
     
     
     // 操作完毕，写入textview
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:self.rightCodeString replacementRange:NSMakeRange(0, 1)];
+        [self.codeTextView insertText:rightCodeString replacementRange:NSMakeRange(0, 1)];
         self.codeTextView.editable = NO;
     });
     
