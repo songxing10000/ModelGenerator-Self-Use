@@ -361,11 +361,7 @@
 
         } else {
             
-            NSLog(@"----%@---", @"特别情况出现");
-            if ([className isEqualToString:@"true"] ||
-                [className isEqualToString:@"false"]) {
-                // count	false	int	单页返回的记录条数，默认为20。
-            }
+            NSLog(@"----特别情况出现->%@---", className);
         }
         
         NSString *codeString = @"??";
@@ -393,8 +389,10 @@
                 }
             }
         }
-        
-        [outPutArray addObject:codeString];
+        if (codeString && codeString.length) {
+            
+            [outPutArray addObject:codeString];
+        }
     }];
     
     self.rightCodeString = [outPutArray componentsJoinedByString:@""];
