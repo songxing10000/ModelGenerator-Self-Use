@@ -225,7 +225,7 @@
             // NSArray 不需要生成IB
             
             codeString =
-            [NSString stringWithFormat:@"///  %@\n__weak IBOutlet UILabel *%@Label;\n\n", descString, propertyName];
+            [NSString stringWithFormat:@"///  %@\n__weak IBOutlet UILabel *_%@Label;\n\n", descString, propertyName];
             
         
             [outPutArray addObject:codeString];
