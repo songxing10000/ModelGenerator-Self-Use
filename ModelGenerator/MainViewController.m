@@ -12,6 +12,7 @@
 @interface MainViewController ()<NSComboBoxDataSource,NSTextViewDelegate>
 
 @property (weak) IBOutlet NSButton *emptyBtn;
+@property (weak) IBOutlet NSPopUpButton *popUpBtn;
 
 @end
 
@@ -27,25 +28,28 @@
     [super viewDidLoad];
     
     self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
     
     [_jsonTextView becomeFirstResponder];
     
 
-    _comboBox.placeholderAttributedString = [self btnAttributedStringWithtitle:@"Language"];
-    _classNameField.placeholderAttributedString = [self btnAttributedStringWithtitle:@"ClassName"];
-    _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"Start"];
-    self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"empty"];
+    _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"生成"];
+    self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"清空"];
     
     
 //    generater.language = ObjectiveC;
     
-    [self makeRound:_comboBox];
-    [self makeRound:_classNameField];
     [self makeRound:_startBtn];
     [self makeRound:self.emptyBtn];
 }
 #pragma mark - action
+
+- (IBAction)popUpBtnAction:(NSPopUpButton *)sender {
+    
+    NSLog(@"sender.indexOfSelectedItem===%ld",(long)sender.indexOfSelectedItem);
+    NSInteger selectedIndex = sender.indexOfSelectedItem;
+//    self.isPost = (selectedIndex == 0)?YES:NO;
+}
 
 - (IBAction)checkChangeFromBtn:(NSButton *)sender {
     NSLog(@"----%tu---", sender.state);
@@ -63,12 +67,12 @@
 #pragma mark start btn
 - (IBAction)generate:(id)sender {
 
-    if (self.comboBox.indexOfSelectedItem >= languageArray.count) {
+    if (self.popUpBtn.indexOfSelectedItem >= languageArray.count) {
         [self showAlertWithString:@"请先选择一个转换格式"];
         return;
     }
     
-    NSString *currentLanguage = languageArray[self.comboBox.indexOfSelectedItem];
+    NSString *currentLanguage = languageArray[self.popUpBtn.indexOfSelectedItem];
     if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
     } else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
@@ -354,7 +358,6 @@
 //    generater.language = idx;
     BOOL showJsonPlaceHoler = idx <= 2;
     self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
-    self.classNameField.hidden = !showJsonPlaceHoler;
 }
 
 #pragma mark NSTextViewDelegate
