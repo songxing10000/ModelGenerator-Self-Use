@@ -4,9 +4,9 @@
 
 ![](api.gif)
 
-![](sosoapi to pro.gif)
+![](pro.gif)
 
-![](sosoapi to postman.gif)
+![](postman.gif)
 
 
 
