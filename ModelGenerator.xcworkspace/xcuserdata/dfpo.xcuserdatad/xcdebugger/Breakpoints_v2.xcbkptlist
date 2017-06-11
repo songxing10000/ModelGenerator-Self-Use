@@ -10,27 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModelGenerator/MainViewController.m"
-            timestampString = "512578221.433454"
+            timestampString = "518865337.617728"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "135"
-            endingLineNumber = "135"
-            landmarkName = "-jsonToOCProperty"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ModelGenerator/MainViewController.m"
-            timestampString = "512578221.433454"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
             landmarkName = "-sosoapiToOCIBProperty"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ModelGenerator/MainViewController.m"
-            timestampString = "512578221.433454"
+            timestampString = "518865337.617728"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "367"
-            endingLineNumber = "367"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
             landmarkName = "-sosoapiToOCProperty:needOCDict:"
             landmarkType = "7">
          </BreakpointContent>

@@ -7,11 +7,9 @@
 //
 
 #import "MainViewController.h"
-#import "ModelGenerator.h"
-#import "ClassViewController.h"
 #import "MainViewController+Show.h"
 
-@interface MainViewController ()<ClassViewControllerDelegate,NSComboBoxDataSource,NSTextViewDelegate>
+@interface MainViewController ()<NSComboBoxDataSource,NSTextViewDelegate>
 
 @property (weak) IBOutlet NSButton *emptyBtn;
 
@@ -19,7 +17,7 @@
 
 @implementation MainViewController
 {
-    ModelGenerator *generater;
+
     id objectToResolve;
     NSString *result;
     NSArray *languageArray;
@@ -30,7 +28,6 @@
     
     self.preferredContentSize = CGSizeMake(700, 400);
     languageArray = @[@"JSON to OC property", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
-    generater = [ModelGenerator sharedGenerator];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -41,7 +38,7 @@
     self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"empty"];
     
     
-    generater.language = ObjectiveC;
+//    generater.language = ObjectiveC;
     
     [self makeRound:_comboBox];
     [self makeRound:_classNameField];
@@ -72,9 +69,7 @@
     }
     
     NSString *currentLanguage = languageArray[self.comboBox.indexOfSelectedItem];
-    if ([currentLanguage isEqualToString:@"JSON to OC property"]) {
-        [self jsonToOCProperty];
-    } else if ([currentLanguage isEqualToString:@"doc to OC property"]) {
+    if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
     } else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
         [self sosoapiToOCProperty:YES needOCDict:YES];
@@ -86,68 +81,6 @@
         [self sosoapiToOCIBProperty];
     }
     
-}
-#pragma mark jsonToOCProperty
-- (void)jsonToOCProperty {
-    if (self.jsonTextView.textStorage.string.length == 0) {
-        [self showAlertWithString:@"请先输入要转换的Json文本"];
-        return;
-    }
-    if (_classNameField.stringValue.length == 0) {
-        [self showAlertWithString:@"请输入要生成的类名"];
-        return;
-    }
-    if (generater.language == Unknow) {
-        
-        [self showAlertWithString:@"请选择语言"];
-
-        return;
-    }
-    generater.className = _classNameField.stringValue;
-    NSError *error = nil;
-    NSData *JSONData = [_jsonTextView.textStorage.string dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:JSONData
-                                                        options:0
-                                                          error:&error];
-    if (error) {
-        
-        [self showAlertWithString:@"无效的Json数据"];
-        return;
-    }
-    
-    
-    
-    self.codeTextView.editable = YES;
-    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-    
-    dispatch_async(dispatch_queue_create("generate", DISPATCH_QUEUE_CONCURRENT), ^{
-        // 异步耗时操作
-        NSString *code = [generater generateModelFromDictionary:dic withBlock:^NSString *(id unresolvedObject) {
-            
-            objectToResolve = unresolvedObject;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self performSegueWithIdentifier:@"showModal" sender:self];
-            });
-            result = nil;
-            
-            while (result == nil) {
-                sleep(0.1);
-            }
-            return result;
-        }];
-        
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // 主线程写入UI
-            [self.codeTextView insertText:code replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
-        
-        
-    });
-
 }
 
 /// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
@@ -418,22 +351,10 @@
         return;
     }
     
-    generater.language = idx;
+//    generater.language = idx;
     BOOL showJsonPlaceHoler = idx <= 2;
     self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
     self.classNameField.hidden = !showJsonPlaceHoler;
-}
-
-- (void)prepareForSegue:(NSStoryboardSegue *)segue sender:(id)sender {
-    
-    if (![segue.identifier isEqualToString:@"showModal"]) {
-    
-        return;
-    }
-    
-    ClassViewController *vc = segue.destinationController;
-    vc.objectToResolve = objectToResolve;
-    vc.delegate = self;
 }
 
 #pragma mark NSTextViewDelegate
@@ -449,10 +370,10 @@
 
 - (void)didResolvedWithClassName:(NSString *)name
 {
-    if (generater.language == ObjectiveC && ![name hasSuffix:@"*"]) {
-        name = [name stringByAppendingString:@"*"];
-    }
-    result = name;
+//    if (generater.language == ObjectiveC && ![name hasSuffix:@"*"]) {
+//        name = [name stringByAppendingString:@"*"];
+//    }
+//    result = name;
 }
 
 #pragma mark NSComboBoxDelegate & NSComboBoxDataSource
