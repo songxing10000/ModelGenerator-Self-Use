@@ -298,6 +298,10 @@
             className = @"BOOL";
             objectStr = @"   ";
 
+        } else if ([className isEqualToString:@"float"]) {
+            className = @"float";
+            objectStr = @"   ";
+            
         } else {
             
             NSLog(@"----特别情况出现->%@---", className);
@@ -312,13 +316,13 @@
                 
                 codeString =
                 [NSString stringWithFormat:
-                 @"///  %@\n@property (nonatomic) %@ %@ %@;\n\n",
+                 @"\n///  %@\n@property (nonatomic) %@ %@ %@;\n",
                  descString, className, objectStr, propertyName];
             } else {
                 
                 if (idx == 0) {
                     
-                    codeString = [NSString stringWithFormat:@"@{\n\t@\"%@\": @1,\n", propertyName];
+                    codeString = [NSString stringWithFormat:@"@{\n\n\t@\"%@\": @1,\n", propertyName];
                 } else if (idx == arrs.count -1) {
                     
                     codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
