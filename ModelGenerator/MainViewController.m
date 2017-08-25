@@ -7,7 +7,9 @@
 //
 
 #import "MainViewController.h"
-#import "MainViewController+Show.h"
+#import "NSString+Empty.h"
+
+#import "MainViewController+Other.h"
 
 @interface MainViewController ()<NSComboBoxDataSource,NSTextViewDelegate>
 
@@ -27,7 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.preferredContentSize = CGSizeMake(700, 400);
+//    self.preferredContentSize = CGSizeMake(700, 400);
     languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit"];
     
     [_jsonTextView becomeFirstResponder];
@@ -105,7 +107,7 @@
     [inputString componentsSeparatedByString:@"\n"].mutableCopy;
     
     // 12=4*3
-    [self dealWithArray:lineCodeStrings];
+    [self removeSpaceStringOrNilStringFromMutableArray:lineCodeStrings];
     
     NSMutableArray *arrs = @[].mutableCopy;
     
@@ -200,14 +202,19 @@
     [inputString componentsSeparatedByString:@"\n"].mutableCopy;
     
     // 12=4*3
-    [self dealWithArray:lineCodeStrings];
+//    [self removeSpaceStringOrNilStringFromMutableArray:lineCodeStrings];
     NSInteger lieNum = 3;
     if ([lineCodeStrings[2] isEqualToString:@"是"] ||
         [lineCodeStrings[2] isEqualToString:@"否"] ||
         [lineCodeStrings[2] isEqualToString:@"非"] ||
         [lineCodeStrings[2] isEqualToString:@"不是"] ||
         [lineCodeStrings[1] isEqualToString:@"false"] ||
-        [lineCodeStrings[1] isEqualToString:@"true"]) {
+        [lineCodeStrings[1] isEqualToString:@"true"] ||
+        [lineCodeStrings[2] isEqualToString:@"Integer"] ||
+        [lineCodeStrings[2] isEqualToString:@"String"] ||
+        [lineCodeStrings[2] isEqualToString:@"Int"] ||
+        [lineCodeStrings[2] isEqualToString:@"对象"]
+        ) {
         
         lieNum = 4;///< 四列、含有 参数为必填与非必填
     } else {
@@ -247,6 +254,11 @@
             if ([lineArray[1] isEqualToString:@"false"] ||
                 [lineArray[1] isEqualToString:@"true"]) {
                 className = lineArray[2];
+            } else if ([lineArray[2] isEqualToString:@"Integer"] ||
+                       [lineArray[2] isEqualToString:@"String"] ||
+                       [lineArray[2] isEqualToString:@"Int"] ||
+                       [lineArray[2] isEqualToString:@"对象"]) {
+                className = lineArray[2];
             }
         }
         NSString *descString = @"未找到该字段的注释";
@@ -257,6 +269,8 @@
                 descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
             }
         } else if (lieNum == 4) {
+                
+            
             if ([lineArray[1] isEqualToString:@"false"] ||
                 [lineArray[1] isEqualToString:@"true"]) {
             
@@ -264,7 +278,20 @@
                 [NSString stringWithFormat:@"%@，是否必填->%@",
                  [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
                  lineArray[1]];
-            } else {
+            } else if ([lineArray[2] isEqualToString:@"Integer"] ||
+                       [lineArray[2] isEqualToString:@"String"] ||
+                       [lineArray[2] isEqualToString:@"Int"] ||
+                       [lineArray[2] isEqualToString:@"对象"]){
+            
+                descString = lineArray[1];
+                NSString *str = [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
+                if (str && str.length && !str.isEmpty) {
+                    
+                    descString =
+                    [NSString stringWithFormat:@"%@ -> %@",lineArray[1],str];
+                } 
+                 
+            }else {
                 
                 descString =
                 [NSString stringWithFormat:@"%@，是否必填->%@",
@@ -275,10 +302,13 @@
         }
         NSString *objectStr = @"*";
         
-        if ([className isEqualToString:@"string"]) {
+        if ([className isEqualToString:@"string"] ||
+            [className isEqualToString:@"String"]) {
             
             className = @"NSString";
-        } else if ([className isEqualToString:@"int"]) {
+        } else if ([className isEqualToString:@"int"] ||
+                   [className isEqualToString:@"Int"] ||
+                   [className isEqualToString:@"Integer"]) {
             
             className = @"NSInteger";
             objectStr = @" ";
@@ -350,7 +380,7 @@
     });
     
 }
-#pragma mark - selected a language
+#pragma mark - action
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
     
     NSInteger idx = sender.indexOfSelectedItem;
@@ -396,32 +426,5 @@
 }
 
 
-#pragma mark - private
-- (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title  {
-    
-    NSDictionary *dict = @{NSForegroundColorAttributeName:[NSColor whiteColor],
-                           NSFontAttributeName: [NSFont fontWithName:@"Times New Roman" size:16]};
-    return [[NSAttributedString alloc] initWithString:title
-                                           attributes:dict];
-}
-- (void)makeRound:(NSView*)view{
-    view.layer.masksToBounds = YES;
-    view.layer.cornerRadius = 10;
-    view.layer.borderWidth = 5;
-    view.layer.borderColor = [NSColor whiteColor].CGColor;
-}
-
-- (void)dealWithArray:(NSMutableArray *)arr {
-    [arr enumerateObjectsUsingBlock:^(NSString  *_Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([str isEqualToString:@" "]) {
-            [arr removeObject:str];
-        }
-        BOOL hasValue = str && str.length;
-        if (!hasValue) {
-            [arr removeObject:str];
-        }
-        
-    }];
-}
 
 @end
