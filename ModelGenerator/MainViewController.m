@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
 //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit",@"yiHaoCheDoc"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -88,6 +88,79 @@
     } else if ([currentLanguage isEqualToString:@"yiHaoCheDoc"]){
         
         [self yiHaoCheDoc];
+    } else if ([currentLanguage isEqualToString:@"pythonHeader"]){
+        
+        [self pythonHeader];
+    }
+    
+}
+- (void)pythonHeader {
+        NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
+
+    if ([inputString containsString:@"	.	"]) {
+        /*
+         .	Host:www.jianshu.com
+         .	If-None-Match:W/"01370c870657c5581f082ee63f9e537b"
+         .	Proxy-Connection:keep-alive
+         */
+        // chrome 拷贝会有这个
+        inputString = [inputString stringByReplacingOccurrencesOfString:@"	.	" withString:@""].mutableCopy;
+        NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
+        NSMutableString *muStr = @"".mutableCopy;
+        [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (string.isEmpty) {
+                
+            } else {
+                
+                NSArray<NSString *> *keyAndValue = [string componentsSeparatedByString:@":"];
+                if (keyAndValue.count < 2) {
+                    
+                    NSLog(@"----%@---", keyAndValue);
+                }else{
+                    
+                    NSString *key = keyAndValue[0];
+                    NSString *value = keyAndValue[1];
+                    
+                    [muStr appendFormat:@"\n'%@' : '%@' ,", key, value];
+                }
+            }
+            
+        }];
+        self.codeTextView.string = muStr;
+    } else if ([inputString containsString:@"名称	值\n"]) {
+        /*
+         
+         名称	值
+         Referer	https://www.baidu.com/
+         If-None-Match	"1ec5-502264e2ae4c0"
+         Cache-Control	max-age=0
+         If-Modified-Since	Wed, 03 Sep 2014 10:00:27 GMT
+         User-Agent	Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8
+         */
+        // safari 拷贝会有这个
+        inputString = [inputString stringByReplacingOccurrencesOfString:@"名称	值\n" withString:@""].mutableCopy;
+        NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
+        NSMutableString *muStr = @"".mutableCopy;
+        [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (string.isEmpty) {
+                
+            } else {
+                
+                NSArray<NSString *> *keyAndValue = [string componentsSeparatedByString:@"	"];
+                if (keyAndValue.count < 2) {
+                    
+                    NSLog(@"----%@---", keyAndValue);
+                }else{
+                    
+                    NSString *key = keyAndValue[0];
+                    NSString *value = keyAndValue[1];
+                    
+                    [muStr appendFormat:@"\n'%@' : '%@' ,", key, value];
+                }
+            }
+            
+        }];
+        self.codeTextView.string = muStr;
     }
     
 }

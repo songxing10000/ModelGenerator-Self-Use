@@ -271,6 +271,7 @@
                                             <menuItem title="doc to OC dict" id="bNu-Vd-96p"/>
                                             <menuItem title="doc to postman bulk edit" id="3ok-ne-t9i"/>
                                             <menuItem title="yiHaoCheDoc" state="on" id="DWe-B7-1mM"/>
+                                            <menuItem title="pythonHeader" id="YWu-wz-ewN"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
