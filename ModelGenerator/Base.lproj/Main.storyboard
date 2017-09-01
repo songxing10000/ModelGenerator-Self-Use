@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12121"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -261,15 +261,16 @@
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ze-hF-oao">
                                 <rect key="frame" x="207" y="263" width="188" height="26"/>
-                                <popUpButtonCell key="cell" type="push" title="doc to OC property" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fGV-5T-UrV" id="uQd-0b-6Ay">
+                                <popUpButtonCell key="cell" type="push" title="yiHaoCheDoc" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="DWe-B7-1mM" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="PFq-h8-ddo">
                                         <items>
-                                            <menuItem title="doc to OC property" state="on" id="fGV-5T-UrV"/>
+                                            <menuItem title="doc to OC property" id="fGV-5T-UrV"/>
                                             <menuItem title="doc to OC IB property" id="MUD-HP-MBQ"/>
                                             <menuItem title="doc to OC dict" id="bNu-Vd-96p"/>
                                             <menuItem title="doc to postman bulk edit" id="3ok-ne-t9i"/>
+                                            <menuItem title="yiHaoCheDoc" state="on" id="DWe-B7-1mM"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
