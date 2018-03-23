@@ -161,6 +161,51 @@
             
         }];
         self.codeTextView.string = muStr;
+    } else if ([inputString containsString:@" = "] && [inputString containsString:@";"]) {
+        /*
+         Xcode打印请求参数
+         
+         appmac = 000000;
+         appversion = "3.5.0";
+         authorization = "Basic MTg5MDAwMDAwMDE6Y2hlMDAx";
+         channel = 2;
+         deviceId = 000000;
+         deviceName = "iPhone Simulator";
+         height = "667.000000";
+         imei = 000000;
+         imsi = 000000;
+         loginWay = 1;
+         system = IOS;
+         sysversion = "11.200000";
+         width = "375.000000";
+         
+         */
+        inputString = [inputString stringByReplacingOccurrencesOfString:@" = " withString:@":"].mutableCopy;
+        inputString = [inputString stringByReplacingOccurrencesOfString:@";" withString:@""].mutableCopy;
+
+        NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
+        NSMutableString *muStr = @"".mutableCopy;
+        [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (string.isEmpty) {
+                
+            } else {
+                string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                NSArray<NSString *> *keyAndValue = [string componentsSeparatedByString:@":"];
+                if (keyAndValue.count < 2) {
+                    
+                    NSLog(@"----%@---", keyAndValue);
+                }else{
+                    
+                    NSString *key = keyAndValue[0];
+                    NSString *value = keyAndValue[1];
+                    value = [value stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                    value = [value stringByReplacingOccurrencesOfString:@"\'" withString:@""];
+                    [muStr appendFormat:@"\n'%@' : '%@' ,", key, value];
+                }
+            }
+            
+        }];
+        self.codeTextView.string = muStr;
     }
     
 }
