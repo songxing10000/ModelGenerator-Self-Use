@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
 //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -91,8 +91,299 @@
     } else if ([currentLanguage isEqualToString:@"pythonHeader"]){
         
         [self pythonHeader];
+    } else if ([currentLanguage isEqualToString:@"状态码-描述-状态码含义"]) {
+        
+        [self statusCode_statusCodeDes_statusCodeMeaning];
+    }  else if ([currentLanguage isEqualToString:@"参数名称-参数说明-参数类型-备注"]){
+        
+        [self name_des_type_remark];
+    } else if ([currentLanguage isEqualToString:@"字段名-类型-示例值-备注"]){
+        
+        [self name_type_example_des];
     }
     
+}
+/// 状态码-描述-状态码含义
+- (void)statusCode_statusCodeDes_statusCodeMeaning {
+    //    NSMutableString *inputString =  self.inputTextView.string.mutableCopy;
+    if ([self.jsonTextView.string containsString:@"\n"]) {
+        NSArray<NSString *> *strings=  [self.jsonTextView.string componentsSeparatedByString:@"\n"];
+        NSMutableArray<NSArray<NSString *> *> *lineCodeStrs = @[].mutableCopy;
+        // 四个一组
+        for (NSInteger i = 0; i < [strings count] ; i ++) {
+            
+            NSMutableArray *arr1 = [NSMutableArray array];
+            NSInteger counts = 0;
+            
+            while (counts != 3 && i < [strings count]  ) {
+                counts++;
+                
+                [arr1 addObject:strings[i]];
+                
+                i ++;
+                
+                
+            }
+            if (arr1.count == 3) {
+                
+                [lineCodeStrs addObject:arr1.copy];
+            }
+            
+            i --;
+        }
+        
+        NSMutableString *outPutString = @"".mutableCopy;
+        [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *statusCode = lineArray[0];
+            NSString *statusDes = lineArray[1];
+            NSString *statusDetailDes = lineArray[2];
+            
+            
+            if (statusDetailDes && statusDetailDes.length && !statusDetailDes.isEmpty) {
+                
+                
+                NSString *codeString =
+                [NSString stringWithFormat: @"@\"%@\" : @\"%@%@\",\n", statusCode, statusDes,statusDetailDes];
+                [outPutString appendString:codeString];
+            } else {
+                
+                
+                NSString *codeString =
+                [NSString stringWithFormat: @"@\"%@\" : @\"%@\",\n", statusCode, statusDes];
+                [outPutString appendString:codeString];
+                
+            }
+            
+        }];
+        self.codeTextView.editable = YES;
+        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+        
+        
+        // 操作完毕，写入textview
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
+            self.codeTextView.editable = NO;
+        });
+        
+    }
+    
+}
+/// 字段名-类型-示例值-备注
+- (void)name_type_example_des {
+    
+    //    NSMutableString *inputString =  self.inputTextView.string.mutableCopy;
+    if ([self.jsonTextView.string containsString:@"\n"]) {
+        NSArray<NSString *> *strings=  [self.jsonTextView.string componentsSeparatedByString:@"\n"];
+        NSMutableArray<NSArray<NSString *> *> *lineCodeStrs = @[].mutableCopy;
+        // 四个一组
+        for (NSInteger i = 0; i < [strings count] ; i ++) {
+            
+            NSMutableArray *arr1 = [NSMutableArray array];
+            NSInteger counts = 0;
+            
+            while (counts != 4 && i < [strings count]  ) {
+                counts++;
+                
+                [arr1 addObject:strings[i]];
+                
+                i ++;
+                
+                
+            }
+            if (arr1.count == 4) {
+                
+                [lineCodeStrs addObject:arr1.copy];
+            }
+            
+            i --;
+        }
+        
+        NSMutableString *outPutString = @"".mutableCopy;
+        [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *propertyName = lineArray[0];
+            NSString *classStr = lineArray[1];
+            NSString *propertyDes1 = lineArray[3];
+            NSString *propertyDes2 = lineArray[2];
+            if (classStr && classStr.length && !classStr.isEmpty &&![classStr isEqualToString:@"对象"]) {
+                // integer Integer int Int String string
+                NSString *rightClassStr = @"f";
+                if ([classStr isEqualToString:@"int"] ||[classStr isEqualToString:@"Int"]) {
+                    
+                    rightClassStr = @"NSInteger";
+                } else if ([classStr isEqualToString:@"integer"] ||[classStr isEqualToString:@"Integer"]) {
+                    
+                    rightClassStr = @"NSInteger";
+                } else if ([classStr isEqualToString:@"string"] ||[classStr isEqualToString:@"String"]) {
+                    
+                    rightClassStr = @"NSString";
+                } else if ([classStr isEqualToString:@"arry"]) {
+                    
+                    rightClassStr = @"NSArray";
+                }
+                
+                if (propertyDes2 && propertyDes2.length && !propertyDes2.isEmpty) {
+                    
+                    if ([rightClassStr isEqualToString:@"NSString"] ||
+                        [rightClassStr isEqualToString:@"NSArray"]) {
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@ 例如-> %@\n@property (nonatomic, copy) %@ *%@;\n",
+                         propertyDes1, propertyDes2,rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    } else {
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@ 例如-> %@\n@property (nonatomic) %@ %@;\n",
+                         propertyDes1, propertyDes2,rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    }
+                    
+                } else {
+                    
+                    if ([rightClassStr isEqualToString:@"NSString"] ||
+                        [rightClassStr isEqualToString:@"NSArray"]) {
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@\n@property (nonatomic, copy) %@ *%@;\n",
+                         propertyDes1, rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    }else{
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@\n@property (nonatomic) %@ %@;\n",
+                         propertyDes1, rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    }
+                    
+                }
+            }
+        }];
+        self.codeTextView.editable = YES;
+        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+        
+        
+        // 操作完毕，写入textview
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
+            self.codeTextView.editable = NO;
+        });
+        
+    }
+}
+/// 参数名称-参数说明-参数类型-备注
+- (void)name_des_type_remark {
+    //    NSMutableString *inputString =  self.inputTextView.string.mutableCopy;
+    if ([self.jsonTextView.string containsString:@"\n"]) {
+        NSArray<NSString *> *strings=  [self.jsonTextView.string componentsSeparatedByString:@"\n"];
+        NSMutableArray<NSArray<NSString *> *> *lineCodeStrs = @[].mutableCopy;
+        // 四个一组
+        for (NSInteger i = 0; i < [strings count] ; i ++) {
+            
+            NSMutableArray *arr1 = [NSMutableArray array];
+            NSInteger counts = 0;
+            
+            while (counts != 4 && i < [strings count]  ) {
+                counts++;
+                
+                [arr1 addObject:strings[i]];
+                
+                i ++;
+                
+                
+            }
+            if (arr1.count == 4) {
+                
+                [lineCodeStrs addObject:arr1.copy];
+            }
+            
+            i --;
+        }
+        
+        NSMutableString *outPutString = @"".mutableCopy;
+        [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *propertyName = lineArray[0];
+            NSString *propertyDes1 = lineArray[1];
+            NSString *classStr = lineArray[2];
+            NSString *propertyDes2 = lineArray[3];
+            if (classStr && classStr.length && !classStr.isEmpty &&![classStr isEqualToString:@"对象"]) {
+                // integer Integer int Int String string
+                NSString *rightClassStr = @"f";
+                if ([classStr isEqualToString:@"int"] ||[classStr isEqualToString:@"Int"]) {
+                    
+                    rightClassStr = @"NSInteger";
+                } else if ([classStr isEqualToString:@"integer"] ||[classStr isEqualToString:@"Integer"]) {
+                    
+                    rightClassStr = @"NSInteger";
+                } else if ([classStr isEqualToString:@"string"] ||[classStr isEqualToString:@"String"]) {
+                    
+                    rightClassStr = @"NSString";
+                }
+                
+                if (propertyDes2 && propertyDes2.length && !propertyDes2.isEmpty) {
+                    
+                    if ([rightClassStr isEqualToString:@"NSString"]) {
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@ : %@\n@property (nonatomic, copy) %@ *%@;\n",
+                         propertyDes1, propertyDes2,rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    } else {
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@ : %@\n@property (nonatomic) %@ %@;\n",
+                         propertyDes1, propertyDes2,rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    }
+                    
+                } else {
+                    
+                    if ([rightClassStr isEqualToString:@"NSString"]) {
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@\n@property (nonatomic, copy) %@ *%@;\n",
+                         propertyDes1, rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    }else{
+                        
+                        NSString *codeString =
+                        [NSString stringWithFormat:
+                         @"\n///  %@\n@property (nonatomic) %@ %@;\n",
+                         propertyDes1, rightClassStr, propertyName];
+                        
+                        [outPutString appendString:codeString];
+                    }
+                    
+                }
+            }
+        }];
+        self.codeTextView.editable = YES;
+        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+        
+        
+        // 操作完毕，写入textview
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
+            self.codeTextView.editable = NO;
+        });
+        
+    }
 }
 - (void)pythonHeader {
         NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
