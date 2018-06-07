@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
 //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -100,7 +100,16 @@
     } else if ([currentLanguage isEqualToString:@"字段名-类型-示例值-备注"]){
         
         [self name_type_example_des];
+    } else if ([currentLanguage isEqualToString:@"XcodePrintToJSONString"]){
+        
+        [self XcodePrintToJSONString];
+    }else if ([currentLanguage isEqualToString:@"OC代码取JSON字符串"]){
+        
+        [self OCParamDictToJSONString];
+    } else if ([currentLanguage isEqualToString:@"小程序url转换"]) {
+        [self minAppURLConversion];
     }
+    
     
 }
 /// 状态码-描述-状态码含义
@@ -498,6 +507,179 @@
         }];
         self.codeTextView.string = muStr;
     }
+    
+}
+
+/**
+ Xcode 打印出来的字典转换成JSON字符串，方便postman传参
+ */
+- (void)XcodePrintToJSONString {
+    NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
+    
+    if (([inputString containsString:@" = "] && [inputString containsString:@";"]) ||
+               ([inputString containsString:@" = "] && [inputString containsString:@","])) {
+        /*
+         Xcode打印请求参数
+         
+         appmac = 000000;
+         appversion = "3.5.0";
+         authorization = "Basic MTg5MDAwMDAwMDE6Y2hlMDAx";
+         channel = 2;
+         deviceId = 000000;
+         deviceName = "iPhone Simulator";
+         height = "667.000000";
+         imei = 000000;
+         imsi = 000000;
+         loginWay = 1;
+         system = IOS;
+         sysversion = "11.200000";
+         width = "375.000000";
+         
+         */
+        inputString = [inputString stringByReplacingOccurrencesOfString:@" = " withString:@":"].mutableCopy;
+        inputString = [inputString stringByReplacingOccurrencesOfString:@";" withString:@""].mutableCopy;
+        
+        NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
+        NSMutableString *muStr = @"{".mutableCopy;
+        [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (string.isEmpty) {
+                
+            } else {
+                string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                NSArray<NSString *> *keyAndValue = [string componentsSeparatedByString:@":"];
+                if (keyAndValue.count < 2) {
+                    
+                    NSLog(@"----%@---", keyAndValue);
+                }else{
+                    
+                    NSString *key = keyAndValue[0];
+                    NSString *value = keyAndValue[1];
+                    value = [value stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                    value = [value stringByReplacingOccurrencesOfString:@"\'" withString:@""];
+                    
+                        [muStr appendFormat:@"\n\"%@\" : \"%@\" ,", key, value];
+
+                
+                }
+            }
+            
+        }];
+        // 去除,
+        
+        
+        [muStr deleteCharactersInRange: NSMakeRange(muStr.length-1, 1)];
+        // 换行加}
+        self.codeTextView.string = [muStr stringByAppendingString:@"\n}"];;
+    }
+    
+}
+
+/**
+ 从OC代码里网络请求传递的参数字典转换成JSON字符串，方便postman传参
+ */
+- (void)OCParamDictToJSONString {
+    NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
+    
+
+    /*
+     Xcode打印请求参数
+     
+     params[@"newTelNum"] = self.tellNewNumber.text;
+     params[@"checkCode"] = self.verificationTextField.text;
+     params[@"templateType"] = @"SMSMOBILEMODIFY";
+     params[@"validateKey"] = self.validateKey;
+     
+     */
+    inputString = [inputString stringByReplacingOccurrencesOfString:@"params[@\"" withString:@"\""].mutableCopy;
+    /*
+     "newTelNum"] = self.tellNewNumber.text;
+     "checkCode"] = self.verificationTextField.text;
+     "templateType"] = @"SMSMOBILEMODIFY";
+     "validateKey"] = self.validateKey;
+     */
+    
+    inputString = [inputString stringByReplacingOccurrencesOfString:@"\"] = @\"" withString:@"\" : \""].mutableCopy;
+    inputString = [inputString stringByReplacingOccurrencesOfString:@"\"] = " withString:@"\" : "].mutableCopy;
+    /*
+     "newTelNum":self.tellNewNumber.text;
+     "checkCode":self.verificationTextField.text;
+     "templateType":@"SMSMOBILEMODIFY";
+     "validateKey":self.validateKey;
+     */
+    inputString = [inputString stringByReplacingOccurrencesOfString:@"\";" withString:@"\","].mutableCopy;
+    inputString = [inputString stringByReplacingOccurrencesOfString:@";" withString:@","].mutableCopy;
+
+    NSMutableString *muStr = @"{\n".mutableCopy;
+    [muStr appendString:inputString];
+    [muStr deleteCharactersInRange: NSMakeRange(muStr.length-1, 1)];
+    // 换行加}
+    self.codeTextView.string = [muStr stringByAppendingString:@"\n}"];;
+    
+    
+}
+/**
+ 小程序url转换
+ url: utils.kBaseUrl + '/nw/entrance/apis/contract/serviceprotocol/json',
+
+ 
+ 
+ 稳盈管理页面信息
+
+mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentamount/json',
+ */
+- (void)minAppURLConversion {
+    NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
+    // 冒号分割后的数组
+    /*
+     <__NSArrayM 0x60000004a4d0>(
+     url,
+     utils.kBaseUrl + '/nw/entrance/apis/contract/serviceprotocol/json',
+     
+     )
+     */
+    NSArray<NSString *> *colonStirngs = [inputString componentsSeparatedByString:@":"];
+    if (colonStirngs.count < 2) {
+        // 尝试解析 var url = utils.kBaseUrl + '/nw/entrance/apis/xsb/profitdetail/json';
+        if ([inputString containsString:@"var"] && [inputString containsString:@"="]) {
+            colonStirngs = [inputString componentsSeparatedByString:@"="];
+            if (colonStirngs.count < 2) {
+                return;
+            }
+
+        } else {
+            
+            return;
+        }
+    }
+    //  colonStirngs[1] 为 utils.kBaseUrl + '/nw/entrance/apis/contract/serviceprotocol/json',
+
+    // 加号分割后的数组
+    /*
+     <__NSArrayM 0x60800004be50>(
+     utils.kBaseUrl ,
+     '/nw/entrance/apis/contract/serviceprotocol/json',
+     
+     )
+     */
+    NSArray<NSString *> *plusStrings = [colonStirngs[1] componentsSeparatedByString:@"+"];
+    if (plusStrings.count < 2) {
+        return;
+    }
+    // utils.kBaseUrl ,
+    // 子地址 '/nw/entrance/apis/contract/serviceprotocol/json'
+    NSString *subURLString = plusStrings[1];
+    
+    // kBaseUrl +  '/nw/entrance/apis/contract/serviceprotocol/json',
+    NSString *allURLString = [NSString stringWithFormat:@"kBaseUrl + %@", subURLString];
+    NSArray<NSString *> *subURLStringOtherNameStrings = [subURLString componentsSeparatedByString:@"/"];
+    NSString *subURLStringOtherNameString = @"???";
+    if (subURLStringOtherNameStrings.count >= 2) {
+        subURLStringOtherNameString = subURLStringOtherNameStrings[subURLStringOtherNameStrings.count -2];
+    }
+    NSString *commentString = [NSString stringWithFormat:@"/**\n * %@\n */\nmine_%@: %@", @"中文注释",subURLStringOtherNameString,allURLString];
+    // 以;结尾
+    self.codeTextView.string = [commentString stringByReplacingOccurrencesOfString:@";" withString:@""];
+    
     
 }
 - (void)yiHaoCheDoc {
