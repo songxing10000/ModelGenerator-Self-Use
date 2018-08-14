@@ -283,6 +283,7 @@
                                             <menuItem title="OC代码取JSON字符串" id="JK9-lq-ei4"/>
                                             <menuItem title="小程序url转换" id="Q5N-1c-gJu"/>
                                             <menuItem title="谷歌翻译转换" id="rAf-js-UfR"/>
+                                            <menuItem title="字符串转换成数组" id="KCR-Fm-IC0"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>

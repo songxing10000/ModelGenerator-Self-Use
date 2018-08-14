@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
 //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -110,6 +110,8 @@
         [self minAppURLConversion];
     } else if ([currentLanguage isEqualToString:@"谷歌翻译转换"]) {
         [self googleTranslateConversion];
+    } else if ([currentLanguage isEqualToString:@"字符串转换成数组"]) {
+        [self convertStringToarray];
     }
     
     
@@ -716,6 +718,41 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
 
     [outStr appendString:inputString];
     self.codeTextView.string = outStr;
+    
+    
+}
+
+/**
+ 字符串转换成数组
+ 输入：
+ 法定代表人/负责人、
+ 
+ 总经理、
+ 
+ 部门负责人、
+ 
+ 员工
+ 输出：
+ @[@"法定代表人/负责人",@"总经理",@"部门负责人",@"员工"]
+ */
+- (void)convertStringToarray {
+    
+    NSString *inputString =  self.jsonTextView.string;
+    
+    /// 去除所有空格，首字母小写，加或不加  m_
+    inputString = [self removeSpaceAndNewline:inputString];
+    BOOL hasInput = inputString && inputString.length > 0;
+    if (!hasInput) {
+        return;
+    }
+    NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"、"];
+    NSMutableString *muStr = [NSMutableString string];
+    [muStr appendString:@"@["];
+    [strs enumerateObjectsUsingBlock:^(NSString * _Nonnull str, NSUInteger idx, BOOL * _Nonnull stop) {
+        [muStr appendFormat:@"@\"%@\", ",str];
+    }];
+    NSString *outStr = [muStr substringWithRange:NSMakeRange(0, muStr.length -2)];
+    self.codeTextView.string = [outStr stringByAppendingString:@"]"];
     
     
 }
