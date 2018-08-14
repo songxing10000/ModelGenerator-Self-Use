@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
 //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"参数名称-参数说明-参数类型-备注", @"字段名-类型-示例值-备注", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -108,6 +108,8 @@
         [self OCParamDictToJSONString];
     } else if ([currentLanguage isEqualToString:@"小程序url转换"]) {
         [self minAppURLConversion];
+    } else if ([currentLanguage isEqualToString:@"谷歌翻译转换"]) {
+        [self googleTranslateConversion];
     }
     
     
@@ -679,6 +681,41 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
     NSString *commentString = [NSString stringWithFormat:@"/**\n * %@\n */\nmine_%@: %@", @"中文注释",subURLStringOtherNameString,allURLString];
     // 以;结尾
     self.codeTextView.string = [commentString stringByReplacingOccurrencesOfString:@";" withString:@""];
+    
+    
+}
+
+/**
+ 谷歌翻译转换
+ 输入：
+ Google Translate Conversion
+ 输出：
+ m_googleTranslateConversion
+ googleTranslateConversion
+ */
+- (void)googleTranslateConversion {
+    
+    NSString *inputString =  self.jsonTextView.string;
+    
+    /// 去除所有空格，首字母小写，加或不加  m_
+    inputString = [self removeSpaceAndNewline:inputString];
+    BOOL hasInput = inputString && inputString.length > 0;
+    if (!hasInput) {
+        return;
+    }
+    NSString *firstLetter = [inputString substringWithRange:NSMakeRange(0, 1)];
+    
+    inputString = [inputString stringByReplacingOccurrencesOfString:firstLetter withString:[firstLetter lowercaseString]];
+    NSMutableString *outStr = [NSMutableString string];
+    [outStr appendString:@"\n"];
+    [outStr appendString:@"\n"];
+
+    [outStr appendString:[@"m_" stringByAppendingString:inputString]];
+    [outStr appendString:@"\n"];
+    [outStr appendString:@"\n"];
+
+    [outStr appendString:inputString];
+    self.codeTextView.string = outStr;
     
     
 }

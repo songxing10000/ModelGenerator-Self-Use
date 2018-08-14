@@ -50,4 +50,11 @@
     view.layer.borderColor = [NSColor whiteColor].CGColor;
 }
 
+- (NSString *)removeSpaceAndNewline:(NSString *)str
+{
+    NSString *temp = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
+    temp = [temp stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+    temp = [temp stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    return temp;
+}
 @end

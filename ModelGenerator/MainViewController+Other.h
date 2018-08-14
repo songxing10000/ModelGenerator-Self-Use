@@ -15,4 +15,5 @@
 
 - (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title;
 - (void)makeRound:(NSView*)view;
+- (NSString *)removeSpaceAndNewline:(NSString *)str;
 @end
