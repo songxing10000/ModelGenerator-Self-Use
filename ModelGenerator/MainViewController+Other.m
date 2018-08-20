@@ -53,8 +53,15 @@
 - (NSString *)removeSpaceAndNewline:(NSString *)str
 {
     NSString *temp = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
+    str = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+
+    temp = [temp stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+temp = [temp stringByReplacingOccurrencesOfString:@" " withString:@""];
     temp = [temp stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     temp = [temp stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    temp = [temp stringByReplacingOccurrencesOfString:@" " withString:@""];
+    temp = [temp stringByReplacingOccurrencesOfString:@"\r\n" withString:@""];
     return temp;
 }
 @end
