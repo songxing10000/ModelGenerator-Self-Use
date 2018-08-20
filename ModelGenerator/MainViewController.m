@@ -139,7 +139,7 @@
 /// JSON字符串转OC模型
 - (void)convertJSONStringToOCModel {
     // json转字典
-    NSString *str = [self removeSpaceAndNewline: self.jsonTextView.string];
+    NSString *str = [self removeSpaceAndNewline: [self.jsonTextView.string stringByReplacingOccurrencesOfString:@"null" withString:@"\"null\""]];
     NSDictionary *dict = [self dictFromJSONString: str];
     if (![dict isKindOfClass:[NSDictionary class]]) {
         return;
