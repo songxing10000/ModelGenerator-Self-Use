@@ -146,7 +146,7 @@
     }
     NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData                  options:NSJSONReadingMutableContainers error:&err];
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&err];
     
     if(err) {
         NSLog(@"----%@---", err.userInfo[@"NSDebugDescription"]);
@@ -173,162 +173,31 @@
             
             [outStr appendFormat:@"/// 如，%@\n",value];
             [outStr appendFormat:@"@property(nonatomic, copy) NSString *%@;\n",key];
-            NSLog(@"----%@---", outStr);
         } else if ([value isKindOfClass:[NSNumber class]]){
+            
             [outStr appendFormat:@"/// 如，%@\n",value];
             [outStr appendFormat:@"@property(nonatomic, strong) NSNumber *%@;\n",key];
-            NSLog(@"----%@---", outStr);
         } else if ([value isKindOfClass:[NSArray class]]){
+            
             [outStr appendFormat:@"/// 如，%@\n",value];
             [outStr appendFormat:@"@property(nonatomic, strong) NSArray *%@;\n",key];
-            NSLog(@"----%@---", outStr);
         }
     }];
+
+    
+    [self operationCompletedWithString:outStr];
+}
+/// 操作完毕，写入textview
+- (void)operationCompletedWithString:(NSString *)outStr {
+    if (isEmpty(outStr)) {
+        return;
+    }
     self.codeTextView.editable = YES;
     [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-    
-    
-    // 操作完毕，写入textview
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.codeTextView insertText:outStr replacementRange:NSMakeRange(0, 1)];
         self.codeTextView.editable = NO;
     });
-//    NSMutableArray *outPutArray = @[].mutableCopy;
-//    [arrs enumerateObjectsUsingBlock:^(NSArray<NSString *>  *_Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
-//        // 有注释
-//        
-//        NSString *propertyName = lineArray.firstObject;
-//        NSString *className = @"NSObject";
-//        if ([lineArray count] >= 3) {
-//            className = lineArray[1];
-//            if ([lineArray[1] isEqualToString:@"false"] ||
-//                [lineArray[1] isEqualToString:@"true"]) {
-//                className = lineArray[2];
-//            } else if ([lineArray[2] isEqualToString:@"Integer"] ||
-//                       [lineArray[2] isEqualToString:@"String"] ||
-//                       [lineArray[2] isEqualToString:@"Int"] ||
-//                       [lineArray[2] isEqualToString:@"对象"]) {
-//                className = lineArray[2];
-//            }
-//        }
-//        NSString *descString = @"未找到该字段的注释";
-//        
-//        if (lieNum == 3) {
-//            if ([lineArray count] >= 3) {
-//                
-//                descString = [lineArray[2].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
-//            }
-//        } else if (lieNum == 4) {
-//            
-//            
-//            if ([lineArray[1] isEqualToString:@"false"] ||
-//                [lineArray[1] isEqualToString:@"true"]) {
-//                
-//                descString =
-//                [NSString stringWithFormat:@"%@，是否必填->%@",
-//                 [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
-//                 lineArray[1]];
-//            } else if ([lineArray[2] isEqualToString:@"Integer"] ||
-//                       [lineArray[2] isEqualToString:@"String"] ||
-//                       [lineArray[2] isEqualToString:@"Int"] ||
-//                       [lineArray[2] isEqualToString:@"对象"]){
-//                
-//                descString = lineArray[1];
-//                NSString *str = [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
-//                if (str && str.length && !str.isEmpty) {
-//                    
-//                    descString =
-//                    [NSString stringWithFormat:@"%@ -> %@",lineArray[1],str];
-//                }
-//                
-//            }else {
-//                
-//                descString =
-//                [NSString stringWithFormat:@"%@，是否必填->%@",
-//                 [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""],
-//                 lineArray[2]];
-//            }
-//            
-//        }
-//        NSString *objectStr = @"*";
-//        
-//        if ([className isEqualToString:@"string"] ||
-//            [className isEqualToString:@"String"]) {
-//            
-//            className = @"NSString";
-//        } else if ([className isEqualToString:@"int"] ||
-//                   [className isEqualToString:@"Int"] ||
-//                   [className isEqualToString:@"Integer"]) {
-//            
-//            className = @"NSInteger";
-//            objectStr = @" ";
-//        } else if ([className isEqualToString:@"array"]) {
-//            
-//            className = @"NSArray";
-//        } else if ([className isEqualToString:@"NSInteger"]) {
-//            
-//            objectStr = @" ";
-//        } else if ([className isEqualToString:@"NSString"]) {
-//            
-//            objectStr = @"  *";
-//        } else if ([className isEqualToString:@"NSArray"]) {
-//            
-//            objectStr = @"   *";
-//        } else if ([className isEqualToString:@"boolean"]) {
-//            className = @"BOOL";
-//            objectStr = @"   ";
-//            
-//        } else if ([className isEqualToString:@"float"]) {
-//            className = @"float";
-//            objectStr = @"   ";
-//            
-//        } else {
-//            
-//            NSLog(@"----特别情况出现->%@---", className);
-//        }
-//        
-//        NSString *codeString = @"??";
-//        if (!isOCProperty) {
-//            
-//            codeString = [NSString stringWithFormat:@"%@:1\n", propertyName];
-//        } else  {
-//            if (!isNeedDict) {
-//                
-//                codeString =
-//                [NSString stringWithFormat:
-//                 @"\n///  %@\n@property (nonatomic) %@ %@ %@;\n",
-//                 descString, className, objectStr, propertyName];
-//            } else {
-//                
-//                if (idx == 0) {
-//                    
-//                    codeString = [NSString stringWithFormat:@"@{\n\n\t@\"%@\": @1,\n", propertyName];
-//                } else if (idx == arrs.count -1) {
-//                    
-//                    codeString = [NSString stringWithFormat:@"\t@\"%@\": @1 \n  }", propertyName];
-//                } else {
-//                    
-//                    codeString = [NSString stringWithFormat:@"\t@\"%@\": @1,\n", propertyName];
-//                }
-//            }
-//        }
-//        if (codeString && codeString.length) {
-//            
-//            [outPutArray addObject:codeString];
-//        }
-//    }];
-//    
-//    NSString *rightCodeString = [outPutArray componentsJoinedByString:@""];
-//    self.codeTextView.editable = YES;
-//    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-//    
-//    
-//    // 操作完毕，写入textview
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.codeTextView insertText:rightCodeString replacementRange:NSMakeRange(0, 1)];
-//        self.codeTextView.editable = NO;
-//    });
-//    
 }
 #pragma mark - 状态码-描述
 /// 状态码-描述
@@ -376,16 +245,8 @@
             
             
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
         
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
-        
+        [self operationCompletedWithString:outPutString];
     }
     
 }
@@ -442,15 +303,10 @@
             }
             
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
         
         
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        [self operationCompletedWithString:outPutString];
+
         
     }
     
@@ -533,15 +389,8 @@
                 
             }
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-        
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        [self operationCompletedWithString:outPutString];
+
         
     }
 }
@@ -645,15 +494,8 @@
                 }
             }
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-        
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        [self operationCompletedWithString:outPutString];
+
         
     }
 }
@@ -753,15 +595,8 @@
                 
             }
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-        
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        [self operationCompletedWithString:outPutString];
+
         
     }
 }
@@ -858,15 +693,8 @@
                 
             }
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-        
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        [self operationCompletedWithString:outPutString];
+
         
     }
 }
@@ -964,15 +792,8 @@
                 }
             }
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-        
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
+        [self operationCompletedWithString:outPutString];
+
         
     }
 }
@@ -1427,15 +1248,8 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
                 }
             }
         }];
-        self.codeTextView.editable = YES;
-        [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+        [self operationCompletedWithString:outPutString];
 
-        
-        // 操作完毕，写入textview
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.codeTextView insertText:outPutString replacementRange:NSMakeRange(0, 1)];
-            self.codeTextView.editable = NO;
-        });
         
     }
 }
@@ -1523,15 +1337,8 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
     }];
 
     NSString *rightCodeString = [outPutArray componentsJoinedByString:@""];
-    self.codeTextView.editable = YES;
-    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-    
+    [self operationCompletedWithString:rightCodeString];
 
-// 操作完毕，写入textview
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:rightCodeString replacementRange:NSMakeRange(0, 1)];
-        self.codeTextView.editable = NO;
-    });
 
 }
 /// 如果是OCProperty 就生成oc property code ,otherwise postman bulk edit
@@ -1719,15 +1526,8 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
     }];
     
     NSString *rightCodeString = [outPutArray componentsJoinedByString:@""];
-    self.codeTextView.editable = YES;
-    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
-    
-    
-    // 操作完毕，写入textview
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.codeTextView insertText:rightCodeString replacementRange:NSMakeRange(0, 1)];
-        self.codeTextView.editable = NO;
-    });
+    [self operationCompletedWithString:rightCodeString];
+
     
 }
 #pragma mark - action
