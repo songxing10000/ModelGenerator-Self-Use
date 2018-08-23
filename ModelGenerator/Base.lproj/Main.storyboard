@@ -187,14 +187,14 @@
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VBm-Dc-THG">
                                 <rect key="frame" x="0.0" y="0.0" width="300" height="257"/>
                                 <clipView key="contentView" id="xKZ-Nn-SIU">
-                                    <rect key="frame" x="1" y="1" width="298" height="255"/>
+                                    <rect key="frame" x="1" y="1" width="283" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="p7Q-IO-h2F">
-                                            <rect key="frame" x="0.0" y="0.0" width="298" height="255"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="283" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="298" height="255"/>
+                                            <size key="minSize" width="283" height="255"/>
                                             <size key="maxSize" width="463" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <connections>
@@ -209,7 +209,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="V7Q-ck-oDV">
-                                    <rect key="frame" x="283" y="1" width="16" height="255"/>
+                                    <rect key="frame" x="284" y="1" width="15" height="255"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -240,14 +240,14 @@
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPe-l8-THT">
                                 <rect key="frame" x="300" y="0.0" width="300" height="257"/>
                                 <clipView key="contentView" id="nDZ-iH-vQp">
-                                    <rect key="frame" x="1" y="1" width="298" height="255"/>
+                                    <rect key="frame" x="1" y="1" width="283" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="Ysi-iN-v9F">
-                                            <rect key="frame" x="0.0" y="0.0" width="298" height="255"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="283" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="298" height="255"/>
+                                            <size key="minSize" width="283" height="255"/>
                                             <size key="maxSize" width="463" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -259,12 +259,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="wDe-d8-uPF">
-                                    <rect key="frame" x="283" y="1" width="16" height="255"/>
+                                    <rect key="frame" x="284" y="1" width="15" height="255"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ze-hF-oao">
-                                <rect key="frame" x="180" y="263" width="241" height="26"/>
+                                <rect key="frame" x="108" y="263" width="385" height="26"/>
                                 <popUpButtonCell key="cell" type="push" title="doc to OC property" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fGV-5T-UrV" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
@@ -277,8 +277,12 @@
                                             <menuItem title="yiHaoCheDoc" id="DWe-B7-1mM"/>
                                             <menuItem title="pythonHeader" id="YWu-wz-ewN"/>
                                             <menuItem title="状态码-描述-状态码含义" id="obk-Kh-Ja1"/>
+                                            <menuItem title="状态码-描述" id="38s-xS-8Hk"/>
                                             <menuItem title="参数名称-参数说明-参数类型-备注" id="1Qx-g6-yc9"/>
+                                            <menuItem title="参数名称-参数类型-是否必传-参数示例-参数说明" id="Mzf-6w-8z5"/>
+                                            <menuItem title="参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注" id="tVv-6t-Ior"/>
                                             <menuItem title="字段名-类型-示例值-备注" id="zhK-Ac-Uar"/>
+                                            <menuItem title="参数名称-参数类型-是否必填-参数说明" id="aWp-tT-YDM"/>
                                             <menuItem title="XcodePrintToJSONString" id="78z-Fn-exa"/>
                                             <menuItem title="OC代码取JSON字符串" id="JK9-lq-ei4"/>
                                             <menuItem title="小程序url转换" id="Q5N-1c-gJu"/>
