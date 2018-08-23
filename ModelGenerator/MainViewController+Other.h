@@ -16,4 +16,6 @@
 - (NSAttributedString *)btnAttributedStringWithtitle:(NSString *)title;
 - (void)makeRound:(NSView*)view;
 - (NSString *)removeSpaceAndNewline:(NSString *)str;
+/// 是否为空或者是空格
+BOOL isEmpty(NSString *str);
 @end

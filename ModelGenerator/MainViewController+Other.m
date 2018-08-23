@@ -64,4 +64,38 @@ temp = [temp stringByReplacingOccurrencesOfString:@" " withString:@""];
     temp = [temp stringByReplacingOccurrencesOfString:@"\r\n" withString:@""];
     return temp;
 }
+/// 是否为空或者是空格
+BOOL isEmpty(NSString *str) {
+    if (!str ||
+        ![str isKindOfClass:[NSString class]] ||
+        str.length <= 0 ||
+        [str isEqualToString:@""]) {
+        return YES;
+    }
+    NSString * newSelf = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (!newSelf ||
+        ![newSelf isKindOfClass:[NSString class]] ||
+        newSelf.length <= 0 ||
+        [newSelf isEqualToString:@""]) {
+        return YES;
+    }
+    if([str isEqualToString:@"<null>"]
+       || [str isEqualToString:@"(null)"]
+       || [str isEqualToString:@"null"]
+       || [newSelf isEqualToString:@"<null>"]
+       || [newSelf isEqualToString:@"(null)"]
+       || [newSelf isEqualToString:@"null"]){
+        
+        return YES;
+        
+    }else{
+        // <object returned empty description> 会来这里
+        NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+        NSString *trimedString = [str stringByTrimmingCharactersInSet:set];
+        
+        return [trimedString isEqualToString: @""];
+    }
+    
+    return NO;
+}
 @end

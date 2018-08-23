@@ -7,7 +7,7 @@
 //
 
 #import "MainViewController.h"
-#import "NSString+Empty.h"
+
 
 #import "MainViewController+Other.h"
 
@@ -426,7 +426,7 @@
             NSString *statusDetailDes = lineArray[2];
             
             
-            if (statusDetailDes && statusDetailDes.length && !statusDetailDes.isEmpty) {
+            if (!isEmpty(statusDetailDes)) {
                 
                 
                 NSString *codeString =
@@ -491,7 +491,8 @@
             NSString *propertyName = lineArray[0];
             NSString *classStr = lineArray[1];
             NSString *propertyDes = lineArray[3];
-            if (classStr && classStr.length && !classStr.isEmpty &&![classStr isEqualToString:@"对象"]) {
+            if (!isEmpty(classStr) &&
+                ![classStr isEqualToString:@"对象"]) {
                 // integer Integer int Int String string
                 NSString *rightClassStr = @"f";
                 if ([classStr isEqualToString:@"int"] ||
@@ -581,7 +582,8 @@
             NSString *classStr = lineArray[1];
             NSString *propertyDes1 = lineArray[3];
             NSString *propertyDes2 = lineArray[2];
-            if (classStr && classStr.length && !classStr.isEmpty &&![classStr isEqualToString:@"对象"]) {
+            if (!isEmpty(classStr)&&
+                ![classStr isEqualToString:@"对象"]) {
                 // integer Integer int Int String string
                 NSString *rightClassStr = @"f";
                 if ([classStr isEqualToString:@"int"] ||[classStr isEqualToString:@"Int"]) {
@@ -598,7 +600,7 @@
                     rightClassStr = @"NSArray";
                 }
                 
-                if (propertyDes2 && propertyDes2.length && !propertyDes2.isEmpty) {
+                if (!isEmpty(propertyDes2)) {
                     
                     if ([rightClassStr isEqualToString:@"NSString"] ||
                         [rightClassStr isEqualToString:@"NSArray"]) {
@@ -696,9 +698,7 @@
             NSString *propertyDes = lineArray[6];
             /// 参数说明
             NSString *propertyDes2 = lineArray[7];
-            if (propertyClassTypeStr &&
-                propertyClassTypeStr.length &&
-                !propertyClassTypeStr.isEmpty &&
+            if (!isEmpty(propertyClassTypeStr) &&
                 ![propertyClassTypeStr isEqualToString:@"对象"]) {
                 // integer Integer int Int String string arr
                 NSString *rightClassStr = @"f";
@@ -803,9 +803,7 @@
             NSString *propertyClassTypeStr = lineArray[1];
             /// 参数说明
             NSString *propertyDes = lineArray[4];
-            if (propertyClassTypeStr &&
-                propertyClassTypeStr.length &&
-                !propertyClassTypeStr.isEmpty &&
+            if (!isEmpty(propertyClassTypeStr) &&
                 ![propertyClassTypeStr isEqualToString:@"对象"]) {
                 // integer Integer int Int String string arr
                 NSString *rightClassStr = @"f";
@@ -908,7 +906,8 @@
             NSString *propertyDes1 = lineArray[1];
             NSString *classStr = lineArray[2];
             NSString *propertyDes2 = lineArray[3];
-            if (classStr && classStr.length && !classStr.isEmpty &&![classStr isEqualToString:@"对象"]) {
+            if (!isEmpty(classStr) &&
+                ![classStr isEqualToString:@"对象"]) {
                 // integer Integer int Int String string
                 NSString *rightClassStr = @"f";
                 if ([classStr isEqualToString:@"int"] ||[classStr isEqualToString:@"Int"]) {
@@ -922,7 +921,7 @@
                     rightClassStr = @"NSString";
                 }
                 
-                if (propertyDes2 && propertyDes2.length && !propertyDes2.isEmpty) {
+                if (!isEmpty(propertyDes2)) {
                     
                     if ([rightClassStr isEqualToString:@"NSString"]) {
                         
@@ -991,7 +990,7 @@
         NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
         NSMutableString *muStr = @"".mutableCopy;
         [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (string.isEmpty) {
+            if (isEmpty(string)) {
                 
             } else {
                 
@@ -1025,7 +1024,7 @@
         NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
         NSMutableString *muStr = @"".mutableCopy;
         [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (string.isEmpty) {
+            if (isEmpty(string)) {
                 
             } else {
                 
@@ -1069,7 +1068,7 @@
         NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
         NSMutableString *muStr = @"".mutableCopy;
         [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (string.isEmpty) {
+            if (isEmpty(string)) {
                 
             } else {
                 string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -1125,7 +1124,7 @@
         NSArray<NSString *> *keyAndValueStrings = [inputString componentsSeparatedByString:@"\n"];
         NSMutableString *muStr = @"{".mutableCopy;
         [keyAndValueStrings enumerateObjectsUsingBlock:^(NSString * _Nonnull string, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (string.isEmpty) {
+            if (isEmpty(string)) {
                 
             } else {
                 string = [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -1370,7 +1369,8 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
             NSString *propertyDes1 = lineArray[1];
             NSString *classStr = lineArray[2];
             NSString *propertyDes2 = lineArray[3];
-            if (classStr && classStr.length && !classStr.isEmpty &&![classStr isEqualToString:@"对象"]) {
+            if (!isEmpty(classStr) &&
+                ![classStr isEqualToString:@"对象"]) {
                 // integer Integer int Int String string
                 NSString *rightClassStr = @"f";
                 if ([classStr isEqualToString:@"int"] ||[classStr isEqualToString:@"Int"]) {
@@ -1384,7 +1384,7 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
                     rightClassStr = @"NSString";
                 }
                 
-                if (propertyDes2 && propertyDes2.length && !propertyDes2.isEmpty) {
+                if (!isEmpty(propertyDes2)) {
                     
                     if ([rightClassStr isEqualToString:@"NSString"]) {
                         
@@ -1635,7 +1635,7 @@ mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentam
             
                 descString = lineArray[1];
                 NSString *str = [lineArray[3].mutableCopy stringByReplacingOccurrencesOfString:@"（varchar）" withString:@""];
-                if (str && str.length && !str.isEmpty) {
+                if (!isEmpty(str)) {
                     
                     descString =
                     [NSString stringWithFormat:@"%@ -> %@",lineArray[1],str];

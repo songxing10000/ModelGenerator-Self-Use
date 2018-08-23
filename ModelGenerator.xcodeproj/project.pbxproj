@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		043DB1991F4FF61D0084D7FE /* MainViewController+Other.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DB1981F4FF61D0084D7FE /* MainViewController+Other.m */; };
-		043DB19C1F5000F90084D7FE /* NSString+Empty.m in Sources */ = {isa = PBXBuildFile; fileRef = 043DB19B1F5000F90084D7FE /* NSString+Empty.m */; };
 		07853E241CE31D67007A5F3A /* MainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07853E231CE31D67007A5F3A /* MainWindowController.m */; };
 		07A304181B79B1DC00B0CA47 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A304171B79B1DC00B0CA47 /* AppDelegate.m */; };
 		07A3041A1B79B1DC00B0CA47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A304191B79B1DC00B0CA47 /* main.m */; };
@@ -23,8 +22,6 @@
 /* Begin PBXFileReference section */
 		043DB1971F4FF61D0084D7FE /* MainViewController+Other.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MainViewController+Other.h"; sourceTree = "<group>"; };
 		043DB1981F4FF61D0084D7FE /* MainViewController+Other.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MainViewController+Other.m"; sourceTree = "<group>"; };
-		043DB19A1F5000F90084D7FE /* NSString+Empty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Empty.h"; sourceTree = "<group>"; };
-		043DB19B1F5000F90084D7FE /* NSString+Empty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Empty.m"; sourceTree = "<group>"; };
 		07298A6195D771439BD22088 /* Pods-ModelGenerator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelGenerator.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ModelGenerator/Pods-ModelGenerator.debug.xcconfig"; sourceTree = "<group>"; };
 		075150ED1B7C94070078138B /* Template.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Template.h; sourceTree = "<group>"; };
 		07853DC71CDC6CDD007A5F3A /* ModelGenerator.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ModelGenerator.entitlements; sourceTree = "<group>"; };
@@ -83,8 +80,6 @@
 				07853DC71CDC6CDD007A5F3A /* ModelGenerator.entitlements */,
 				07A3041B1B79B1DC00B0CA47 /* MainViewController.h */,
 				07A3041C1B79B1DC00B0CA47 /* MainViewController.m */,
-				043DB19A1F5000F90084D7FE /* NSString+Empty.h */,
-				043DB19B1F5000F90084D7FE /* NSString+Empty.m */,
 				043DB1971F4FF61D0084D7FE /* MainViewController+Other.h */,
 				043DB1981F4FF61D0084D7FE /* MainViewController+Other.m */,
 				07A304201B79B1DC00B0CA47 /* Main.storyboard */,
@@ -259,7 +254,6 @@
 				07853E241CE31D67007A5F3A /* MainWindowController.m in Sources */,
 				07A304181B79B1DC00B0CA47 /* AppDelegate.m in Sources */,
 				07CE48BF1C5A04CD00DC2AFD /* Window.m in Sources */,
-				043DB19C1F5000F90084D7FE /* NSString+Empty.m in Sources */,
 				043DB1991F4FF61D0084D7FE /* MainViewController+Other.m in Sources */,
 				07CE48BE1C5A04CD00DC2AFD /* ColorView.m in Sources */,
 			);
