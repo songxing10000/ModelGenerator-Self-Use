@@ -265,12 +265,13 @@
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ze-hF-oao">
                                 <rect key="frame" x="108" y="263" width="386" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="doc to OC property" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fGV-5T-UrV" id="uQd-0b-6Ay">
+                                <popUpButtonCell key="cell" type="push" title="转换安卓代码" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fGV-5T-UrV" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="PFq-h8-ddo">
                                         <items>
-                                            <menuItem title="doc to OC property" state="on" id="fGV-5T-UrV"/>
+                                            <menuItem title="转换安卓代码" state="on" id="fGV-5T-UrV" userLabel="转换安卓代码"/>
+                                            <menuItem title="doc to OC property" state="on" id="Th2-Ts-FT1"/>
                                             <menuItem title="doc to OC IB property" id="MUD-HP-MBQ"/>
                                             <menuItem title="doc to OC dict" id="bNu-Vd-96p"/>
                                             <menuItem title="doc to postman bulk edit" id="3ok-ne-t9i"/>

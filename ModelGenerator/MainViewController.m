@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型", @"Weex加解密"];
+    languageArray = @[@"转换安卓代码", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型", @"Weex加解密"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -75,7 +75,10 @@
     }
     
     NSString *currentLanguage = languageArray[self.popUpBtn.indexOfSelectedItem];
-    if ([currentLanguage isEqualToString:@"doc to OC property"]) {
+    
+    if ([currentLanguage isEqualToString:@"转换安卓代码"]) {
+        [self convertAndroidCodeToObjc];
+    } else if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
     } else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
         [self sosoapiToOCProperty:YES needOCDict:YES];
@@ -1185,7 +1188,7 @@
     
     NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
     NSString *content = [self removeSpaceAndNewline: inputString];
-
+    
     if (!content && content.length < 100) {
         return;
     }
@@ -1207,11 +1210,88 @@
         [self.codeTextView insertText:content replacementRange:NSMakeRange(0, 1)];
         self.codeTextView.editable = NO;
     });
+}
+#pragma mark  转换安卓代码
+/// 转换安卓代码
+- (void)convertAndroidCodeToObjc {
+    /*
+     //add 添加 edit 编辑 reject 驳回
+     private String from = "add";
+     //0 是房屋担保 1是第三方担保
+     private String fromType = "0";
+     //列表,信息查询id
+     private String id = "";
+     private String proviceNameNow;
+     private String cityNameNow;
+     private String areaNameNow;
+     //解析地址util
+     private ParseAddress parseAddress = null;
+     //省级地址数据源
+     private ArrayList<JsonBean> options1Items = new ArrayList<>();
+     //市级数据源
+     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+     //区、县数据源
+     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+     private String ssoid = "";
+     private String parentId = "";
+     private String alreadyId = "";
+     private FastItemAdapter<UploadPicItem> itemAdapter;
+     private int MAX_PIC = 5;
+     private int mItemPosition;//是哪个位置
+     private int mRvPosition;//是哪个位置
+     private List<UploadUIBean> mCurrentList = new ArrayList<>();//是哪个位置
+     List<UploadUIBean> mContractList = new ArrayList();
+     List<UploadBean> uploadBeans = new ArrayList<>();
+     
+     //是否是个人业务 字符串"true" 是个人业务 "false"不是
+     private String isPer;
+     */
+    
+    NSString *inputString = [self.jsonTextView.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    NSArray<NSString *> *lineStrs = [inputString componentsSeparatedByString:@"\n"];
+    NSMutableArray<NSString *> *tempLineStrs = [NSMutableArray array];
+    NSString *str1 = @"public String ";
+    NSString *str2 = @"private String ";
+    NSString *str3 = @"public int ";
+    NSString *str4 = @"private int ";
+    NSArray<NSString *> *desStrs = @[str1, str2, str3, str4];
+    [lineStrs enumerateObjectsUsingBlock:^(NSString * _Nonnull line, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        for (NSString *str in desStrs) {
+            if ([line containsString: str]) {
+                
+                NSString *rightLine =
+                [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                rightLine = [rightLine stringByReplacingOccurrencesOfString: str withString:@"@property(nonatomic, copy) NSString *m_"];
+                rightLine = [rightLine stringByReplacingOccurrencesOfString: @" = \"" withString:@" = @\""];
+                if (idx >= 1 ) {
+                    NSString *preLine = lineStrs[idx-1];
+                    preLine =
+                    [preLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                    if([preLine hasPrefix:@"//"]) {
+                        NSString *des =
+                        [lineStrs[idx-1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        [tempLineStrs addObject:des];
+                        
+                    } else if ([rightLine componentsSeparatedByString:@"//"].count > 1) {
+                                NSArray *strss = [rightLine componentsSeparatedByString:@"//"];
+                                [tempLineStrs addObject: strss[1]];
+                                rightLine = strss[0];
+                    }
+                    [tempLineStrs addObject:rightLine];
+                }}
+        }
+    }];
     
     
-    
-    
-    
+    NSString *content = [tempLineStrs componentsJoinedByString:@"\n"];
+    self.codeTextView.editable = YES;
+    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.codeTextView insertText:content replacementRange:NSMakeRange(0, 1)];
+        self.codeTextView.editable = NO;
+    });
 }
 #pragma mark - action
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
