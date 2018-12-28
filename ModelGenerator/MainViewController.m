@@ -8,7 +8,7 @@
 
 #import "MainViewController.h"
 
-
+#import "DES3Encryptor.h"
 #import "MainViewController+Other.h"
 
 @interface MainViewController ()<NSComboBoxDataSource,NSTextViewDelegate>
@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型"];
+    languageArray = @[@"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型", @"Weex加解密"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -132,6 +132,8 @@
         [self convertStringToArray];
     } else if ([currentLanguage isEqualToString:@"JSON字符串转OC模型"]) {
         [self JSONStringToOCModel];
+    } else if ([currentLanguage isEqualToString:@"Weex加解密"]) {
+        [self weexEncryptionAndEecryption];
     }
     
     
@@ -1174,6 +1176,40 @@
     
     NSString *rightCodeString = [outPutArray componentsJoinedByString:@""];
     [self operationCompletedWithString:rightCodeString];
+    
+    
+}
+#pragma mark  Weex加解密
+/// Weex加解密
+- (void)weexEncryptionAndEecryption {
+    
+    NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
+    NSString *content = [self removeSpaceAndNewline: inputString];
+
+    if (!content && content.length < 100) {
+        return;
+    }
+    
+    NSString *key = @"M";
+    NSString *iv = @"kW";
+    
+    
+    if (![content hasPrefix:@"{\"pages\":[{\"" ] && ![content hasPrefix:@"{\"pages\": [{\"" ] && ![content hasPrefix:@"{\"pages\":[" ]) {
+        content =
+        [DES3Encryptor DES3DecryptString: content keyString:key ivString: iv];
+    } else {
+        content =
+        [DES3Encryptor DES3EncryptString: content keyString:key ivString: iv];
+    }
+    self.codeTextView.editable = YES;
+    [self.codeTextView insertText:@"" replacementRange:NSMakeRange(0, self.codeTextView.textStorage.string.length)];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.codeTextView insertText:content replacementRange:NSMakeRange(0, 1)];
+        self.codeTextView.editable = NO;
+    });
+    
+    
+    
     
     
 }
