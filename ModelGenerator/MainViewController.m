@@ -1256,32 +1256,46 @@
     NSString *str3 = @"public int ";
     NSString *str4 = @"private int ";
     NSArray<NSString *> *desStrs = @[str1, str2, str3, str4];
+    
+    
+    
     [lineStrs enumerateObjectsUsingBlock:^(NSString * _Nonnull line, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        for (NSString *str in desStrs) {
-            if ([line containsString: str]) {
-                
-                NSString *rightLine =
-                [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                rightLine = [rightLine stringByReplacingOccurrencesOfString: str withString:@"@property(nonatomic, copy) NSString *m_"];
-                rightLine = [rightLine stringByReplacingOccurrencesOfString: @" = \"" withString:@" = @\""];
-                if (idx >= 1 ) {
-                    NSString *preLine = lineStrs[idx-1];
-                    preLine =
-                    [preLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                    if([preLine hasPrefix:@"//"]) {
-                        NSString *des =
-                        [lineStrs[idx-1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                        [tempLineStrs addObject:des];
-                        
-                    } else if ([rightLine componentsSeparatedByString:@"//"].count > 1) {
-                                NSArray *strss = [rightLine componentsSeparatedByString:@"//"];
-                                [tempLineStrs addObject: strss[1]];
-                                rightLine = strss[0];
-                    }
-                    [tempLineStrs addObject:rightLine];
-                }}
+        NSString *rightLine =
+        [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if ([rightLine hasSuffix:@"();"]) {
+            rightLine = [rightLine stringByReplacingOccurrencesOfString: @"();" withString:@"];"];
+            rightLine = [@"[self " stringByAppendingString:rightLine];
+            [tempLineStrs addObject:rightLine];
+        } else if ([rightLine containsString:@"WXStorageModule wxStorageModule = new WXStorageModule();"]) {
+            [tempLineStrs addObject: @"WXStorageModule *wxStorageModule = [WXStorageModule new];"];
+        } else if ([rightLine containsString:@"wxStorageModule.getItem(\"key\", new JSCallback() {"]) {
+            [tempLineStrs addObject: @"[wxStorageModule getItem:@\"key\" callback:^(NSDictionary *result) {"];
+        } else {
+            for (NSString *str in desStrs) {
+                if ([line containsString: str]) {
+                    
+                    
+                    rightLine = [rightLine stringByReplacingOccurrencesOfString: str withString:@"@property(nonatomic, copy) NSString *m_"];
+                    rightLine = [rightLine stringByReplacingOccurrencesOfString: @" = \"" withString:@" = @\""];
+                    if (idx >= 1 ) {
+                        NSString *preLine = lineStrs[idx-1];
+                        preLine =
+                        [preLine stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        if([preLine hasPrefix:@"//"]) {
+                            NSString *des =
+                            [lineStrs[idx-1] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                            [tempLineStrs addObject:des];
+                            
+                        } else if ([rightLine componentsSeparatedByString:@"//"].count > 1) {
+                            NSArray *strss = [rightLine componentsSeparatedByString:@"//"];
+                            [tempLineStrs addObject: strss[1]];
+                            rightLine = strss[0];
+                        }
+                        [tempLineStrs addObject:rightLine];
+                    }}
+            }
         }
+        
     }];
     
     
