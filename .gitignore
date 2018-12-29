@@ -9,7 +9,7 @@ xcuserdata
 Example
 
 
-xcuserdata
+xcuserdata/*
 
 *.xcbkptlist
 
