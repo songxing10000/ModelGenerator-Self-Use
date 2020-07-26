@@ -265,15 +265,14 @@
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ze-hF-oao">
                                 <rect key="frame" x="108" y="263" width="386" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="showdoc.cc 参数名-必选-字段含义-类型" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FOM-Se-tOo" id="uQd-0b-6Ay">
+                                <popUpButtonCell key="cell" type="push" title="showdoc.cc 参数名-必选-字段含义-类型" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FOM-Se-tOo" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <menu key="menu" id="PFq-h8-ddo">
                                         <items>
-                                            <menuItem title="showdoc.cc 参数名-必选-字段含义-类型" id="FOM-Se-tOo"/>
+                                            <menuItem title="showdoc.cc 参数名-必选-字段含义-类型" state="on" id="FOM-Se-tOo"/>
                                             <menuItem title="showdoc.cc 参数名-类型-说明" id="UDb-xv-6LC"/>
                                             <menuItem title="showdoc.cc 参数名-必选-类型-字段含义" id="KtG-aC-kQG"/>
-                                            <menuItem title="转换安卓代码" id="fGV-5T-UrV"/>
                                             <menuItem title="doc to OC property" id="Th2-Ts-FT1">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
@@ -295,7 +294,6 @@
                                             <menuItem title="谷歌翻译转换" id="rAf-js-UfR"/>
                                             <menuItem title="字符串转换成数组" id="KCR-Fm-IC0"/>
                                             <menuItem title="JSON字符串转OC模型" id="PFO-Lx-EhE"/>
-                                            <menuItem title="Weex加解密" id="JfY-6e-LHl"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
