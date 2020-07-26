@@ -30,7 +30,7 @@
     [super viewDidLoad];
     
     //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"showdoc.cc 参数名-必选-字段含义-类型", @"showdoc.cc 参数名-类型-说明",@"转换安卓代码", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型", @"Weex加解密"];
+    languageArray = @[@"showdoc.cc 参数名-必选-字段含义-类型", @"showdoc.cc 参数名-类型-说明", @"showdoc.cc 参数名-必选-类型-字段含义",@"转换安卓代码", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"yiHaoCheDoc", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型", @"Weex加解密"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -112,6 +112,10 @@
     else if ([currentLanguage isEqualToString:  @"showdoc.cc 参数名-必选-字段含义-类型"]){
         
         [self name_must_des_type];
+    }
+    else if ([currentLanguage isEqualToString:  @"showdoc.cc 参数名-必选-类型-字段含义"]){
+        
+        [self name_must_type_des];
     }
     else if ([currentLanguage isEqualToString:  @"showdoc.cc 参数名-类型-说明"]){
         
@@ -452,6 +456,50 @@
         NSString *propertyClassTypeStr = lineArray[1];
         /// 参数说明
         NSString *propertyDes = lineArray[2];
+        if (!isEmpty(propertyClassTypeStr) &&
+            ![propertyClassTypeStr isEqualToString:@"对象"]) {
+            // integer Integer int Int String string arr
+            NSString *rightClassStr = [self objcClassStrFromStr:propertyClassTypeStr];
+            /// 修饰符 copy strong assign
+            NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
+            
+            
+            
+            NSString *codeString =
+            [NSString stringWithFormat:
+             @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
+             propertyDes, modifierStr, rightClassStr, propertyName];
+            
+            [outPutString appendString:codeString];
+            
+            
+            
+        }
+    }];
+    [self operationCompletedWithString:outPutString];
+    
+    
+    
+}
+/// showdoc.cc 参数名-必选-类型-字段含义
+- (void)name_must_type_des {
+    
+    NSString *inputString =  self.jsonTextView.string;
+    if (![inputString containsString:@"\n"]) {
+        return;
+    }
+    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
+    [self getLineCodeStrsFromStr:inputString rowNum:4];
+    
+    NSMutableString *outPutString = @"".mutableCopy;
+    [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        /// 参数名称
+        NSString *propertyName = lineArray[0];
+        /// 参数类型
+        NSString *propertyClassTypeStr = lineArray[2];
+        /// 参数说明
+        NSString *propertyDes = lineArray[3];
         if (!isEmpty(propertyClassTypeStr) &&
             ![propertyClassTypeStr isEqualToString:@"对象"]) {
             // integer Integer int Int String string arr
