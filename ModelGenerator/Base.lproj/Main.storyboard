@@ -264,7 +264,7 @@
                                 </scroller>
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ze-hF-oao">
-                                <rect key="frame" x="108" y="263" width="386" height="25"/>
+                                <rect key="frame" x="103" y="263" width="395" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="showdoc.cc 参数名-必选-字段含义-类型" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FOM-Se-tOo" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -273,6 +273,7 @@
                                             <menuItem title="showdoc.cc 参数名-必选-字段含义-类型" state="on" id="FOM-Se-tOo"/>
                                             <menuItem title="showdoc.cc 参数名-类型-说明" id="UDb-xv-6LC"/>
                                             <menuItem title="showdoc.cc 参数名-必选-类型-字段含义" id="KtG-aC-kQG"/>
+                                            <menuItem title="showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数" id="ecl-pj-JEh"/>
                                             <menuItem title="doc to OC property" id="Th2-Ts-FT1">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>

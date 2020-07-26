@@ -32,7 +32,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     [super viewDidLoad];
     
     //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"showdoc.cc 参数名-必选-字段含义-类型", @"showdoc.cc 参数名-类型-说明", @"showdoc.cc 参数名-必选-类型-字段含义", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型"];
+    languageArray = @[@"showdoc.cc 参数名-必选-字段含义-类型", @"showdoc.cc 参数名-类型-说明", @"showdoc.cc 参数名-必选-类型-字段含义", @"showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型"];
     
     [_jsonTextView becomeFirstResponder];
     
@@ -113,6 +113,10 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     else if ([currentLanguage isEqualToString:  @"showdoc.cc 参数名-必选-类型-字段含义"]){
         
         [self name_must_type_des];
+    }
+    else if ([currentLanguage isEqualToString:  @"showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数"]){
+        
+        [self name_must_type_desUploadApi];
     }
     else if ([currentLanguage isEqualToString:  @"showdoc.cc 参数名-类型-说明"]){
         
@@ -418,6 +422,40 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     }];
     
     
+}
+/// showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数
+- (void)name_must_type_desUploadApi {
+    NSString *inputString = self.jsonTextView.string;
+    if (![inputString containsString:@"\n"]) {
+        return;
+    }
+    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
+    [self getLineCodeStrsFromStr:inputString rowNum: 4];
+    
+    NSMutableString *outPutString = @"\nNSMutableDictionary *dict = [NSMutableDictionary dictionary];\n".mutableCopy;
+    [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineStrs, NSUInteger idx, BOOL * _Nonnull stop) {
+        /// 参数名称
+        NSString *pName = lineStrs[0];
+        /// 参数必须性
+        __unused BOOL canNull = ([lineStrs[1] isEqualToString:@"否"]);
+        /// 参数类型
+        NSString *pClass = lineStrs[2];
+        /// 参数说明
+        NSString *pDes = lineStrs[3];
+        if (!isEmpty(pClass) &&
+            ![pClass isEqualToString:@"对象"]) {
+            // integer Integer int Int String string arr
+            NSString *rightClassStr = [self objcClassStrFromStr:pClass];
+            /// 修饰符 copy strong assign
+            NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
+            
+            
+            [outPutString appendString: [NSString stringWithFormat:@"\n///  %@", pDes]];
+            [outPutString appendString: [NSString stringWithFormat:@"\ndict[@\"%@\"] = @\"\";", pName]];
+
+        }
+    }];
+    [self operationCompletedWithString:outPutString];
 }
 /// showdoc.cc 参数名-必选-类型-字段含义
 - (void)name_must_type_des {
