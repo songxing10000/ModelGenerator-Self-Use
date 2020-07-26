@@ -10,11 +10,13 @@
 
 #import "DES3Encryptor.h"
 #import "MainViewController+Other.h"
+typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 
 @interface MainViewController ()<NSComboBoxDataSource,NSTextViewDelegate>
 
 @property (weak) IBOutlet NSButton *emptyBtn;
 @property (weak) IBOutlet NSPopUpButton *popUpBtn;
+
 
 @end
 
@@ -484,22 +486,15 @@
 /// showdoc.cc 参数名-必选-类型-字段含义
 - (void)name_must_type_des {
     
-    NSString *inputString =  self.jsonTextView.string;
-    if (![inputString containsString:@"\n"]) {
-        return;
-    }
-    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
-    [self getLineCodeStrsFromStr:inputString rowNum:4];
-    
-    NSMutableString *outPutString = @"".mutableCopy;
-    [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+
         
         /// 参数名称
-        NSString *propertyName = lineArray[0];
+        NSString *propertyName = lineStrs[0];
         /// 参数类型
-        NSString *propertyClassTypeStr = lineArray[2];
+        NSString *propertyClassTypeStr = lineStrs[2];
         /// 参数说明
-        NSString *propertyDes = lineArray[3];
+        NSString *propertyDes = lineStrs[3];
         if (!isEmpty(propertyClassTypeStr) &&
             ![propertyClassTypeStr isEqualToString:@"对象"]) {
             // integer Integer int Int String string arr
@@ -507,43 +502,36 @@
             /// 修饰符 copy strong assign
             NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
             
+            NSString *nullStr = @"";
+            if ([lineStrs[1] isEqualToString:@"否"]) {
+                nullStr = @", nullable";
+            }
             
             
             NSString *codeString =
             [NSString stringWithFormat:
-             @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
-             propertyDes, modifierStr, rightClassStr, propertyName];
-            
-            [outPutString appendString:codeString];
-            
-            
-            
+             @"\n///  %@ \n@property (nonatomic, %@%@) %@ %@;\n",
+             propertyDes, modifierStr, nullStr, rightClassStr, propertyName];
+
+            return codeString;
         }
+        return @"";
     }];
-    [self operationCompletedWithString:outPutString];
-    
-    
     
 }
 /// showdoc.cc 参数名-必选-字段含义-类型
 - (void)name_must_des_type {
     
-    NSString *inputString =  self.jsonTextView.string;
-    if (![inputString containsString:@"\n"]) {
-        return;
-    }
-    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
-    [self getLineCodeStrsFromStr:inputString rowNum:4];
     
-    NSMutableString *outPutString = @"".mutableCopy;
-    [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+        
         
         /// 参数名称
-        NSString *propertyName = lineArray[0];
+        NSString *propertyName = lineStrs[0];
         /// 参数类型
-        NSString *propertyClassTypeStr = lineArray[3];
+        NSString *propertyClassTypeStr = lineStrs[3];
         /// 参数说明
-        NSString *propertyDes = lineArray[2];
+        NSString *propertyDes = lineStrs[2];
         if (!isEmpty(propertyClassTypeStr) &&
             ![propertyClassTypeStr isEqualToString:@"对象"]) {
             // integer Integer int Int String string arr
@@ -557,17 +545,11 @@
             [NSString stringWithFormat:
              @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
              propertyDes, modifierStr, rightClassStr, propertyName];
-            
-            [outPutString appendString:codeString];
-            
-            
-            
+            return codeString;
         }
+        return @"";
     }];
-    [self operationCompletedWithString:outPutString];
-    
-    
-    
+           
 }
 /// 参数名称-参数类型-是否必传-参数示例-参数说明
 - (void)name_type_must_example_des {
@@ -1497,6 +1479,29 @@
     return languageArray[index];
 }
 
+#pragma mark - 方法抽取
 
-
+/// 通用处理
+/// @param column 一行里有多少列数据
+/// @param lineMap 每一行怎么转换成代码
+- (void)xsColumn:(NSInteger)column lineMap:(LineMapStringBlock)lineMap{
+    NSString *inputString = self.jsonTextView.string;
+    if (![inputString containsString:@"\n"]) {
+        return;
+    }
+    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
+    [self getLineCodeStrsFromStr:inputString rowNum: column];
+    
+    NSMutableString *outPutString = @"".mutableCopy;
+    [lineCodeStrs enumerateObjectsUsingBlock:^(NSArray<NSString *> * _Nonnull lineArray, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if (lineArray.count > 0 && lineMap) {
+            NSString *lineStr = lineMap(lineArray);
+            if (lineStr.length > 0) {
+                [outPutString appendString: lineStr];
+            }
+        }
+    }];
+    [self operationCompletedWithString:outPutString];
+}
 @end
