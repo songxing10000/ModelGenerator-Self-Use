@@ -513,12 +513,18 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             /// 修饰符 copy strong assign
             NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
             
+       
+            
+            NSString *nullStr = @"";
+            if ([lineStrs[1] isEqualToString:@"否"]) {
+                nullStr = @", nullable";
+            }
             
             
             NSString *codeString =
             [NSString stringWithFormat:
-             @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
-             propertyDes, modifierStr, rightClassStr, propertyName];
+             @"\n///  %@ \n@property (nonatomic, %@%@) %@ %@;\n",
+             propertyDes, modifierStr, nullStr, rightClassStr, propertyName];
             return codeString;
         }
         return @"";
