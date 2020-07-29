@@ -25,14 +25,12 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     id objectToResolve;
     NSString *result;
-    NSArray *languageArray;
 }
 #pragma mark - view life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //    self.preferredContentSize = CGSizeMake(700, 400);
-    languageArray = @[@"showdoc.cc 参数名-必选-字段含义-类型", @"showdoc.cc 参数名-类型-说明", @"showdoc.cc 参数名-必选-类型-字段含义", @"showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数", @"doc to OC property", @"doc to OC IB property", @"doc to OC dict", @"doc to postman bulk edit", @"pythonHeader",@"状态码-描述-状态码含义", @"状态码-描述",@"参数名称-参数说明-参数类型-备注", @"参数名称-参数类型-是否必传-参数示例-参数说明",@"参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注",@"字段名-类型-示例值-备注",@"参数名称-参数类型-是否必填-参数说明", @"XcodePrintToJSONString", @"OC代码取JSON字符串", @"小程序url转换", @"谷歌翻译转换", @"字符串转换成数组", @"JSON字符串转OC模型"];
+    
     
     [_jsonTextView becomeFirstResponder];
     
@@ -71,12 +69,12 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 #pragma mark start btn
 - (IBAction)generate:(id)sender {
     
-    if (self.popUpBtn.indexOfSelectedItem >= languageArray.count) {
+    NSString *currentLanguage = [self.popUpBtn selectedItem].title;
+    if (currentLanguage.length <=0 ) {
         [self showAlertWithString:@"请先选择一个转换格式"];
         return;
     }
     
-    NSString *currentLanguage = languageArray[self.popUpBtn.indexOfSelectedItem];
     
     if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
@@ -134,7 +132,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     else if ([currentLanguage isEqualToString:@"参数名称-参数类型-是否必填-参数说明"]){
         [self name_type_must_des];
     }
-    
+    else if ([currentLanguage isEqualToString:@"showdoc.cc 参数名-类型-字段含义-必选"]){
+        [self name_type_des_must];
+    }
     else if ([currentLanguage isEqualToString:@"XcodePrintToJSONString"]){
         
         [self XcodePrintToJSONString];
@@ -300,6 +300,31 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
                            };
     
     return dict[str]?:@"assign";
+}
+#pragma mark - 参数名-类型-字段含义-必选
+- (void)name_type_des_must {
+    
+    [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+        NSString *propertyName = lineStrs[0];
+        NSString *classStr = lineStrs[1];
+        NSString *propertyDes = lineStrs[2];
+        if (!isEmpty(classStr) &&
+            ![classStr isEqualToString:@"对象"]) {
+            
+            NSString *rightClassStr = [self objcClassStrFromStr:classStr];
+            /// 修饰符 copy strong assign
+            NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
+            
+            
+            NSString *codeString =
+            [NSString stringWithFormat:
+             @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
+             propertyDes, modifierStr,rightClassStr, propertyName];
+            
+            return codeString;
+        }
+        return @"";
+    }];
 }
 #pragma mark - 参数名称-参数类型-是否必填-参数说明
 - (void)name_type_must_des {
@@ -1247,12 +1272,6 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 - (IBAction)selectedLanguage:(NSComboBox*)sender {
     
     NSInteger idx = sender.indexOfSelectedItem;
-    if (idx < languageArray.count) {
-        
-        return;
-    }
-    
-    //    generater.language = idx;
     BOOL showJsonPlaceHoler = idx <= 2;
     self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
 }
@@ -1275,19 +1294,6 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     //    }
     //    result = name;
 }
-
-#pragma mark NSComboBoxDelegate & NSComboBoxDataSource
-
-- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox {
-    
-    return languageArray.count;
-}
-
-- (id)comboBox:(NSComboBox *)aComboBox objectValueForItemAtIndex:(NSInteger)index {
-    
-    return languageArray[index];
-}
-
 #pragma mark - 方法抽取
 
 /// 通用处理

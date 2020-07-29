@@ -232,7 +232,7 @@
                                     <constraint firstAttribute="height" constant="17" id="LEU-k0-0pp"/>
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" placeholderString="请输入后台接口网页里复制的文本" id="VbS-w5-5W3">
-                                    <font key="font" metaFont="cellTitle"/>
+                                    <font key="font" metaFont="label" size="12"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -274,6 +274,7 @@
                                             <menuItem title="showdoc.cc 参数名-类型-说明" id="UDb-xv-6LC"/>
                                             <menuItem title="showdoc.cc 参数名-必选-类型-字段含义" id="KtG-aC-kQG"/>
                                             <menuItem title="showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数" id="ecl-pj-JEh"/>
+                                            <menuItem title="showdoc.cc 参数名-类型-字段含义-必选" id="osy-ex-rzx"/>
                                             <menuItem title="doc to OC property" id="Th2-Ts-FT1">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
