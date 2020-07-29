@@ -1304,7 +1304,41 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     if (![inputString containsString:@"\n"]) {
         return;
     }
-    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
+    NSAttributedString *atStr = self.jsonTextView.attributedString;
+    if (atStr.length > 0) {
+        /// 有些table块里好几个换行，按table块来重新组装inputString
+        /// 先把每个table块里的放拼接成一个字符串，放数组里
+        /// 然后用 \n 拼接成 inputString
+        NSMutableArray<NSString *> *lineCodeStrs2 = @[].mutableCopy;
+        NSMutableArray<NSTextBlock *> *tabMuArr = @[].mutableCopy;
+        [atStr enumerateAttributesInRange:NSMakeRange(0, atStr.length) options:NSAttributedStringEnumerationLongestEffectiveRangeNotRequired usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+            NSAttributedString *subAtStr = [atStr attributedSubstringFromRange:range];
+            if ([subAtStr.string isEqualToString:@"\n"]) {
+                return;
+            }
+            NSArray<NSTextBlock *> *textBlocks = [attrs[@"NSParagraphStyle"] textBlocks];
+            NSAssert(textBlocks.count>0, @"没有blocks咋办");
+            if(textBlocks.count > 0) {
+                NSTextBlock *textBlock = textBlocks[0];
+                /// 在同一个小table块里的textBlock是同一个对象
+                NSUInteger idx = [tabMuArr indexOfObject:textBlock];
+                if (idx != NSNotFound) {
+                    NSString *oldStr = lineCodeStrs2[idx];
+                    NSString *addStr = [oldStr stringByAppendingString:subAtStr.string];
+                    if (addStr.length > 0) {
+                        lineCodeStrs2[idx] = [addStr stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                    }
+                } else {
+                    [tabMuArr addObject:textBlock];
+                    [lineCodeStrs2 addObject:[self removeSpaceAndNewline:subAtStr.string]];
+                }
+
+            }
+        }];
+        [self removeSpaceStringOrNilStringFromMutableArray:lineCodeStrs2];
+        inputString = [lineCodeStrs2 componentsJoinedByString:@"\n"];
+    }
+     NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
     [self getLineCodeStrsFromStr:inputString rowNum: column];
     
     NSMutableString *outPutString = @"".mutableCopy;
