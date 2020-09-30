@@ -8,7 +8,6 @@
 
 #import "MainViewController.h"
 
-#import "DES3Encryptor.h"
 #import "MainViewController+Other.h"
 typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 
@@ -37,11 +36,14 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"生成"];
     self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"清空"];
-    
+    _m_copyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"复制"];
+
     
     //    generater.language = ObjectiveC;
     
     [self makeRound:_startBtn];
+    [self makeRound:_m_copyBtn];
+
     [self makeRound:self.emptyBtn];
 }
 #pragma mark - action
@@ -67,6 +69,13 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     [super setRepresentedObject:representedObject];
 }
 #pragma mark start btn
+/// 复制事件
+- (IBAction)clickCopyBtn:(NSButton *)sender {
+    NSPasteboard *bd = [NSPasteboard generalPasteboard];
+    [bd clearContents];
+    [bd setString:self.codeTextView.string forType:NSPasteboardTypeString];
+}
+/// 生成事件
 - (IBAction)generate:(id)sender {
     
     NSString *currentLanguage = [self.popUpBtn selectedItem].title;
@@ -472,7 +481,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             // integer Integer int Int String string arr
             NSString *rightClassStr = [self objcClassStrFromStr:pClass];
             /// 修饰符 copy strong assign
-            NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
+            __unused NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
             
             
             [outPutString appendString: [NSString stringWithFormat:@"\n///  %@", pDes]];

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -214,16 +214,26 @@
                                 </scroller>
                             </scrollView>
                             <button verticalHuggingPriority="750" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2RJ-6J-dX1">
-                                <rect key="frame" x="535" y="256" width="65" height="41"/>
+                                <rect key="frame" x="555" y="256" width="45" height="41"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="65" id="8St-Nv-748"/>
+                                    <constraint firstAttribute="width" constant="45" id="8St-Nv-748"/>
                                 </constraints>
-                                <buttonCell key="cell" type="smallSquare" title="生成" bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="Mif-Ut-ghd">
+                                <buttonCell key="cell" type="smallSquare" title="复制" bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="Mif-Ut-ghd">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="generate:" target="XfG-lQ-9wD" id="8fk-Eh-yZc"/>
+                                    <action selector="clickCopyBtn:" target="XfG-lQ-9wD" id="hSb-R6-IbU"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gjl-D6-mDD">
+                                <rect key="frame" x="502" y="256" width="45" height="41"/>
+                                <buttonCell key="cell" type="smallSquare" title="生成" bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="c3g-7w-fEI">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="generate:" target="XfG-lQ-9wD" id="6dr-7s-XiD"/>
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FeE-ai-AHy">
@@ -232,7 +242,7 @@
                                     <constraint firstAttribute="height" constant="17" id="LEU-k0-0pp"/>
                                 </constraints>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" placeholderString="请输入后台接口网页里复制的文本" id="VbS-w5-5W3">
-                                    <font key="font" metaFont="label" size="12"/>
+                                    <font key="font" metaFont="cellTitle"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -267,7 +277,7 @@
                                 <rect key="frame" x="103" y="263" width="395" height="25"/>
                                 <popUpButtonCell key="cell" type="push" title="showdoc.cc 参数名-必选-字段含义-类型" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FOM-Se-tOo" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="PFq-h8-ddo">
                                         <items>
                                             <menuItem title="showdoc.cc 参数名-必选-字段含义-类型" state="on" id="FOM-Se-tOo"/>
@@ -321,6 +331,7 @@
                             <constraint firstItem="VBm-Dc-THG" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="0GX-N3-c6v"/>
                             <constraint firstItem="aPe-l8-THT" firstAttribute="leading" secondItem="VBm-Dc-THG" secondAttribute="trailing" id="27b-Ss-7bj"/>
                             <constraint firstItem="0ze-hF-oao" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="2ET-28-boO"/>
+                            <constraint firstItem="Gjl-D6-mDD" firstAttribute="centerY" secondItem="2RJ-6J-dX1" secondAttribute="centerY" id="2WY-Qb-y8a"/>
                             <constraint firstAttribute="trailing" secondItem="2RJ-6J-dX1" secondAttribute="trailing" id="2aJ-9B-nbA"/>
                             <constraint firstItem="VBm-Dc-THG" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="40" id="6tm-vZ-Vgk"/>
                             <constraint firstAttribute="trailing" secondItem="aPe-l8-THT" secondAttribute="trailing" id="9nX-Mt-1A3"/>
@@ -329,9 +340,12 @@
                             <constraint firstItem="9y7-rt-rER" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="Ofk-Tu-33S"/>
                             <constraint firstItem="Ysi-iN-v9F" firstAttribute="top" secondItem="2RJ-6J-dX1" secondAttribute="bottom" id="PW1-wH-Qyj"/>
                             <constraint firstItem="FeE-ai-AHy" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="43" id="QIR-c7-nha"/>
+                            <constraint firstItem="Gjl-D6-mDD" firstAttribute="height" secondItem="2RJ-6J-dX1" secondAttribute="height" id="Xu6-vy-WuS"/>
                             <constraint firstItem="FeE-ai-AHy" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="5" id="Zgn-fj-pvt"/>
+                            <constraint firstItem="Gjl-D6-mDD" firstAttribute="width" secondItem="2RJ-6J-dX1" secondAttribute="width" id="l06-mh-EUL"/>
                             <constraint firstItem="VBm-Dc-THG" firstAttribute="top" secondItem="aPe-l8-THT" secondAttribute="top" id="mIr-pb-ETj"/>
                             <constraint firstItem="0ze-hF-oao" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="pSm-YH-euk"/>
+                            <constraint firstItem="2RJ-6J-dX1" firstAttribute="leading" secondItem="Gjl-D6-mDD" secondAttribute="trailing" constant="8" id="tSm-5y-QMX"/>
                             <constraint firstItem="9y7-rt-rER" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="tr0-Tx-W5e"/>
                             <constraint firstItem="VBm-Dc-THG" firstAttribute="top" secondItem="9y7-rt-rER" secondAttribute="bottom" id="uDD-yq-MF1"/>
                             <constraint firstAttribute="bottom" secondItem="aPe-l8-THT" secondAttribute="bottom" id="uOU-pp-6At"/>
@@ -342,9 +356,10 @@
                         <outlet property="codeTextView" destination="Ysi-iN-v9F" id="iv0-al-lS6"/>
                         <outlet property="emptyBtn" destination="9y7-rt-rER" id="wTD-RK-lg5"/>
                         <outlet property="jsonTextView" destination="p7Q-IO-h2F" id="dDi-y8-vsf"/>
+                        <outlet property="m_copyBtn" destination="2RJ-6J-dX1" id="Dbz-hc-KUn"/>
                         <outlet property="placeHolder" destination="FeE-ai-AHy" id="J7X-v3-SfS"/>
                         <outlet property="popUpBtn" destination="0ze-hF-oao" id="DRe-9R-0T4"/>
-                        <outlet property="startBtn" destination="2RJ-6J-dX1" id="btu-sd-Fl3"/>
+                        <outlet property="startBtn" destination="Gjl-D6-mDD" id="yev-XK-XID"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

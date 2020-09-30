@@ -16,10 +16,10 @@
 
 @property (unsafe_unretained) IBOutlet NSTextField *placeHolder;
 
-
+/// 生成按钮
 @property (weak) IBOutlet NSButton *startBtn;
-
-- (IBAction)generate:(id)sender;
+/// 复制按钮
+@property (weak) IBOutlet NSButton *m_copyBtn;
 
 @end
 
