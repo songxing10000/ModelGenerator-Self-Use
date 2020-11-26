@@ -20,11 +20,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 @end
 
 @implementation MainViewController
-{
-    
-    id objectToResolve;
-    NSString *result;
-}
+
 #pragma mark - view life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
