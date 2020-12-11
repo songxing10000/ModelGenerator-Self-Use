@@ -12,3 +12,14 @@
 
 
 
+---
+看云和模型生成注释
+
+1、来自http://modelend.com/的oc属性
+![](https://cdn.nlark.com/yuque/0/2020/png/221886/1607697345810-9396478e-f6f9-4bdc-80c6-3779f7e81380.png)
+
+2、来自www.kancloud.cn的接口返回的参数说明
+![](https://cdn.nlark.com/yuque/0/2020/png/221886/1607697338378-e5bc29e1-1f9f-410e-891d-7cdddec90cfe.png)
+
+3、通过---分割粘贴入，一键生成
+![](https://cdn.nlark.com/yuque/0/2020/png/221886/1607697231291-ab04df86-d27d-4e09-a3a4-0c5c2f4e6007.png)
