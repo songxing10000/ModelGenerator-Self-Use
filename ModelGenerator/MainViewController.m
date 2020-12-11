@@ -80,11 +80,13 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         return;
     }
     
-    
     if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
     } else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
         [self sosoapiToOCProperty:YES needOCDict:YES];
+    }
+    else if ([currentLanguage isEqualToString:@"kancloud字段注释"])  {
+        [self kancloudFieldAnnotation];
     }
     else if ([currentLanguage isEqualToString:@"doc to postman bulk edit"]) {
         [self sosoapiToOCProperty:NO  needOCDict:NO];
@@ -992,6 +994,72 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     }];
     NSString *outStr = [muStr substringWithRange:NSMakeRange(0, muStr.length -2)];
     self.codeTextView.string = [outStr stringByAppendingString:@"]"];
+    
+    
+}
+- (void)kancloudFieldAnnotation {
+    
+    NSString *inputString =  self.jsonTextView.string;
+    NSString *outStr = @"";
+    NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"---"];
+    NSString *proStr = strs[0];
+    NSString *desStr = strs[1];
+    if (![strs[0] hasPrefix:@"@"]) {
+        proStr = strs[1];
+        desStr = strs[0];
+    }
+    /**
+     @property (nonatomic , assign) NSInteger              is_jump;
+     @property (nonatomic , assign) NSInteger              id;
+     @property (nonatomic , copy) NSString              * img;
+     @property (nonatomic , copy) NSString              * area;
+     @property (nonatomic , copy) NSString              * url;
+     @property (nonatomic , assign) NSInteger              add_time;
+     
+     
+     "id":bannerID,
+                 "img":路径地址,
+                 "url":跳转路径,
+                 "is_jump":是否跳转,
+                 "area":banner位置,
+     */
+    NSMutableDictionary *muDict = [NSMutableDictionary dictionary];
+    NSArray<NSString *> *desStrs = [desStr componentsSeparatedByString:@","];
+    [desStrs enumerateObjectsUsingBlock:^(NSString * _Nonnull line, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSArray<NSString *> *lineStrs = [[self removeSpaceAndNewline:line] componentsSeparatedByString:@":"];
+        if (lineStrs.count > 1) {
+            NSString *key = [self removeSpaceAndNewline: lineStrs[0]];
+            if ([key hasPrefix:@"\""]) {
+                key = [key stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@""];
+            }
+            if ([key hasSuffix:@"\""]) {
+                key = [key stringByReplacingCharactersInRange:NSMakeRange(key.length-1, 1) withString:@""];
+            }
+            NSString *value = [self removeSpaceAndNewline: lineStrs[1]];
+            if ([value hasPrefix:@"\""]) {
+                value = [value stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@""];
+            }
+            if ([value hasSuffix:@"\""]) {
+                value = [value stringByReplacingCharactersInRange:NSMakeRange(key.length-1, 1) withString:@""];
+            }
+            muDict[key] = value;
+        }
+    }];
+    NSMutableArray<NSString *> *muArr = [NSMutableArray array];
+    NSArray<NSString *> *proStrs = [proStr componentsSeparatedByString:@"\n"];
+    for (NSString *line in proStrs) {
+        NSArray<NSString *> *lineStrs = [line componentsSeparatedByString:@"              "];
+        if (lineStrs.count > 1) {
+            NSString *proName  = [lineStrs[1] stringByReplacingOccurrencesOfString:@";" withString:@""];
+            proName = [proName stringByReplacingOccurrencesOfString:@"* " withString:@""];
+            NSString *proDes = muDict[proName];
+            if (proDes.length > 0) {
+                [muArr addObject:[NSString stringWithFormat:@"/// %@\n%@", proDes, line]];
+            }
+        }
+    };
+    
+    self.codeTextView.string = [muArr componentsJoinedByString:@"\n"];
     
     
 }

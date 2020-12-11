@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -220,7 +220,7 @@
                                 </constraints>
                                 <buttonCell key="cell" type="smallSquare" title="复制" bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="Mif-Ut-ghd">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="clickCopyBtn:" target="XfG-lQ-9wD" id="hSb-R6-IbU"/>
@@ -230,7 +230,7 @@
                                 <rect key="frame" x="502" y="256" width="45" height="41"/>
                                 <buttonCell key="cell" type="smallSquare" title="生成" bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="c3g-7w-fEI">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                    <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="generate:" target="XfG-lQ-9wD" id="6dr-7s-XiD"/>
@@ -281,6 +281,7 @@
                                     <menu key="menu" id="PFq-h8-ddo">
                                         <items>
                                             <menuItem title="showdoc.cc 参数名-必选-字段含义-类型" state="on" id="FOM-Se-tOo"/>
+                                            <menuItem title="kancloud字段注释" id="oaf-I5-wrx"/>
                                             <menuItem title="showdoc.cc 参数名-类型-说明" id="UDb-xv-6LC"/>
                                             <menuItem title="showdoc.cc 参数名-必选-类型-字段含义" id="KtG-aC-kQG"/>
                                             <menuItem title="showdoc.cc 参数名-必选-类型-字段含义   转为接口请求参数" id="ecl-pj-JEh"/>
