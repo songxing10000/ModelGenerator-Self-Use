@@ -1040,7 +1040,11 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
                 value = [value stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@""];
             }
             if ([value hasSuffix:@"\""]) {
-                value = [value stringByReplacingCharactersInRange:NSMakeRange(key.length-1, 1) withString:@""];
+                // -[__NSCFString replaceCharactersInRange:withString:]: Range or index out of bounds
+                if (key.length - 1 < value.length) {
+                    
+                    value = [value stringByReplacingCharactersInRange:NSMakeRange(key.length-1, 1) withString:@""];
+                }
             }
             muDict[key] = value;
         }
