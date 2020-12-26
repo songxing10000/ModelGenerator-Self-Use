@@ -1050,19 +1050,27 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         }
     }];
     NSMutableArray<NSString *> *muArr = [NSMutableArray array];
+    NSMutableArray<NSString *> *proNames = [NSMutableArray array];
+
     NSArray<NSString *> *proStrs = [proStr componentsSeparatedByString:@"\n"];
     for (NSString *line in proStrs) {
         NSArray<NSString *> *lineStrs = [line componentsSeparatedByString:@"              "];
         if (lineStrs.count > 1) {
             NSString *proName  = [lineStrs[1] stringByReplacingOccurrencesOfString:@";" withString:@""];
             proName = [proName stringByReplacingOccurrencesOfString:@"* " withString:@""];
+            [proNames addObject:proName];
             NSString *proDes = muDict[proName];
             if (proDes.length > 0) {
                 [muArr addObject:[NSString stringWithFormat:@"/// %@\n%@", proDes, line]];
             }
         }
     };
-    
+    // 注释上有字段[muDict allKeys]，但是接口没有返回此字段proNames
+    [muDict enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull value, BOOL * _Nonnull stop) {
+        if (![proNames containsObject: key]) {
+            [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , copy) NSString *%@;", value, key]];
+        }
+    }];
     self.codeTextView.string = [muArr componentsJoinedByString:@"\n"];
     
     
