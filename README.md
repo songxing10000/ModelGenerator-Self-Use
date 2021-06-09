@@ -13,9 +13,9 @@
 
 
 ---
-看云和模型生成注释
+看云和模型生成注释(粘入属性用`---`分隔再粘入字段注释)
 
-1、来自http://modelend.com/的oc属性
+1、来自 http://modelend.com/ 的oc属性
 ![](https://cdn.nlark.com/yuque/0/2020/png/221886/1607697345810-9396478e-f6f9-4bdc-80c6-3779f7e81380.png)
 
 2、来自www.kancloud.cn的接口返回的参数说明

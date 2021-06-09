@@ -88,6 +88,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     else if ([currentLanguage isEqualToString:@"kancloud字段注释"])  {
         [self kancloudFieldAnnotation];
     }
+    else if ([currentLanguage isEqualToString:@"字段名:示例值, // 描述说明"])  {
+        [self fieldName_sampleValue_description];
+    }
     else if ([currentLanguage isEqualToString:@"doc to postman bulk edit"]) {
         [self sosoapiToOCProperty:NO  needOCDict:NO];
     } else if ([currentLanguage isEqualToString:@"doc to OC IB property"]) {
@@ -1080,12 +1083,71 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     
 }
+// 字段名:示例值, // 描述说明
+- (void)fieldName_sampleValue_description {
+    /*
+     "message": "", //更新文案
+       "latestVersion": "", //最新app版本
+       "updateStrategy": 1, //更新策略 0不更新 1推荐更新 2强制更新
+       "noticeContent": 1, // 更新文案
+       "noticeStartTime": 1, // 更新弹框开始时间
+       "noticeEndTime": 1 // 更新弹框结束时间
+     */
+    NSString *inputString =  self.jsonTextView.string;
+    NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"---"];
+    NSString *proStr = strs[0];
+    NSArray<NSString *> *rows =  [proStr componentsSeparatedByString:@"\n"];
+    NSMutableDictionary *muDict = [NSMutableDictionary dictionary];
+    [rows enumerateObjectsUsingBlock:^(NSString * _Nonnull line, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (line.length > 0) {
+            // line   "latestVersion": "", //最新app版本,
+            NSArray<NSString *> *sepLines = [line componentsSeparatedByString:@":"];
+            NSString *propertyName = [self removeSpaceAndNewline: sepLines[0]];
+            NSString *sampleValue;
+            NSString *desStr;
+            NSString *lineOtherStr = sepLines[1];
+            if ([lineOtherStr containsString: @", //"]) {
+                NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @", //"];
+                sampleValue = sepLines2[0];
+                desStr = sepLines2[1];
+            }
+            else if ([lineOtherStr containsString: @" // "]) {
+                NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @" // "];
+                sampleValue = sepLines2[0];
+                desStr = sepLines2[1];
+            } else {
+                NSLog(@"%@ %@", NSStringFromSelector(_cmd), line);
+            }
+            
+            if ([propertyName hasPrefix:@"\""]) {
+                propertyName = [propertyName stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@""];
+            }
+            if ([propertyName hasSuffix:@"\""]) {
+                propertyName = [propertyName stringByReplacingCharactersInRange:NSMakeRange(propertyName.length-1, 1) withString:@""];
+            }
+            muDict[propertyName] = desStr;
+        }
+        
+    }];
+    NSMutableArray *muArr =  [NSMutableArray array];
+    [muDict enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull value, BOOL * _Nonnull stop) {
+        
+        [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , copy) NSString *%@;", value, key]];
+        
+    }];
+    self.codeTextView.string = [muArr componentsJoinedByString:@"\n"];
+    
+    
+}
 - (void)kancloudFieldAnnotation {
     
     NSString *inputString =  self.jsonTextView.string;
-    NSString *outStr = @"";
     NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"---"];
     NSString *proStr = strs[0];
+    if (strs.count < 2) {
+        NSLog(@"%@ %@", NSStringFromSelector(_cmd), @"未找到分隔符 --- ");
+        return;
+    }
     NSString *desStr = strs[1];
     if (![strs[0] hasPrefix:@"@"]) {
         proStr = strs[1];
