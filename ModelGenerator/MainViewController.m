@@ -1097,7 +1097,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"---"];
     NSString *proStr = strs[0];
     NSArray<NSString *> *rows =  [proStr componentsSeparatedByString:@"\n"];
-    NSMutableDictionary *muDict = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, NSArray<NSString *> *> *muDict = [NSMutableDictionary dictionary];
     [rows enumerateObjectsUsingBlock:^(NSString * _Nonnull line, NSUInteger idx, BOOL * _Nonnull stop) {
         if (line.length > 0) {
             // line   "latestVersion": "", //最新app版本,
@@ -1105,17 +1105,32 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             NSString *propertyName = [self removeSpaceAndNewline: sepLines[0]];
             NSString *sampleValue;
             NSString *desStr;
+            NSString *typeStr;
             NSString *lineOtherStr = sepLines[1];
-            if ([lineOtherStr containsString: @", //"]) {
-                NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @", //"];
-                sampleValue = sepLines2[0];
+            if ([lineOtherStr containsString: @"//"]) {
+                NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @"//"];
+                sampleValue = [self removeSpaceAndNewline: sepLines2[0]];
+                if ([sampleValue hasSuffix:@","]) {
+                    sampleValue = [sampleValue stringByReplacingOccurrencesOfString:@"," withString:@""];
+                }
+                if ([sampleValue isEqualToString:@"\"\""]) {
+                     typeStr = @"NSString *";
+                    NSLog(@"%@ %@", NSStringFromSelector(_cmd), typeStr);
+                }
+                else if ([sampleValue isEqualToString:@"0"] ||
+                         [sampleValue isEqualToString:@"1"] ||
+                         [sampleValue isEqualToString:@"[0,1]"] ||
+                         [sampleValue isEqualToString:@"[01]"] ||
+                         [sampleValue integerValue] > 0) {
+                    typeStr = @"NSInteger";
+                   NSLog(@"%@ %@", NSStringFromSelector(_cmd), typeStr);
+                } else {
+                    
+                    NSLog(@"%@ %@", NSStringFromSelector(_cmd), sampleValue);
+                }
                 desStr = sepLines2[1];
             }
-            else if ([lineOtherStr containsString: @" // "]) {
-                NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @" // "];
-                sampleValue = sepLines2[0];
-                desStr = sepLines2[1];
-            } else {
+            else {
                 NSLog(@"%@ %@", NSStringFromSelector(_cmd), line);
             }
             
@@ -1125,15 +1140,23 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             if ([propertyName hasSuffix:@"\""]) {
                 propertyName = [propertyName stringByReplacingCharactersInRange:NSMakeRange(propertyName.length-1, 1) withString:@""];
             }
-            muDict[propertyName] = desStr;
+            muDict[propertyName] = @[desStr, typeStr];
         }
         
     }];
     NSMutableArray *muArr =  [NSMutableArray array];
-    [muDict enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, NSString *  _Nonnull value, BOOL * _Nonnull stop) {
-        
-        [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , copy) NSString *%@;", value, key]];
-        
+    [muDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSArray<NSString *> * _Nonnull obj, BOOL * _Nonnull stop) {
+        if (obj.count > 1) {
+            if ([obj[1] isEqualToString:@"NSInteger"]) {
+                [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , assign) NSInteger %@;", obj[0], key]];
+
+            } else {
+                [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , copy) NSString *%@;", obj[0], key]];
+            }
+        }
+        else if (obj.count > 0) {
+            [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , copy) NSString *%@;", obj[0], key]];
+        }
     }];
     self.codeTextView.string = [muArr componentsJoinedByString:@"\n"];
     
