@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -297,6 +297,8 @@
                                             <menuItem title="状态码-描述-状态码含义" id="obk-Kh-Ja1"/>
                                             <menuItem title="状态码-描述" id="38s-xS-8Hk"/>
                                             <menuItem title="参数名称-参数说明-参数类型-备注" id="1Qx-g6-yc9"/>
+                                            <menuItem title="字段-含义-类型" id="ZDx-ZM-iap"/>
+                                            <menuItem title="字段-含义-是否必传-类型" id="0lF-r4-wW2"/>
                                             <menuItem title="参数名称-参数类型-是否必传-参数示例-参数说明" id="Mzf-6w-8z5"/>
                                             <menuItem title="参数名称-参数类型-默认值-是否为空-主键-索引-注释-备注" id="tVv-6t-Ior"/>
                                             <menuItem title="字段名-类型-示例值-备注" id="zhK-Ac-Uar"/>

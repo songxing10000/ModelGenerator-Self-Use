@@ -107,7 +107,18 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     else if ([currentLanguage isEqualToString:@"参数名称-参数说明-参数类型-备注"]){
         
         [self name_des_type_remark];
-    } else if ([currentLanguage isEqualToString:@"参数名称-参数类型-是否必传-参数示例-参数说明"]){
+    }
+    else if ([currentLanguage isEqualToString:@"字段-含义-类型"]){
+        
+        [self name_des_type];
+    }
+    else if ([currentLanguage isEqualToString:@"字段-含义-是否必传-类型"]){
+        
+        [self name_des_must_type];
+    }
+    
+    
+    else if ([currentLanguage isEqualToString:@"参数名称-参数类型-是否必传-参数示例-参数说明"]){
         
         [self name_type_must_example_des];
     }
@@ -333,7 +344,43 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         return @"";
     }];
 }
+- (void)name_des_must_type {
+    [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+
+        
+        /// 参数名称
+        NSString *propertyName = lineStrs[0];
+        /// 参数说明
+        NSString *propertyDes = lineStrs[1];
+        /// 参数类型
+        NSString *propertyClassTypeStr = lineStrs[3];
+        
+        if (!isEmpty(propertyClassTypeStr) &&
+            ![propertyClassTypeStr isEqualToString:@"对象"]) {
+            // integer Integer int Int String string arr
+            NSString *rightClassStr = [self objcClassStrFromStr:propertyClassTypeStr];
+            /// 修饰符 copy strong assign
+            NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
+            
+            NSString *nullStr = @"";
+            if ([lineStrs[2] isEqualToString:@"否"]) {
+                nullStr = @", nullable";
+            }
+            
+            
+            NSString *codeString =
+            [NSString stringWithFormat:
+             @"\n///  %@ \n@property (nonatomic, %@%@) %@ %@;\n",
+             propertyDes, modifierStr, nullStr, rightClassStr, propertyName];
+
+            return codeString;
+        }
+        return @"";
+    }];
+    
+}
 #pragma mark - 参数名称-参数类型-是否必填-参数说明
+
 - (void)name_type_must_des {
     
     [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
@@ -626,6 +673,42 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             [NSString stringWithFormat:
              @"\n///  %@ : %@\n@property (nonatomic, %@) %@ %@;\n",
              propertyDes1, propertyDes2, modifierStr,rightClassStr, propertyName];
+            
+            return codeString;
+            
+            
+            
+        }
+            return @"";
+    }];
+    
+    
+    
+    
+}
+/// 字段-含义-类型
+- (void)name_des_type {
+    
+        [self xsColumn:3 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+
+        
+        NSString *propertyName = lineStrs[0];
+        NSString *propertyDes1 = lineStrs[1];
+        NSString *classStr = lineStrs[2];
+        if (!isEmpty(classStr) &&
+            ![classStr isEqualToString:@"对象"]) {
+            
+            // integer Integer int Int String string arr
+            NSString *rightClassStr = [self objcClassStrFromStr:classStr];
+            /// 修饰符 copy strong assign
+            NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
+            
+            
+            
+            NSString *codeString =
+            [NSString stringWithFormat:
+             @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
+             propertyDes1, modifierStr,rightClassStr, propertyName];
             
             return codeString;
             
