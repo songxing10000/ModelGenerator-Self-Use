@@ -23,3 +23,11 @@
 
 3、通过---分割粘贴入，一键生成
 ![](https://cdn.nlark.com/yuque/0/2020/png/221886/1607697231291-ab04df86-d27d-4e09-a3a4-0c5c2f4e6007.png)
+
+---
+wiki上后台写的字段含义类型
+![](https://cdn.nlark.com/yuque/0/2021/png/221886/1623246000380-3d426b0a-e59f-4b9c-acd6-c8452b3f9d88.png?x-oss-process=image%2Fresize%2Cw_1492)
+
+---
+wiki上后台写的字段含义是否必传类型
+![](https://cdn.nlark.com/yuque/0/2021/png/221886/1623246039817-b91ac197-536f-4625-afa7-ae645ed752e4.png?x-oss-process=image%2Fresize%2Cw_1492)
