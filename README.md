@@ -31,3 +31,14 @@ wiki上后台写的字段含义类型
 ---
 wiki上后台写的字段含义是否必传类型
 ![](https://cdn.nlark.com/yuque/0/2021/png/221886/1623246039817-b91ac197-536f-4625-afa7-ae645ed752e4.png?x-oss-process=image%2Fresize%2Cw_1492)
+
+---
+wiki上后台写的类似这种的
+
+`"updateStrategy": 1, //更新策略 0不更新 1推荐更新 2强制更新`
+
+有`:`和`//`分隔的
+![](https://cdn.nlark.com/yuque/0/2021/png/221886/1623287225557-6e7a8372-fd3d-4f1b-bff4-3f4df8e3f23a.png?x-oss-process=image%2Fresize%2Cw_1492)
+
+所有图片地址：
+https://www.yuque.com/shiyisuidejiazhong/image/gcp4mg

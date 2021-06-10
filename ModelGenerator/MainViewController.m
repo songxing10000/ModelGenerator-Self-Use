@@ -33,13 +33,13 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     _startBtn.attributedTitle = [self btnAttributedStringWithtitle:@"生成"];
     self.emptyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"清空"];
     _m_copyBtn.attributedTitle = [self btnAttributedStringWithtitle:@"复制"];
-
+    
     
     //    generater.language = ObjectiveC;
     
     [self makeRound:_startBtn];
     [self makeRound:_m_copyBtn];
-
+    
     [self makeRound:self.emptyBtn];
 }
 #pragma mark - action
@@ -318,7 +318,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
                            @"NSArray *":@"strong",
                            @"NSNumber *":@"strong",
                            @"NSDictionary *":@"strong",
-                           };
+    };
     
     return dict[str]?:@"assign";
 }
@@ -349,7 +349,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 }
 - (void)name_des_must_type {
     [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+        
         
         /// 参数名称
         NSString *propertyName = lineStrs[0];
@@ -375,7 +375,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             [NSString stringWithFormat:
              @"\n///  %@ \n@property (nonatomic, %@%@) %@ %@;\n",
              propertyDes, modifierStr, nullStr, rightClassStr, propertyName];
-
+            
             return codeString;
         }
         return @"";
@@ -413,7 +413,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     
     [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+        
         NSString *propertyName = lineStrs[0];
         NSString *classStr = lineStrs[1];
         NSString *propertyDes1 = lineStrs[3];
@@ -439,7 +439,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 - (void)name_type_defaultValue_isEmpty_primaryKey_index_zhuShi_not {
     
     [self xsColumn:8 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+        
         
         /// 参数名称
         NSString *propertyName = lineStrs[0];
@@ -466,14 +466,14 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         }
         return @"";
     }];
-   
+    
 }
 /// showdoc.cc 参数名-类型-说明
 - (void)name_type_des {
     
     
     [self xsColumn:3 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+        
         
         /// 参数名称
         NSString *propertyName = lineStrs[0];
@@ -534,7 +534,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             
             [outPutString appendString: [NSString stringWithFormat:@"\n///  %@", pDes]];
             [outPutString appendString: [NSString stringWithFormat:@"\ndict[@\"%@\"] = @\"\";", pName]];
-
+            
         }
     }];
     [self operationCompletedWithString:outPutString];
@@ -543,7 +543,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 - (void)name_must_type_des {
     
     [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+        
         
         /// 参数名称
         NSString *propertyName = lineStrs[0];
@@ -568,7 +568,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             [NSString stringWithFormat:
              @"\n///  %@ \n@property (nonatomic, %@%@) %@ %@;\n",
              propertyDes, modifierStr, nullStr, rightClassStr, propertyName];
-
+            
             return codeString;
         }
         return @"";
@@ -595,7 +595,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             /// 修饰符 copy strong assign
             NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
             
-       
+            
             
             NSString *nullStr = @"";
             if ([lineStrs[1] isEqualToString:@"否"]) {
@@ -611,14 +611,14 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         }
         return @"";
     }];
-           
+    
 }
 /// 参数名称-参数类型-是否必传-参数示例-参数说明
 - (void)name_type_must_example_des {
     
     
     [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+        
         
         /// 参数名称
         NSString *propertyName = lineStrs[0];
@@ -655,8 +655,8 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 /// 参数名称-参数说明-参数类型-备注
 - (void)name_des_type_remark {
     
-        [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+    [self xsColumn:4 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+        
         
         NSString *propertyName = lineStrs[0];
         NSString *propertyDes1 = lineStrs[1];
@@ -682,7 +682,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             
             
         }
-            return @"";
+        return @"";
     }];
     
     
@@ -692,8 +692,8 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 /// 字段-含义-类型
 - (void)name_des_type {
     
-        [self xsColumn:3 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
-
+    [self xsColumn:3 lineMap:^NSString *(NSArray<NSString *> *lineStrs) {
+        
         
         NSString *propertyName = lineStrs[0];
         NSString *propertyDes1 = lineStrs[1];
@@ -718,7 +718,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             
             
         }
-            return @"";
+        return @"";
     }];
     
     
@@ -1087,11 +1087,11 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
 - (void)fieldName_sampleValue_description {
     /*
      "message": "", //更新文案
-       "latestVersion": "", //最新app版本
-       "updateStrategy": 1, //更新策略 0不更新 1推荐更新 2强制更新
-       "noticeContent": 1, // 更新文案
-       "noticeStartTime": 1, // 更新弹框开始时间
-       "noticeEndTime": 1 // 更新弹框结束时间
+     "latestVersion": "", //最新app版本
+     "updateStrategy": 1, //更新策略 0不更新 1推荐更新 2强制更新
+     "noticeContent": 1, // 更新文案
+     "noticeStartTime": 1, // 更新弹框开始时间
+     "noticeEndTime": 1 // 更新弹框结束时间
      */
     NSString *inputString =  self.jsonTextView.string;
     NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"---"];
@@ -1099,7 +1099,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     NSArray<NSString *> *rows =  [proStr componentsSeparatedByString:@"\n"];
     NSMutableDictionary<NSString *, NSArray<NSString *> *> *muDict = [NSMutableDictionary dictionary];
     [rows enumerateObjectsUsingBlock:^(NSString * _Nonnull line, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (line.length > 0) {
+        if ([line containsString:@":"] && [line containsString:@"//"]) {
             // line   "latestVersion": "", //最新app版本,
             NSArray<NSString *> *sepLines = [line componentsSeparatedByString:@":"];
             NSString *propertyName = [self removeSpaceAndNewline: sepLines[0]];
@@ -1107,32 +1107,29 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             NSString *desStr;
             NSString *typeStr;
             NSString *lineOtherStr = sepLines[1];
-            if ([lineOtherStr containsString: @"//"]) {
-                NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @"//"];
-                sampleValue = [self removeSpaceAndNewline: sepLines2[0]];
-                if ([sampleValue hasSuffix:@","]) {
-                    sampleValue = [sampleValue stringByReplacingOccurrencesOfString:@"," withString:@""];
-                }
-                if ([sampleValue isEqualToString:@"\"\""]) {
-                     typeStr = @"NSString *";
-                    NSLog(@"%@ %@", NSStringFromSelector(_cmd), typeStr);
-                }
-                else if ([sampleValue isEqualToString:@"0"] ||
-                         [sampleValue isEqualToString:@"1"] ||
-                         [sampleValue isEqualToString:@"[0,1]"] ||
-                         [sampleValue isEqualToString:@"[01]"] ||
-                         [sampleValue integerValue] > 0) {
-                    typeStr = @"NSInteger";
-                   NSLog(@"%@ %@", NSStringFromSelector(_cmd), typeStr);
-                } else {
-                    
-                    NSLog(@"%@ %@", NSStringFromSelector(_cmd), sampleValue);
-                }
-                desStr = sepLines2[1];
+            
+            NSArray<NSString *> *sepLines2 = [lineOtherStr componentsSeparatedByString: @"//"];
+            sampleValue = [self removeSpaceAndNewline: sepLines2[0]];
+            if ([sampleValue hasSuffix:@","]) {
+                sampleValue = [sampleValue stringByReplacingOccurrencesOfString:@"," withString:@""];
             }
-            else {
-                NSLog(@"%@ %@", NSStringFromSelector(_cmd), line);
+            if ([sampleValue isEqualToString:@"\"\""]) {
+                typeStr = @"NSString *";
+                NSLog(@"%@ %@", NSStringFromSelector(_cmd), typeStr);
             }
+            else if ([sampleValue isEqualToString:@"0"] ||
+                     [sampleValue isEqualToString:@"1"] ||
+                     [sampleValue isEqualToString:@"[0,1]"] ||
+                     [sampleValue isEqualToString:@"[01]"] ||
+                     [sampleValue integerValue] > 0) {
+                typeStr = @"NSInteger";
+                NSLog(@"%@ %@", NSStringFromSelector(_cmd), typeStr);
+            } else {
+                
+                NSLog(@"%@ %@", NSStringFromSelector(_cmd), sampleValue);
+            }
+            desStr = sepLines2[1];
+            
             
             if ([propertyName hasPrefix:@"\""]) {
                 propertyName = [propertyName stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@""];
@@ -1149,7 +1146,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         if (obj.count > 1) {
             if ([obj[1] isEqualToString:@"NSInteger"]) {
                 [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , assign) NSInteger %@;", obj[0], key]];
-
+                
             } else {
                 [muArr addObject:[NSString stringWithFormat:@"/// %@\n@property (nonatomic , copy) NSString *%@;", obj[0], key]];
             }
@@ -1219,7 +1216,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     }];
     NSMutableArray<NSString *> *muArr = [NSMutableArray array];
     NSMutableArray<NSString *> *proNames = [NSMutableArray array];
-
+    
     NSArray<NSString *> *proStrs = [proStr componentsSeparatedByString:@"\n"];
     for (NSString *line in proStrs) {
         NSArray<NSString *> *lineStrs = [line componentsSeparatedByString:@"              "];
@@ -1585,13 +1582,13 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
                     [tabMuArr addObject:textBlock];
                     [lineCodeStrs2 addObject:[self removeSpaceAndNewline:subAtStr.string]];
                 }
-
+                
             }
         }];
         [self removeSpaceStringOrNilStringFromMutableArray:lineCodeStrs2];
         inputString = [lineCodeStrs2 componentsJoinedByString:@"\n"];
     }
-     NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
+    NSMutableArray<NSArray<NSString *> *> *lineCodeStrs =
     [self getLineCodeStrsFromStr:inputString rowNum: column];
     
     NSMutableString *outPutString = @"".mutableCopy;
