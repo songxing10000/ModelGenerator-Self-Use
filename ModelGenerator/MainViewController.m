@@ -71,6 +71,31 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     [bd clearContents];
     [bd setString:self.codeTextView.string forType:NSPasteboardTypeString];
 }
+- (void)getDictFromURLStr {
+    /*
+     输入，如，https://www.91hilife.com/appmanage/upgrade/update?patchVersion=6.0.8&app=166&cType=1&appVersion=6.0.8&version=6.6.5&cVersion=6.6.5
+     得到
+     
+     */
+    NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
+    if ([inputString containsString:@"?"]) {
+        inputString = [NSMutableString stringWithString: [inputString componentsSeparatedByString:@"?"][1]];
+    }
+    // patchVersion=6.0.8&app=166&cType=1&appVersion=6.0.8&version=6.6.5&cVersion=6.6.5
+    NSArray<NSString *> *keyAndvalues = [inputString componentsSeparatedByString:@"&"];
+    NSMutableString *muStr = [NSMutableString string];
+    [muStr appendString:@"NSMutableDictionary *dict = [NSMutableDictionary dictionary];\n"];
+    [keyAndvalues enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj containsString:@"="]) {
+            NSArray<NSString *> *keyValus = [obj componentsSeparatedByString:@"="];
+            [muStr appendString: [NSString stringWithFormat:@"dict[@\"%@\"] = @\"%@\";\n", keyValus[0], keyValus[1]]];
+        }
+    }];
+    // 换行加}
+    self.codeTextView.string = muStr;
+    
+    
+}
 /// 生成事件
 - (IBAction)generate:(id)sender {
     
@@ -80,9 +105,15 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         return;
     }
     
-    if ([currentLanguage isEqualToString:@"doc to OC property"]) {
+    
+    
+    if ([currentLanguage isEqualToString:@"urlStr中的参数转字典"]) {
+        [self getDictFromURLStr];
+    }
+    else if ([currentLanguage isEqualToString:@"doc to OC property"]) {
         [self sosoapiToOCProperty:YES needOCDict:NO];
-    } else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
+    }
+    else if ([currentLanguage isEqualToString:@"doc to OC dict"])  {
         [self sosoapiToOCProperty:YES needOCDict:YES];
     }
     else if ([currentLanguage isEqualToString:@"kancloud字段注释"])  {
