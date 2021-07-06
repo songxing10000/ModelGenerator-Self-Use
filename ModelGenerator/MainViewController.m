@@ -338,10 +338,23 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     } else if ([str isEqualToString:@"arry"]||
                [str isEqualToString:@"arr"] ||
                [str isEqualToString:@"Array"] ||
-               [str isEqualToString:@"array"]) {
+               [str isEqualToString:@"array"] ||
+               [str isEqualToString:@"list"] ||
+               [str isEqualToString:@"List"] ||
+               [str isEqualToString:@"lis"]) {
         
         return @"NSArray *";
     }
+    else if ([str isEqualToString:@"Boolean"]) {
+        return @"BOOL";
+    }
+    else if ([str isEqualToString:@"BigDecimal"]) {
+        return @"CGFloat";
+    }
+    else if ([str isEqualToString:@"Long"]) {
+        return @"long";
+    }
+    //
     return @"NSString *";
 }
 - (NSString *)modifierStrFromObjcClassStr:(NSString *)str {
@@ -421,6 +434,8 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         NSString *propertyName = lineStrs[0];
         NSString *classStr = lineStrs[1];
         NSString *propertyDes = lineStrs[3];
+        BOOL isCanNull = [lineStrs[2] isEqualToString:@"否"];
+
         if (!isEmpty(classStr) &&
             ![classStr isEqualToString:@"对象"]) {
             
@@ -428,12 +443,13 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             /// 修饰符 copy strong assign
             NSString *modifierStr = [self modifierStrFromObjcClassStr:rightClassStr];
             
+            NSString *canNullStr = isCanNull?@", nullable":@"";
             
             NSString *codeString =
             [NSString stringWithFormat:
-             @"\n///  %@ \n@property (nonatomic, %@) %@ %@;\n",
-             propertyDes, modifierStr,rightClassStr, propertyName];
-            
+             @"\n///  %@ \n@property (nonatomic, %@%@) %@ %@;\n",
+             propertyDes, modifierStr, canNullStr, rightClassStr, propertyName];
+            //
             return codeString;
         }
         return @"";

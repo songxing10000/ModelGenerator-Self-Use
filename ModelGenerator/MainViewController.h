@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MainViewController : NSViewController
 
@@ -20,6 +21,6 @@
 @property (weak) IBOutlet NSButton *startBtn;
 /// 复制按钮
 @property (weak) IBOutlet NSButton *m_copyBtn;
-
 @end
+NS_ASSUME_NONNULL_END
 
