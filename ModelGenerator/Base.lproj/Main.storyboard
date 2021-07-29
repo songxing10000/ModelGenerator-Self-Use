@@ -190,7 +190,7 @@
                                     <rect key="frame" x="1" y="1" width="293" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="p7Q-IO-h2F">
+                                        <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="p7Q-IO-h2F" customClass="NSPlaceHolderTextView">
                                             <rect key="frame" x="0.0" y="0.0" width="293" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -233,24 +233,13 @@
                                     <action selector="generate:" target="XfG-lQ-9wD" id="6dr-7s-XiD"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FeE-ai-AHy">
-                                <rect key="frame" x="3" y="237" width="309" height="17"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="17" id="LEU-k0-0pp"/>
-                                </constraints>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" placeholderString="请输入后台接口网页里复制的文本" id="VbS-w5-5W3">
-                                    <font key="font" metaFont="cellTitle"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPe-l8-THT">
                                 <rect key="frame" x="310" y="0.0" width="310" height="257"/>
                                 <clipView key="contentView" drawsBackground="NO" id="nDZ-iH-vQp">
                                     <rect key="frame" x="1" y="1" width="293" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="Ysi-iN-v9F">
+                                        <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="Ysi-iN-v9F" customClass="NSPlaceHolderTextView">
                                             <rect key="frame" x="0.0" y="0.0" width="293" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -306,7 +295,6 @@
                                             <menuItem title="小程序url转换" id="Q5N-1c-gJu"/>
                                             <menuItem title="谷歌翻译转换" id="rAf-js-UfR"/>
                                             <menuItem title="字符串转换成数组" id="KCR-Fm-IC0"/>
-                                            <menuItem title="JSON字符串转OC模型" id="PFO-Lx-EhE"/>
                                             <menuItem title="urlStr中的参数转字典" id="Jf8-wj-9wK"/>
                                         </items>
                                     </menu>
@@ -334,16 +322,13 @@
                             <constraint firstAttribute="trailing" secondItem="2RJ-6J-dX1" secondAttribute="trailing" id="2aJ-9B-nbA"/>
                             <constraint firstItem="VBm-Dc-THG" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="40" id="6tm-vZ-Vgk"/>
                             <constraint firstAttribute="trailing" secondItem="aPe-l8-THT" secondAttribute="trailing" id="9nX-Mt-1A3"/>
-                            <constraint firstItem="aPe-l8-THT" firstAttribute="leading" secondItem="FeE-ai-AHy" secondAttribute="trailing" id="ARS-Ky-zi7"/>
                             <constraint firstAttribute="bottom" secondItem="VBm-Dc-THG" secondAttribute="bottom" id="DuC-Cn-aLR"/>
                             <constraint firstItem="0ze-hF-oao" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9y7-rt-rER" secondAttribute="trailing" constant="34" id="GN3-dc-Mn7"/>
                             <constraint firstItem="2RJ-6J-dX1" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="KgI-4X-o9x"/>
                             <constraint firstItem="9y7-rt-rER" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="Ofk-Tu-33S"/>
                             <constraint firstItem="Ysi-iN-v9F" firstAttribute="top" secondItem="2RJ-6J-dX1" secondAttribute="bottom" id="PW1-wH-Qyj"/>
-                            <constraint firstItem="FeE-ai-AHy" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="43" id="QIR-c7-nha"/>
                             <constraint firstItem="Gjl-D6-mDD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0ze-hF-oao" secondAttribute="trailing" constant="17" id="XO9-BV-CMb"/>
                             <constraint firstItem="Gjl-D6-mDD" firstAttribute="height" secondItem="2RJ-6J-dX1" secondAttribute="height" id="Xu6-vy-WuS"/>
-                            <constraint firstItem="FeE-ai-AHy" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="5" id="Zgn-fj-pvt"/>
                             <constraint firstItem="Gjl-D6-mDD" firstAttribute="width" secondItem="2RJ-6J-dX1" secondAttribute="width" id="l06-mh-EUL"/>
                             <constraint firstItem="VBm-Dc-THG" firstAttribute="top" secondItem="aPe-l8-THT" secondAttribute="top" id="mIr-pb-ETj"/>
                             <constraint firstItem="0ze-hF-oao" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="10" id="pSm-YH-euk"/>
@@ -359,7 +344,6 @@
                         <outlet property="emptyBtn" destination="9y7-rt-rER" id="wTD-RK-lg5"/>
                         <outlet property="jsonTextView" destination="p7Q-IO-h2F" id="dDi-y8-vsf"/>
                         <outlet property="m_copyBtn" destination="2RJ-6J-dX1" id="Dbz-hc-KUn"/>
-                        <outlet property="placeHolder" destination="FeE-ai-AHy" id="J7X-v3-SfS"/>
                         <outlet property="popUpBtn" destination="0ze-hF-oao" id="DRe-9R-0T4"/>
                         <outlet property="startBtn" destination="Gjl-D6-mDD" id="yev-XK-XID"/>
                     </connections>

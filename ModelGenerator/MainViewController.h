@@ -7,16 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "NSPlaceHolderTextView.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MainViewController : NSViewController
 
-@property (unsafe_unretained) IBOutlet NSTextView *codeTextView;
+@property (unsafe_unretained) IBOutlet NSPlaceHolderTextView *codeTextView;
 
-@property (unsafe_unretained) IBOutlet NSTextView *jsonTextView;
-
-@property (unsafe_unretained) IBOutlet NSTextField *placeHolder;
-
+@property (unsafe_unretained) IBOutlet NSPlaceHolderTextView *jsonTextView;
 /// 生成按钮
 @property (weak) IBOutlet NSButton *startBtn;
 /// 复制按钮

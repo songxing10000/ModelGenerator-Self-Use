@@ -17,6 +17,7 @@
 		07CE48BE1C5A04CD00DC2AFD /* ColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE48BB1C5A04CD00DC2AFD /* ColorView.m */; };
 		07CE48BF1C5A04CD00DC2AFD /* Window.m in Sources */ = {isa = PBXBuildFile; fileRef = 07CE48BD1C5A04CD00DC2AFD /* Window.m */; };
 		60BC6F470E8C1CCCE39F567F /* libPods-ModelGenerator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 69D601320D0FAF187E1A83B4 /* libPods-ModelGenerator.a */; };
+		9849C30C26B2B0390084D4A4 /* NSPlaceHolderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9849C30B26B2B0390084D4A4 /* NSPlaceHolderTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,8 @@
 		07CE48BC1C5A04CD00DC2AFD /* Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Window.h; sourceTree = "<group>"; };
 		07CE48BD1C5A04CD00DC2AFD /* Window.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Window.m; sourceTree = "<group>"; };
 		69D601320D0FAF187E1A83B4 /* libPods-ModelGenerator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ModelGenerator.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9849C30A26B2B0390084D4A4 /* NSPlaceHolderTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSPlaceHolderTextView.h; sourceTree = "<group>"; };
+		9849C30B26B2B0390084D4A4 /* NSPlaceHolderTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSPlaceHolderTextView.m; sourceTree = "<group>"; };
 		F0497B18906CFDA666C4C0DA /* Pods-ModelGenerator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ModelGenerator.release.xcconfig"; path = "Pods/Target Support Files/Pods-ModelGenerator/Pods-ModelGenerator.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +85,8 @@
 				07A3041C1B79B1DC00B0CA47 /* MainViewController.m */,
 				043DB1971F4FF61D0084D7FE /* MainViewController+Other.h */,
 				043DB1981F4FF61D0084D7FE /* MainViewController+Other.m */,
+				9849C30A26B2B0390084D4A4 /* NSPlaceHolderTextView.h */,
+				9849C30B26B2B0390084D4A4 /* NSPlaceHolderTextView.m */,
 				07A304201B79B1DC00B0CA47 /* Main.storyboard */,
 				07A304141B79B1DC00B0CA47 /* Supporting Files */,
 			);
@@ -255,6 +260,7 @@
 				07A304181B79B1DC00B0CA47 /* AppDelegate.m in Sources */,
 				07CE48BF1C5A04CD00DC2AFD /* Window.m in Sources */,
 				043DB1991F4FF61D0084D7FE /* MainViewController+Other.m in Sources */,
+				9849C30C26B2B0390084D4A4 /* NSPlaceHolderTextView.m in Sources */,
 				07CE48BE1C5A04CD00DC2AFD /* ColorView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

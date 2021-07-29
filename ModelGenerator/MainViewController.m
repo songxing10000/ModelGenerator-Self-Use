@@ -41,6 +41,10 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     [self makeRound:_m_copyBtn];
     
     [self makeRound:self.emptyBtn];
+    
+    self.jsonTextView.m_placeHolderString =   @"请输入api文本";
+    self.codeTextView.m_placeHolderString =   @"请输入api文本";
+
 }
 #pragma mark - action
 
@@ -49,13 +53,10 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     NSLog(@"sender.indexOfSelectedItem===%ld",(long)sender.indexOfSelectedItem);
     __unused NSInteger selectedIndex = sender.indexOfSelectedItem;
     //    self.isPost = (selectedIndex == 0)?YES:NO;
+    self.jsonTextView.m_placeHolderString =    @"请输入api文本";
+
 }
-
-- (IBAction)checkChangeFromBtn:(NSButton *)sender {
-    NSLog(@"----%tu---", sender.state);
-}
-
-
+ 
 #pragma mark empty btn
 - (IBAction)clickemptyBtn:(NSButton *)sender {
     self.jsonTextView.string = @"";
@@ -199,11 +200,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         [self googleTranslateConversion];
     } else if ([currentLanguage isEqualToString:@"字符串转换成数组"]) {
         [self convertStringToArray];
-    } else if ([currentLanguage isEqualToString:@"JSON字符串转OC模型"]) {
-        [self JSONStringToOCModel];
     }
-    
-    
 }
 /**
  字符串转字典
@@ -223,39 +220,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     }
     return dic;
 }
-/// JSON字符串转OC模型
-- (void)JSONStringToOCModel {
-    
-    
-    // json转字典
-    NSString *str = [self removeSpaceAndNewline: [self.jsonTextView.string stringByReplacingOccurrencesOfString:@"null" withString:@"\"null\""]];
-    str = [str stringByReplacingOccurrencesOfString:@";" withString:@","];
-    str = [str stringByReplacingOccurrencesOfString:@",}" withString:@"}"];
-    NSDictionary *dict = [self dictFromJSONString: str];
-    if (!dict ||
-        ![dict isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-    NSMutableString *outStr = [NSMutableString string];
-    [dict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull value, BOOL * _Nonnull stop) {
-        if ([value isKindOfClass:[NSString class]]) {
-            
-            [outStr appendFormat:@"/// 如，%@\n",value];
-            [outStr appendFormat:@"@property(nonatomic, copy) NSString *%@;\n",key];
-        } else if ([value isKindOfClass:[NSNumber class]]){
-            
-            [outStr appendFormat:@"/// 如，%@\n",value];
-            [outStr appendFormat:@"@property(nonatomic, strong) NSNumber *%@;\n",key];
-        } else if ([value isKindOfClass:[NSArray class]]){
-            
-            [outStr appendFormat:@"/// 如，%@\n",value];
-            [outStr appendFormat:@"@property(nonatomic, strong) NSArray *%@;\n",key];
-        }
-    }];
-    
-    
-    [self operationCompletedWithString:outStr];
-}
+
 /// 操作完毕，写入textview
 - (void)operationCompletedWithString:(NSString *)outStr {
     if (isEmpty(outStr)) {
@@ -1564,24 +1529,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     
 }
-
-#pragma mark - action
-- (IBAction)selectedLanguage:(NSComboBox*)sender {
-    
-    NSInteger idx = sender.indexOfSelectedItem;
-    BOOL showJsonPlaceHoler = idx <= 2;
-    self.placeHolder.placeholderString =  showJsonPlaceHoler ? @"请输入Json文本" : @"请输入api文本";
-}
-
-#pragma mark NSTextViewDelegate
-
-- (BOOL)textView:(NSTextView *)textView shouldChangeTextInRanges:(NSArray<NSValue *> *)affectedRanges replacementStrings:(nullable NSArray<NSString *> *)replacementStrings{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.placeHolder.hidden = textView.textStorage.string.length > 0;
-    });
-    return YES;
-}
-
+ 
 #pragma mark ClassViewControllerDelegate
 
 - (void)didResolvedWithClassName:(NSString *)name
