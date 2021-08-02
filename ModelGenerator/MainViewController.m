@@ -194,9 +194,8 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     }else if ([currentLanguage isEqualToString:@"OC代码取JSON字符串"]){
         
         [self OCParamDictToJSONString];
-    } else if ([currentLanguage isEqualToString:@"小程序url转换"]) {
-        [self minAppURLConversion];
-    } else if ([currentLanguage isEqualToString:@"谷歌翻译转换"]) {
+    }
+    else if ([currentLanguage isEqualToString:@"谷歌翻译转换"]) {
         [self googleTranslateConversion];
     } else if ([currentLanguage isEqualToString:@"字符串转换成数组"]) {
         [self convertStringToArray];
@@ -260,6 +259,13 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         i --;
     }
     return lineCodeStrs;
+}
+- (IBAction)didSelectedMenu:(NSPopUpButton *)sender {
+    // 切换转换方式后，占位刷新
+    if ([sender.title isEqualToString:@"urlStr中的参数转字典"]) {
+        self.jsonTextView.m_placeHolderString = @"https://com/xtedu/api/studytask/getStudyTaskList?workId=671317&year=2021";
+        self.codeTextView.m_placeHolderString = @"NSMutableDictionary *dict = [NSMutableDictionary dictionary];\ndict[@\"workId\"] = @\"671317\";\ndict[@\"year\"] = @\"2021\";\n";
+    }
 }
 #pragma mark - 状态码-描述
 /// 状态码-描述
@@ -960,72 +966,6 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     
 }
-/**
- 小程序url转换
- url: utils.kBaseUrl + '/nw/entrance/apis/contract/serviceprotocol/json',
- 
- 
- 
- 稳盈管理页面信息
- 
- mine_steadyManagementPageInfo: kBaseUrl + '/nw/entrance/apis/loan/querycurrentamount/json',
- */
-- (void)minAppURLConversion {
-    NSMutableString *inputString =  self.jsonTextView.string.mutableCopy;
-    // 冒号分割后的数组
-    /*
-     <__NSArrayM 0x60000004a4d0>(
-     url,
-     utils.kBaseUrl + '/nw/entrance/apis/contract/serviceprotocol/json',
-     
-     )
-     */
-    NSArray<NSString *> *colonStirngs = [inputString componentsSeparatedByString:@":"];
-    if (colonStirngs.count < 2) {
-        // 尝试解析 var url = utils.kBaseUrl + '/nw/entrance/apis/xsb/profitdetail/json';
-        if ([inputString containsString:@"var"] && [inputString containsString:@"="]) {
-            colonStirngs = [inputString componentsSeparatedByString:@"="];
-            if (colonStirngs.count < 2) {
-                return;
-            }
-            
-        } else {
-            
-            return;
-        }
-    }
-    //  colonStirngs[1] 为 utils.kBaseUrl + '/nw/entrance/apis/contract/serviceprotocol/json',
-    
-    // 加号分割后的数组
-    /*
-     <__NSArrayM 0x60800004be50>(
-     utils.kBaseUrl ,
-     '/nw/entrance/apis/contract/serviceprotocol/json',
-     
-     )
-     */
-    NSArray<NSString *> *plusStrings = [colonStirngs[1] componentsSeparatedByString:@"+"];
-    if (plusStrings.count < 2) {
-        return;
-    }
-    // utils.kBaseUrl ,
-    // 子地址 '/nw/entrance/apis/contract/serviceprotocol/json'
-    NSString *subURLString = plusStrings[1];
-    
-    // kBaseUrl +  '/nw/entrance/apis/contract/serviceprotocol/json',
-    NSString *allURLString = [NSString stringWithFormat:@"kBaseUrl + %@", subURLString];
-    NSArray<NSString *> *subURLStringOtherNameStrings = [subURLString componentsSeparatedByString:@"/"];
-    NSString *subURLStringOtherNameString = @"???";
-    if (subURLStringOtherNameStrings.count >= 2) {
-        subURLStringOtherNameString = subURLStringOtherNameStrings[subURLStringOtherNameStrings.count -2];
-    }
-    NSString *commentString = [NSString stringWithFormat:@"/**\n * %@\n */\nmine_%@: %@", @"中文注释",subURLStringOtherNameString,allURLString];
-    // 以;结尾
-    self.codeTextView.string = [commentString stringByReplacingOccurrencesOfString:@";" withString:@""];
-    
-    
-}
-
 /**
  谷歌翻译转换
  输入：
