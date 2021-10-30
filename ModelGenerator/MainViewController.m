@@ -44,7 +44,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     self.jsonTextView.m_placeHolderString =   @"请输入api文本";
     self.codeTextView.m_placeHolderString =   @"请输入api文本";
-
+    
 }
 #pragma mark - action
 
@@ -54,9 +54,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     __unused NSInteger selectedIndex = sender.indexOfSelectedItem;
     //    self.isPost = (selectedIndex == 0)?YES:NO;
     self.jsonTextView.m_placeHolderString =    @"请输入api文本";
-
+    
 }
- 
+
 #pragma mark empty btn
 - (IBAction)clickemptyBtn:(NSButton *)sender {
     self.jsonTextView.string = @"";
@@ -206,8 +206,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         
         NSMutableArray<NSString *> *muStrs = [NSMutableArray array];
         [strs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-           // 不要有@Column的这一行
-            if (![obj containsString:@"@Column"]) {
+            // 不要有@Column的这一行
+            if (![obj containsString:@"@Column"] ||
+                ![obj containsString:@"NotNull"]) {
                 NSString *startEmptyStr = @"    ";
                 if ([obj hasPrefix:startEmptyStr]) {
                     // 去除首空格
@@ -216,57 +217,60 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             }
         }];
         NSMutableArray<NSString *> *muStrs2 = [NSMutableArray array];
-
+        
         [muStrs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *proStr = obj;
             if ([obj containsString:@"//"]) {
                 // 这一行有注释
-                /*
-                 private String roomName;
-                 private Integer status;
-                 private java.util.Date createTime;
-                 */
                 NSArray<NSString *> *lineStrs = [obj componentsSeparatedByString:@"//"];
-                
                 [muStrs2 addObject:[NSString stringWithFormat:@"%@%@", @"/// ", lineStrs[1]]];
-                NSString *proStr = lineStrs[0];
-                if ([proStr containsString:@"String"]) {
-                    
-                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic, copy) NSString * ", [proStr componentsSeparatedByString:@" String "][1]]];
-                }
-                else if ([proStr containsString:@"Integer"]) {
-                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" Integer "][1]]];
-                }
-                else if ([proStr containsString:@"java.util.Date"]) {
-                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" java.util.Date "][1]]];
-                }
-                
-            } else {
-                // 可能没注释，或者有 /*类似的注释
-                /*
-                 private String roomName;
-                 private Integer status;
-                 private java.util.Date createTime;
-                 */
-                
-                NSString *proStr = obj;
-                if ([proStr containsString:@"String"]) {
-                    
-                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic, copy) NSString * ", [proStr componentsSeparatedByString:@" String "][1]]];
-                }
-                else if ([proStr containsString:@"Integer"]) {
-                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" Integer "][1]]];
-                }
-                else if ([proStr containsString:@"java.util.Date"]) {
-                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" java.util.Date "][1]]];
-                }
+                proStr = lineStrs[0] ;
             }
+            
+            if ([proStr containsString:@"String"]) {
+                
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic, copy) NSString * ", [proStr componentsSeparatedByString:@" String "][1]]];
+            }
+            else if ([proStr containsString:@"Integer"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" Integer "][1]]];
+            }
+            else if ([proStr containsString:@"java.util.Date"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" java.util.Date "][1]]];
+            }
+            else if ([proStr containsString:@"Date"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" Date "][1]]];
+            }
+            else if ([proStr containsString:@"boolean"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) BOOL ", [proStr componentsSeparatedByString:@" boolean "][1]]];
+            }
+            else if ([proStr containsString:@"BigDecimal"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) NSNumber * ", [proStr componentsSeparatedByString:@" BigDecimal "][1]]];
+            }
+            else if ([proStr containsString:@"List"]) {
+                if ([proStr containsString:@">"]) {
+                    // private List<Exercises> exercises
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) NSArray * ", [proStr componentsSeparatedByString:@" >  "][1]]];
+                } else {
+                    // private List exercises
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) NSArray * ", [proStr componentsSeparatedByString:@" List "][1]]];
+                }
+                
+            }
+            else {
+                // 可能是自定义类如， private GlobalTags globalTag ;// 二级标签
+                NSLog(@"%@ %@", NSStringFromSelector(_cmd), obj);
+                
+            }
+            
+               
+
         }];
         
-            
         
-         self.codeTextView.string = [muStrs2 componentsJoinedByString:@"\n"];
+        
+        self.codeTextView.string = [muStrs2 componentsJoinedByString:@"\n"];
     }
-
+    
 }
 /**
  字符串转字典
@@ -476,7 +480,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         NSString *classStr = lineStrs[1];
         NSString *propertyDes = lineStrs[3];
         BOOL isCanNull = [lineStrs[2] isEqualToString:@"否"];
-
+        
         if (!isEmpty(classStr) &&
             ![classStr isEqualToString:@"对象"]) {
             
@@ -1539,7 +1543,7 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     
     
 }
- 
+
 #pragma mark ClassViewControllerDelegate
 
 - (void)didResolvedWithClassName:(NSString *)name
