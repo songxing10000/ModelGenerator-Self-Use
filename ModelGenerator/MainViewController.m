@@ -210,10 +210,12 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             if (![obj containsString:@"@Column"] ||
                 ![obj containsString:@"NotNull"]) {
                 NSString *startEmptyStr = @"    ";
+                NSString *desStr = obj;
                 if ([obj hasPrefix:startEmptyStr]) {
                     // 去除首空格
-                    [muStrs addObject: [obj stringByReplacingCharactersInRange:[obj rangeOfString:startEmptyStr] withString:@""]];
+                    desStr = [obj stringByReplacingCharactersInRange:[obj rangeOfString:startEmptyStr] withString:@""];
                 }
+                [muStrs addObject: desStr];
             }
         }];
         NSMutableArray<NSString *> *muStrs2 = [NSMutableArray array];
@@ -234,6 +236,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             else if ([proStr containsString:@"Integer"]) {
                 [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" Integer "][1]]];
             }
+            else if ([proStr containsString:@"int"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" int "][1]]];
+            }
             else if ([proStr containsString:@"java.util.Date"]) {
                 [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" java.util.Date "][1]]];
             }
@@ -245,6 +250,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
             }
             else if ([proStr containsString:@"BigDecimal"]) {
                 [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) NSNumber * ", [proStr componentsSeparatedByString:@" BigDecimal "][1]]];
+            }
+            else if ([proStr containsString:@"Long"]) {
+                [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) Long ", [proStr componentsSeparatedByString:@" Long "][1]]];
             }
             else if ([proStr containsString:@"List"]) {
                 if ([proStr containsString:@">"]) {
