@@ -199,7 +199,74 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         [self googleTranslateConversion];
     } else if ([currentLanguage isEqualToString:@"字符串转换成数组"]) {
         [self convertStringToArray];
+    } else if([currentLanguage isEqualToString:@"java后台entity转iOS模型"]) {
+        NSString *inputString =  self.jsonTextView.string;
+        // 按换行符切割
+        NSArray<NSString *> *strs = [inputString componentsSeparatedByString:@"\n"];
+        
+        NSMutableArray<NSString *> *muStrs = [NSMutableArray array];
+        [strs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+           // 不要有@Column的这一行
+            if (![obj containsString:@"@Column"]) {
+                NSString *startEmptyStr = @"    ";
+                if ([obj hasPrefix:startEmptyStr]) {
+                    // 去除首空格
+                    [muStrs addObject: [obj stringByReplacingCharactersInRange:[obj rangeOfString:startEmptyStr] withString:@""]];
+                }
+            }
+        }];
+        NSMutableArray<NSString *> *muStrs2 = [NSMutableArray array];
+
+        [muStrs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj containsString:@"//"]) {
+                // 这一行有注释
+                /*
+                 private String roomName;
+                 private Integer status;
+                 private java.util.Date createTime;
+                 */
+                NSArray<NSString *> *lineStrs = [obj componentsSeparatedByString:@"//"];
+                
+                [muStrs2 addObject:[NSString stringWithFormat:@"%@%@", @"/// ", lineStrs[1]]];
+                NSString *proStr = lineStrs[0];
+                if ([proStr containsString:@"String"]) {
+                    
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic, copy) NSString * ", [proStr componentsSeparatedByString:@" String "][1]]];
+                }
+                else if ([proStr containsString:@"Integer"]) {
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" Integer "][1]]];
+                }
+                else if ([proStr containsString:@"java.util.Date"]) {
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" java.util.Date "][1]]];
+                }
+                
+            } else {
+                // 可能没注释，或者有 /*类似的注释
+                /*
+                 private String roomName;
+                 private Integer status;
+                 private java.util.Date createTime;
+                 */
+                
+                NSString *proStr = obj;
+                if ([proStr containsString:@"String"]) {
+                    
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic, copy) NSString * ", [proStr componentsSeparatedByString:@" String "][1]]];
+                }
+                else if ([proStr containsString:@"Integer"]) {
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property(nonatomic) NSInteger ", [proStr componentsSeparatedByString:@" Integer "][1]]];
+                }
+                else if ([proStr containsString:@"java.util.Date"]) {
+                    [muStrs2 addObject: [NSString stringWithFormat:@"%@%@", @"@property (nonatomic) long ", [proStr componentsSeparatedByString:@" java.util.Date "][1]]];
+                }
+            }
+        }];
+        
+            
+        
+         self.codeTextView.string = [muStrs2 componentsJoinedByString:@"\n"];
     }
+
 }
 /**
  字符串转字典
@@ -265,6 +332,9 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
     if ([sender.title isEqualToString:@"urlStr中的参数转字典"]) {
         self.jsonTextView.m_placeHolderString = @"https://com/xtedu/api/studytask/getStudyTaskList?workId=671317&year=2021";
         self.codeTextView.m_placeHolderString = @"NSMutableDictionary *dict = [NSMutableDictionary dictionary];\ndict[@\"workId\"] = @\"671317\";\ndict[@\"year\"] = @\"2021\";\n";
+    } else if([sender.title isEqualToString:@"java后台entity转iOS模型"]) {
+        self.jsonTextView.m_placeHolderString = @"@Column\nprivate String roomName;//直播间名称\n@Column\nprivate Integer status;//状态(0未使用、1审核中、2已使用、3已过期)\n@Column\nprivate java.util.Date createTime;//获得时间";
+        self.codeTextView.m_placeHolderString = @"///直播间名称\n@property(nonatomic, copy) NSString *roomName;\n///状态(0未使用、1审核中、2已使用、3已过期)\n@property(nonatomic) NSInteger status;\n///获得时间\n@property (nonatomic , assign) long createTime;";
     }
 }
 #pragma mark - 状态码-描述

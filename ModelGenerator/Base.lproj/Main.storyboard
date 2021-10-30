@@ -294,6 +294,7 @@
                                             <menuItem title="谷歌翻译转换" id="rAf-js-UfR"/>
                                             <menuItem title="字符串转换成数组" id="KCR-Fm-IC0"/>
                                             <menuItem title="urlStr中的参数转字典" id="Jf8-wj-9wK"/>
+                                            <menuItem title="java后台entity转iOS模型" id="gKs-ev-fch"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>

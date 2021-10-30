@@ -1,5 +1,16 @@
 
 ### 根据自己日常需要加入了以下功能
+
+---
+java后台entity转iOS模型
+
+1.选中选项，对应的占位会有提示
+![](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/Snip20211030_31.png)
+2.全有注释场景
+![](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/Snip20211030_29.png)
+3.有些没注释场景
+![](https://gitee.com/songxing10000/imgs/raw/master/2021/imgs/Snip20211030_30.png)
+
 ---
 urlStr中的参数转字典
 ![](https://cdn.nlark.com/yuque/0/2021/png/221886/1623303818711-d2366e6b-9068-4208-a874-2250c15400e3.png?x-oss-process=image%2Fresize%2Cw_1492)
