@@ -106,9 +106,10 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         return;
     }
     
-    
-    
-    if ([currentLanguage isEqualToString:@"urlStr中的参数转字典"]) {
+    if ([currentLanguage isEqualToString:@"apifox"]){
+        [self apifox];
+    }
+    else if ([currentLanguage isEqualToString:@"urlStr中的参数转字典"]) {
         [self getDictFromURLStr];
     }
     else if ([currentLanguage isEqualToString:@"doc to OC property"]) {
@@ -1619,5 +1620,78 @@ typedef NSString *(^LineMapStringBlock)(NSArray<NSString *> *lineStrs);
         }
     }];
     [self operationCompletedWithString:outPutString];
+}
+#pragma mark - apifox
+- (BOOL)hasChinese:(NSString *)str {
+    for(int i=0; i< [str length];i++){
+        int a = [str characterAtIndex:i];
+        if( a > 0x4e00 && a < 0x9fff)
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+- (void)apifox {
+    NSMutableArray<NSString *> *muStrs = [NSMutableArray array];
+    NSArray<NSString *> *ojs = [[self.jsonTextView string] componentsSeparatedByString:@"\n"];
+    [ojs enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if(obj.length > 0) {
+            [muStrs addObject:obj];
+        }
+    }];
+    NSMutableString *outStr = [NSMutableString string];
+    [muStrs enumerateObjectsUsingBlock:^(NSString * _Nonnull type, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([type isEqualToString:@"string"]) {
+            NSString *des = muStrs[idx+1];
+            if ([self hasChinese:des]) {
+                // 是中文就说明这个字段有备注
+                NSString *name = muStrs[idx-1];
+                if (![outStr containsString:name]) {
+                    [outStr appendFormat:@"\n/// %@\n", des];
+                    [outStr appendFormat:@"@property(nonatomic, copy) NSString *%@;\n", name];
+                    
+                }
+            }
+        } else if ([type isEqualToString:@"integer"]) {
+            NSString *des = muStrs[idx+1];
+            if ([self hasChinese:des]) {
+                // 是中文就说明这个字段有备注
+                NSString *name = muStrs[idx-1];
+                if (![outStr containsString:name]) {
+                    [outStr appendFormat:@"\n/// %@\n", des];
+                    [outStr appendFormat:@"@property(nonatomic, assign) NSInteger *%@;\n", name];
+                }
+                
+            }
+        } else if ([type isEqualToString:@"null"]) {
+            // user_labels null 店主标签
+            NSString *des = muStrs[idx+1];
+            if ([self hasChinese:des]) {
+                // 是中文就说明这个字段有备注
+                NSString *name = muStrs[idx-1];
+                if (![outStr containsString:name]) {
+                    [outStr appendFormat:@"\n/// %@\n", des];
+                    [outStr appendFormat:@"@property(nonatomic, copy) NSString *%@;\n", name];
+                    
+                }
+            }
+        } else if ([type isEqualToString:@"array[string]"]) {
+            // links array[string] 链接
+            
+            NSString *des = muStrs[idx+1];
+            if ([self hasChinese:des]) {
+                // 是中文就说明这个字段有备注
+                NSString *name = muStrs[idx-1];
+                if (![outStr containsString:name]) {
+                    [outStr appendFormat:@"\n/// %@\n", des];
+                    [outStr appendFormat:@"@property(nonatomic, strong) NSArray<NSString *> *%@;\n", name];
+                    
+                }
+            }
+        }
+    }];
+    self.codeTextView.string = outStr;
+    
 }
 @end

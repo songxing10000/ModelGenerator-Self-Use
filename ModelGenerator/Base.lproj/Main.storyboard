@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -181,21 +181,21 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="MainViewController" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="620" height="297"/>
+                        <rect key="frame" x="0.0" y="0.0" width="623" height="297"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VBm-Dc-THG">
-                                <rect key="frame" x="0.0" y="0.0" width="310" height="257"/>
+                                <rect key="frame" x="0.0" y="0.0" width="312" height="257"/>
                                 <clipView key="contentView" drawsBackground="NO" id="xKZ-Nn-SIU">
-                                    <rect key="frame" x="1" y="1" width="293" height="255"/>
+                                    <rect key="frame" x="1" y="1" width="295" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="p7Q-IO-h2F" customClass="NSPlaceHolderTextView">
-                                            <rect key="frame" x="0.0" y="0.0" width="293" height="255"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="295" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="293" height="255"/>
+                                            <size key="minSize" width="295" height="255"/>
                                             <size key="maxSize" width="463" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <connections>
@@ -209,12 +209,12 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="V7Q-ck-oDV">
-                                    <rect key="frame" x="294" y="1" width="15" height="255"/>
+                                    <rect key="frame" x="296" y="1" width="15" height="255"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
                             <button verticalHuggingPriority="750" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2RJ-6J-dX1">
-                                <rect key="frame" x="575" y="256" width="45" height="41"/>
+                                <rect key="frame" x="577" y="256" width="46" height="41"/>
                                 <buttonCell key="cell" type="smallSquare" title="  复制  " bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="Mif-Ut-ghd">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -224,7 +224,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gjl-D6-mDD">
-                                <rect key="frame" x="522" y="256" width="45" height="41"/>
+                                <rect key="frame" x="523" y="256" width="46" height="41"/>
                                 <buttonCell key="cell" type="smallSquare" title="  生成  " bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="c3g-7w-fEI">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -234,17 +234,17 @@
                                 </connections>
                             </button>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPe-l8-THT">
-                                <rect key="frame" x="310" y="0.0" width="310" height="257"/>
+                                <rect key="frame" x="312" y="0.0" width="311" height="257"/>
                                 <clipView key="contentView" drawsBackground="NO" id="nDZ-iH-vQp">
-                                    <rect key="frame" x="1" y="1" width="293" height="255"/>
+                                    <rect key="frame" x="1" y="1" width="294" height="255"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="Ysi-iN-v9F" customClass="NSPlaceHolderTextView">
-                                            <rect key="frame" x="0.0" y="0.0" width="293" height="255"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="294" height="255"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="293" height="255"/>
+                                            <size key="minSize" width="294" height="255"/>
                                             <size key="maxSize" width="463" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -255,17 +255,18 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="wDe-d8-uPF">
-                                    <rect key="frame" x="294" y="1" width="15" height="255"/>
+                                    <rect key="frame" x="295" y="1" width="15" height="255"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0ze-hF-oao">
-                                <rect key="frame" x="113" y="263" width="395" height="25"/>
-                                <popUpButtonCell key="cell" type="push" title="showdoc.cc 参数名-必选-字段含义-类型" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FOM-Se-tOo" id="uQd-0b-6Ay">
+                                <rect key="frame" x="114" y="263" width="396" height="25"/>
+                                <popUpButtonCell key="cell" type="push" title="apifox" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="qJ3-st-ccI" id="uQd-0b-6Ay">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="PFq-h8-ddo">
                                         <items>
+                                            <menuItem title="apifox" id="qJ3-st-ccI"/>
                                             <menuItem title="showdoc.cc 参数名-必选-字段含义-类型" state="on" id="FOM-Se-tOo"/>
                                             <menuItem title="kancloud字段注释" id="oaf-I5-wrx"/>
                                             <menuItem title="showdoc.cc 参数名-类型-说明" id="UDb-xv-6LC"/>
@@ -303,7 +304,7 @@
                                 </connections>
                             </popUpButton>
                             <button verticalHuggingPriority="750" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9y7-rt-rER">
-                                <rect key="frame" x="0.0" y="257" width="45" height="40"/>
+                                <rect key="frame" x="0.0" y="257" width="46" height="40"/>
                                 <buttonCell key="cell" type="smallSquare" title="  清空  " bezelStyle="smallSquare" imagePosition="right" alignment="center" inset="2" id="9kl-Yo-9xI">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
